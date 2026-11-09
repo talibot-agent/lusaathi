@@ -143,14 +143,25 @@ def daylight_wbgt(wbgt_globe, wbgt_bom, sun_up):
     return cautious_wbgt(wbgt_globe, wbgt_bom) if sun_up else (wbgt_globe, "globe")
 
 
+# BoM assumes strong sun: it may raise the estimate only when shortwave radiation >= this (W/m^2). Same as JS.
+BOM_MIN_SW_WM2 = 600
+
+
+def radiation_gated_wbgt(wbgt_globe, wbgt_bom, ghi, threshold=BOM_MIN_SW_WM2):
+    """Radiation-gated cautious rule: max of both estimates if ghi >= threshold, else the sun/globe model."""
+    return cautious_wbgt(wbgt_globe, wbgt_bom) if (ghi or 0) >= threshold else (wbgt_globe, "globe")
+
+
 def wbgt_cautious(t_c, rh, wind10kmh, ghi, direct, diffuse, utc_ms, lat, lon, p_hpa=1013.25):
-    """Same as the browser's assessHour WBGT (daylight-only cautious rule), plus the strict and permissive variants."""
+    """Same as the browser's assessHour WBGT (radiation-gated rule), plus strict, daylight-only and permissive."""
     o = wbgt_outdoor(t_c, rh, wind10kmh, ghi, direct, diffuse, utc_ms, lat, lon, p_hpa)
     bom = wbgt_bom_c(t_c, rh)
     elev = solar_elevation_deg(utc_ms, lat, lon)
     sun_up = elev > 0
-    w, src = daylight_wbgt(o["wbgt"], bom, sun_up)
+    sw = max(0.0, ghi or 0.0)
+    w, src = radiation_gated_wbgt(o["wbgt"], bom, sw)
     return dict(o, wbgt=w, wbgt_globe=o["wbgt"], wbgt_bom=bom, wbgt_strict=max(o["wbgt"], bom), source=src,
+                wbgt_daylight=daylight_wbgt(o["wbgt"], bom, sun_up)[0], shortwave=sw, strong_sun=sw >= BOM_MIN_SW_WM2,
                 sun_up=sun_up, solar_elevation=elev)
 
 

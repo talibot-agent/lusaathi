@@ -74,30 +74,45 @@ test('daylight-only rule: max of both estimates while the sun is up, sun/globe m
   assert.deepEqual(H.daylightWbgt(29.0, 32.7, false), { wbgt: 29.0, source: 'globe' });
 });
 
-test('solar elevation boundary decides the rule, not the clock (Jaipur sunrise, 29 May 2024)', () => {
-  let lo = ist(5, 30), hi = ist(6, 0); // elevation -1.5° .. +4.6°
-  assert.ok(H.solarElevationDeg(lo, JAIPUR.lat, JAIPUR.lon) < 0 && H.solarElevationDeg(hi, JAIPUR.lat, JAIPUR.lon) > 0);
-  while (hi - lo > 1000) { const mid = (lo + hi) / 2; if (H.solarElevationDeg(mid, JAIPUR.lat, JAIPUR.lon) > 0) hi = mid; else lo = mid; }
-  const base = { ...JAIPUR, tC: 33.7, rh: 40, wind10kmh: 24.9, ghi: 0, direct: 0, diffuse: 0, pHpa: 949.2 };
-  const before = H.assessHour({ ...base, utcMs: lo - 60000 });
-  const after = H.assessHour({ ...base, utcMs: hi + 60000 });
-  assert.equal(before.sunUp, false); assert.equal(before.wbgtSource, 'globe'); assert.equal(before.wbgt, before.wbgtGlobe);
-  assert.equal(after.sunUp, true); assert.equal(after.wbgtSource, 'bom'); assert.equal(after.wbgt, after.wbgtBom);
-  // geometric sunrise ~05:34 IST
-  const t = new Date(hi + 19800000); assert.equal(t.getUTCHours(), 5); assert.ok(t.getUTCMinutes() >= 30 && t.getUTCMinutes() <= 40);
+test('radiation-gated rule: BoM may raise the estimate only at >= BOM_MIN_SW_WM2 (600 W/m²)', () => {
+  assert.equal(H.BOM_MIN_SW_WM2, 600);
+  assert.deepEqual(H.radiationGatedWbgt(29.0, 32.7, 786), { wbgt: 32.7, source: 'bom' });
+  assert.deepEqual(H.radiationGatedWbgt(31.5, 30.2, 900), { wbgt: 31.5, source: 'globe' }); // G higher wins
+  assert.deepEqual(H.radiationGatedWbgt(29.0, 32.7, 599.9), { wbgt: 29.0, source: 'globe' });
+  assert.deepEqual(H.radiationGatedWbgt(29.0, 32.7, 600), { wbgt: 32.7, source: 'bom' });
+  assert.deepEqual(H.radiationGatedWbgt(29.0, 32.7, 0), { wbgt: 29.0, source: 'globe' });
+  assert.deepEqual(H.radiationGatedWbgt(29.0, 32.7, 650, 700), { wbgt: 29.0, source: 'globe' }); // threshold is a parameter
 });
 
-test('Jaipur 29 May 2024: 14:00 Cat 5 (BoM), 06:00 sun already up (BoM, Cat 4), 05:00 before sunrise and 02:00 night use G', () => {
+test('threshold boundary in assessHour: Jaipur 14:00 inputs at 599 vs 600 W/m²', () => {
+  const base = { ...JAIPUR, tC: 45.9, rh: 7, wind10kmh: 17.1, pHpa: 948.6, utcMs: ist(14) };
+  const at = (ghi) => H.assessHour({ ...base, ghi, direct: ghi * 506 / 786, diffuse: ghi * 280 / 786 });
+  const lo = at(599), hi = at(600);
+  assert.equal(lo.strongSun, false); assert.equal(lo.wbgtSource, 'globe'); assert.equal(lo.wbgt, lo.wbgtGlobe);
+  assert.equal(hi.strongSun, true); assert.equal(hi.wbgtSource, 'bom'); assert.equal(hi.wbgt, hi.wbgtBom);
+  assert.equal(lo.category, 2); assert.equal(hi.category, 5);
+});
+
+test('Jaipur 29 May 2024: 14:00 Cat 5 via BoM (786 W/m²); low-sun 06:00 and night 02:00 use G', () => {
   const noon = H.assessHour({ ...JAIPUR, tC: 45.9, rh: 7, wind10kmh: 17.1, ghi: 786, direct: 506, diffuse: 280, pHpa: 948.6, utcMs: ist(14) });
-  assert.equal(noon.wbgtSource, 'bom'); assert.equal(noon.category, 5); assert.equal(noon.workRest.workMin, 20);
+  assert.equal(noon.strongSun, true); assert.equal(noon.wbgtSource, 'bom'); assert.equal(noon.category, 5);
+  assert.equal(noon.workRest.workMin, 20); assert.equal(noon.workRest.restMin, 40);
+  // 06:00: the sun is up (4.6°) but only 31 W/m² -> G; under the previous daylight-only rule this was BoM, Cat 4
   const six = H.assessHour({ ...JAIPUR, tC: 33.7, rh: 40, wind10kmh: 24.9, ghi: 31, direct: 4, diffuse: 27, pHpa: 949.2, utcMs: ist(6) });
-  assert.ok(Math.abs(six.solarElevation - 4.59) < 0.05);
-  assert.equal(six.sunUp, true); assert.equal(six.wbgtSource, 'bom'); assert.equal(six.category, 4);
-  const five = H.assessHour({ ...JAIPUR, tC: 32.1, rh: 40, wind10kmh: 19.4, ghi: 0, direct: 0, diffuse: 0, pHpa: 948.7, utcMs: ist(5) });
-  assert.equal(five.sunUp, false); assert.equal(five.wbgtSource, 'globe');
-  assert.ok(five.wbgtBom > five.wbgtGlobe); // BoM would have been higher, but does not apply in the dark
-  assert.equal(five.category, 0);
+  assert.ok(Math.abs(six.solarElevation - 4.59) < 0.05); assert.equal(six.sunUp, true);
+  assert.equal(six.strongSun, false); assert.equal(six.wbgtSource, 'globe'); assert.equal(six.wbgt, six.wbgtGlobe);
+  assert.ok(six.wbgtBom > six.wbgtGlobe); assert.equal(six.category, 1); assert.equal(H.heatCategory(six.wbgtDaylight), 4);
   const night = H.assessHour({ ...JAIPUR, tC: 33.4, rh: 29, wind10kmh: 19.8, ghi: 0, direct: 0, diffuse: 0, pHpa: 947.6, utcMs: ist(2) });
-  assert.ok(night.solarElevation < -30); assert.equal(night.wbgtSource, 'globe'); assert.equal(night.wbgt, night.wbgtGlobe);
-  assert.equal(night.wbgtStrict, night.wbgtBom);
+  assert.ok(night.solarElevation < -30); assert.equal(night.shortwave, 0); assert.equal(night.strongSun, false);
+  assert.equal(night.wbgtSource, 'globe'); assert.equal(night.wbgt, night.wbgtGlobe); assert.equal(night.wbgtStrict, night.wbgtBom);
+});
+
+test('daylight-only rule (previous default, kept for comparison) still uses the solar elevation boundary', () => {
+  let lo = ist(5, 30), hi = ist(6, 0);
+  while (hi - lo > 1000) { const mid = (lo + hi) / 2; if (H.solarElevationDeg(mid, JAIPUR.lat, JAIPUR.lon) > 0) hi = mid; else lo = mid; }
+  const base = { ...JAIPUR, tC: 33.7, rh: 40, wind10kmh: 24.9, ghi: 0, direct: 0, diffuse: 0, pHpa: 949.2 };
+  const before = H.assessHour({ ...base, utcMs: lo - 60000 }), after = H.assessHour({ ...base, utcMs: hi + 60000 });
+  assert.equal(before.sunUp, false); assert.equal(before.wbgtDaylight, before.wbgtGlobe);
+  assert.equal(after.sunUp, true); assert.equal(after.wbgtDaylight, after.wbgtBom);
+  assert.equal(after.wbgtSource, 'globe'); // default rule: 0 W/m² -> G
 });

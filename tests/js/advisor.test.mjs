@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { buildForecast, hourRanges } from '../../lib/model.js';
 import { parseQuestion } from '../../lib/intent.js';
 import { answer, advisoryText, waLink } from '../../lib/advisor.js';
+import { UI } from '../../lib/i18n.js';
 
 // Fixture: archived Open-Meteo forecast for Delhi from 28 May 2024 (tests/fixtures/delhi_2024-05-28.json)
 const raw = JSON.parse(readFileSync(new URL('../fixtures/delhi_2024-05-28.json', import.meta.url)));
@@ -67,13 +68,16 @@ test('hour answers name the WBGT estimate that drove the verdict (EN + HI)', () 
   assert.match(answer(parseQuestion('Can I work at 2pm tomorrow in Delhi?', NOW), fc2, NOW), /from the sun\/globe model; BoM formula/);
 });
 
-test('night answers say the BoM formula is not used (EN + HI)', () => {
+test('weak-sun and night answers say why the BoM formula is not used (EN + HI)', () => {
   const fc = buildForecast(raw, place, 'moderate', null);
   const h = fc.hours.find((x) => x.date === '2024-05-29' && x.hour === 22);
-  assert.equal(h.sunUp, false);
+  assert.equal(h.strongSun, false); assert.equal(h.shortwave, 0);
   assert.equal(h.wbgtSource, 'globe');
   const en = answer(parseQuestion('Can I work at 10pm tomorrow in Delhi?', NOW), fc, NOW);
-  assert.match(en, /the sun is down, so the BoM formula is not used/);
+  assert.match(en, /forecast sunshine is 0 W\/m², below 600, and the BoM formula assumes strong sun, so it is not used/);
   const hi = answer(parseQuestion('कल रात 10 बजे दिल्ली में काम करना सुरक्षित है?', NOW), fc, NOW);
-  assert.ok(hi.includes('सूरज डूबा है, इसलिए BoM सूत्र लागू नहीं'));
+  assert.ok(hi.includes('600 से कम, और BoM सूत्र तेज़ धूप मानकर बना है, इसलिए वह लागू नहीं'));
+  // the footnote states the same reason in both languages
+  assert.match(UI.en.wbgtNote, /≥ 600 W\/m².*BoM formula assumes strong sun/);
+  assert.ok(UI.hi.wbgtNote.includes('≥ 600 W/m²') && UI.hi.wbgtNote.includes('BoM सूत्र तेज़ धूप मानकर बना है'));
 });

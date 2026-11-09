@@ -1,5 +1,5 @@
 // Offline app shell (forecast data itself is always fetched fresh; last result cached in localStorage).
-const V = 'lusaathi-v4';
+const V = 'lusaathi-v5';
 const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'icon.svg', 'manifest.webmanifest', 'lib/heat.js', 'lib/imd.js',
   'lib/coast.js', 'lib/intent.js', 'lib/gazetteer.js', 'lib/i18n.js', 'lib/model.js', 'lib/advisor.js'];
 self.addEventListener('install', (e) => e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())));

@@ -83,10 +83,12 @@ def hourly_rows(d, suffix=""):
 def assess(rows, lat, lon):
     """Return {date: {'tmax':.., 'hours': {hour: tuple}, 'all': {hour: tuple}}}
 
-    tuple = (cat, cat_bom, wbgt, cat_globe, wbgt_globe, source, cat_strict, sun_up, t, rh, tw, wbgt_bom)
-    cat/wbgt use the app's default daylight-only cautious rule (max of sun/globe model and BoM while the sun is up,
-    sun/globe model when it is down); *_globe = permissive baseline (always the sun/globe model);
-    cat_strict = strict rule (max of both at all hours). 'hours' = work hours only, 'all' = all 24 hours.
+    tuple = (cat, cat_bom, wbgt, cat_globe, wbgt_globe, source, cat_strict, sun_up, t, rh, tw, wbgt_bom,
+             cat_daylight, shortwave, cat_gated500, cat_gated700)
+    cat/wbgt/source use the app's default radiation-gated rule (max of sun/globe model and BoM when shortwave
+    radiation >= heat.BOM_MIN_SW_WM2 = 600 W/m2, else the sun/globe model); *_globe = permissive baseline (always the
+    sun/globe model); cat_strict = max of both at all hours; cat_daylight = max while the sun is up (previous default);
+    cat_gated500/700 = the same gate at 500 / 700 W/m2 (sensitivity). 'hours' = work hours, 'all' = all 24 hours.
     """
     out = {}
     for t, off, v in rows:
@@ -104,11 +106,18 @@ def assess(rows, lat, lon):
             tup = (heat.heat_category(w["wbgt"]), heat.heat_category(w["wbgt_bom"]), w["wbgt"],
                    heat.heat_category(w["wbgt_globe"]), w["wbgt_globe"], w["source"],
                    heat.heat_category(w["wbgt_strict"]), w["sun_up"],
-                   v["temperature_2m"], v["relative_humidity_2m"], w["tw"], w["wbgt_bom"])
+                   v["temperature_2m"], v["relative_humidity_2m"], w["tw"], w["wbgt_bom"],
+                   heat.heat_category(w["wbgt_daylight"]), w["shortwave"],
+                   heat.heat_category(heat.radiation_gated_wbgt(w["wbgt_globe"], w["wbgt_bom"], w["shortwave"], 500)[0]),
+                   heat.heat_category(heat.radiation_gated_wbgt(w["wbgt_globe"], w["wbgt_bom"], w["shortwave"], 700)[0]))
             day["all"][hh] = tup
             if hh in WORK_HOURS:
                 day["hours"][hh] = tup
     return out
+
+
+# rule name -> category index in the assess() tuple
+VARIANTS = {"gated600": 0, "permissive": 3, "strict": 6, "daylight": 12, "gated500": 14, "gated700": 15}
 
 
 def prf(tp, fp, fn):
@@ -129,17 +138,17 @@ def main():
     }
     per_city = []
     agg = {s: {"days": {"tp": 0, "fp": 0, "fn": 0, "tn": 0}, "days2": {"tp": 0, "fp": 0, "fn": 0, "tn": 0},
-               "hours": {"tp": 0, "fp": 0, "fn": 0}, "hours_permissive": {"tp": 0, "fp": 0, "fn": 0},
-               "hours_cautious_vs_permissive_ref": {"tp": 0, "fp": 0, "fn": 0}, "hours_strict": {"tp": 0, "fp": 0, "fn": 0},
-               "hours_strict_vs_permissive_ref": {"tp": 0, "fp": 0, "fn": 0}, "abs_err": [], "err": []} for s in sources}
+               **{f"{n}_{j}": {"tp": 0, "fp": 0, "fn": 0} for n in VARIANTS for j in ("own", "vs_old")},
+               "abs_err": [], "err": []} for s in sources}
     truth_tot = {"city_days": 0, "hw_days": 0, "hw_days_2day": 0, "severe_days": 0, "work_hours": 0,
                  "cat4plus_hours": 0, "cat5_hours": 0, "cat4plus_hours_bom": 0, "max_wbgt": None,
                  "bom_driven_hours": 0, "permissive_cat4plus_hours": 0, "permissive_cat5_hours": 0,
                  "permissive_max_wbgt": None, "strict_cat4plus_hours": 0, "strict_cat5_hours": 0,
                  "sun_down_work_hours": 0, "bom_higher_work_hours": 0,
                  "all_hours": 0, "all_sun_up_hours": 0,
-                 "all_cat4plus": {"daylight": 0, "strict": 0, "permissive": 0},
-                 "all_cat5": {"daylight": 0, "strict": 0, "permissive": 0}}
+                 "work_cat4plus": {k: 0 for k in VARIANTS}, "work_cat5": {k: 0 for k in VARIANTS},
+                 "all_cat4plus": {k: 0 for k in VARIANTS}, "all_cat5": {k: 0 for k in VARIANTS},
+                 "strong_sun_work_hours": 0, "strong_sun_all_hours": 0}
     for c in cities:
         lat, lon = c["lat"], c["lon"]
         p = dict(base, latitude=lat, longitude=lon)
@@ -187,11 +196,28 @@ def main():
         ah = [(d, hh, v) for d in dates for hh, v in truth[d]["all"].items()]
         truth_tot["all_hours"] += len(ah)
         truth_tot["all_sun_up_hours"] += sum(1 for _, _, v in ah if v[7])
-        for name, ix in (("daylight", 0), ("strict", 6), ("permissive", 3)):
+        truth_tot["strong_sun_work_hours"] += sum(1 for _, _, v in wh if v[13] >= heat.BOM_MIN_SW_WM2)
+        truth_tot["strong_sun_all_hours"] += sum(1 for _, _, v in ah if v[13] >= heat.BOM_MIN_SW_WM2)
+        for name, ix in VARIANTS.items():
+            truth_tot["work_cat4plus"][name] += sum(1 for _, _, v in wh if v[ix] >= 4)
+            truth_tot["work_cat5"][name] += sum(1 for _, _, v in wh if v[ix] >= 5)
             truth_tot["all_cat4plus"][name] += sum(1 for _, _, v in ah if v[ix] >= 4)
             truth_tot["all_cat5"][name] += sum(1 for _, _, v in ah if v[ix] >= 5)
+        row["work_hours"] = len(wh)
+        row["work_cat5"] = {name: sum(1 for _, _, v in wh if v[ix] >= 5) for name, ix in VARIANTS.items()}
+        row["work_cat4plus"] = {name: sum(1 for _, _, v in wh if v[ix] >= 4) for name, ix in VARIANTS.items()}
+        row["strong_sun_work_hours"] = sum(1 for _, _, v in wh if v[13] >= heat.BOM_MIN_SW_WM2)
+        c5 = [v for _, _, v in wh if v[0] >= 5]
+        row["default_cat5_work_hours_profile"] = {
+            "n": len(c5), "bom_driven": sum(1 for v in c5 if v[5] == "bom"),
+            "mean_t": round(sum(v[8] for v in c5) / len(c5), 2) if c5 else None,
+            "mean_rh": round(sum(v[9] for v in c5) / len(c5), 1) if c5 else None,
+            "mean_tw": round(sum(v[10] for v in c5) / len(c5), 2) if c5 else None,
+            "mean_wbgt_globe": round(sum(v[4] for v in c5) / len(c5), 2) if c5 else None,
+            "mean_wbgt_bom": round(sum(v[11] for v in c5) / len(c5), 2) if c5 else None,
+            "globe_cat5": sum(1 for v in c5 if v[3] >= 5)}
         hr = [v for _, _, v in ah if v[0] >= 4]
-        row["daylight_cat4plus_all_hours"] = {
+        row["default_cat4plus_all_hours"] = {
             "day": sum(1 for v in hr if v[7]), "night": sum(1 for v in hr if not v[7]),
             "bom_driven": sum(1 for v in hr if v[5] == "bom"),
             "work_hours_day": sum(1 for _, _, v in wh if v[0] >= 4 and v[7]),
@@ -221,10 +247,9 @@ def main():
             errs = [fc[x]["tmax"] - truth[x]["tmax"] for x in dates if fc.get(x, {}).get("tmax") is not None]
             A["abs_err"] += [abs(e) for e in errs]
             A["err"] += errs
-            # (forecast tuple index, reference tuple index): 0 = daylight-only (default), 3 = permissive (always G),
-            # 6 = strict (max at all hours)
-            for key, fi, ti in (("hours", 0, 0), ("hours_permissive", 3, 3), ("hours_cautious_vs_permissive_ref", 0, 3),
-                                ("hours_strict", 6, 6), ("hours_strict_vs_permissive_ref", 6, 3)):
+            # each rule judged by its own reference ("own") and against the permissive (always-G) reference ("old")
+            for key, fi, ti in [(f"{n}_own", ix, ix) for n, ix in VARIANTS.items()] + \
+                               [(f"{n}_vs_old", ix, 3) for n, ix in VARIANTS.items()]:
                 for x, hh, v in wh:
                     fv = fc.get(x, {}).get("hours", {}).get(hh)
                     if fv is None:
@@ -248,11 +273,8 @@ def main():
         summary[s] = {
             "day_alert_single_day": dict(prf(A["days"]["tp"], A["days"]["fp"], A["days"]["fn"]), tn=A["days"]["tn"]),
             "day_alert_two_consecutive_days": dict(prf(A["days2"]["tp"], A["days2"]["fp"], A["days2"]["fn"]), tn=A["days2"]["tn"]),
-            "dangerous_hour_flag_cat4plus": prf(A["hours"]["tp"], A["hours"]["fp"], A["hours"]["fn"]),
-            "permissive_dangerous_hour_flag_cat4plus": prf(A["hours_permissive"]["tp"], A["hours_permissive"]["fp"], A["hours_permissive"]["fn"]),
-            "cautious_flag_vs_permissive_reference": prf(A["hours_cautious_vs_permissive_ref"]["tp"], A["hours_cautious_vs_permissive_ref"]["fp"], A["hours_cautious_vs_permissive_ref"]["fn"]),
-            "strict_dangerous_hour_flag_cat4plus": prf(A["hours_strict"]["tp"], A["hours_strict"]["fp"], A["hours_strict"]["fn"]),
-            "strict_flag_vs_permissive_reference": prf(A["hours_strict_vs_permissive_ref"]["tp"], A["hours_strict_vs_permissive_ref"]["fp"], A["hours_strict_vs_permissive_ref"]["fn"]),
+            "flags": {f"{n}_{j}": prf(A[f"{n}_{j}"]["tp"], A[f"{n}_{j}"]["fp"], A[f"{n}_{j}"]["fn"])
+                      for n in VARIANTS for j in ("own", "vs_old")},
             "tmax_mae_c": round(sum(A["abs_err"]) / n, 3), "tmax_bias_c": round(sum(A["err"]) / n, 3), "n_city_days": n,
         }
     out = {"label": "BACKTEST against ERA5 reanalysis - NOT field/deployment data",

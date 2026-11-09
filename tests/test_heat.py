@@ -151,13 +151,37 @@ def test_daylight_wbgt_rule():
     assert heat.daylight_wbgt(29.0, 32.7, False) == (29.0, "globe")
 
 
+def test_radiation_gated_rule_and_boundary():
+    assert heat.BOM_MIN_SW_WM2 == 600
+    assert heat.radiation_gated_wbgt(29.0, 32.7, 600) == (32.7, "bom")
+    assert heat.radiation_gated_wbgt(29.0, 32.7, 599) == (29.0, "globe")
+    assert heat.radiation_gated_wbgt(31.5, 30.2, 900) == (31.5, "globe")
+    assert heat.radiation_gated_wbgt(29.0, 32.7, 0) == (29.0, "globe")
+    lat, lon = JAIPUR
+    at = lambda g: heat.wbgt_cautious(45.9, 7, 17.1, g, g * 506 / 786, g * 280 / 786, _ist(14), lat, lon, 948.6)
+    lo, hi = at(599), at(600)
+    assert not lo["strong_sun"] and lo["source"] == "globe" and heat.heat_category(lo["wbgt"]) == 2
+    assert hi["strong_sun"] and hi["source"] == "bom" and heat.heat_category(hi["wbgt"]) == 5
+
+
+def test_jaipur_radiation_gate_noon_morning_night():
+    lat, lon = JAIPUR
+    noon = heat.wbgt_cautious(45.9, 7, 17.1, 786, 506, 280, _ist(14), lat, lon, 948.6)
+    assert noon["strong_sun"] and noon["source"] == "bom" and heat.heat_category(noon["wbgt"]) == 5
+    six = heat.wbgt_cautious(33.7, 40, 24.9, 31, 4, 27, _ist(6), lat, lon, 949.2)
+    assert six["sun_up"] and not six["strong_sun"] and six["source"] == "globe" and heat.heat_category(six["wbgt"]) == 1
+    assert heat.heat_category(six["wbgt_daylight"]) == 4
+    night = heat.wbgt_cautious(33.4, 29, 19.8, 0, 0, 0, _ist(2), lat, lon, 947.6)
+    assert night["source"] == "globe" and night["wbgt"] == night["wbgt_globe"] < night["wbgt_bom"]
+
+
 def test_jaipur_daylight_boundary_and_night():
     lat, lon = JAIPUR
     assert heat.solar_elevation_deg(_ist(5, 30), lat, lon) < 0 < heat.solar_elevation_deg(_ist(6), lat, lon)
     six = heat.wbgt_cautious(33.7, 40, 24.9, 31, 4, 27, _ist(6), lat, lon, 949.2)
-    assert six["sun_up"] and six["source"] == "bom" and heat.heat_category(six["wbgt"]) == 4
+    assert six["sun_up"] and heat.heat_category(six["wbgt_daylight"]) == 4
     five = heat.wbgt_cautious(32.1, 40, 19.4, 0, 0, 0, _ist(5), lat, lon, 948.7)
-    assert not five["sun_up"] and five["source"] == "globe" and five["wbgt"] == five["wbgt_globe"]
+    assert not five["sun_up"] and five["wbgt_daylight"] == five["wbgt_globe"] == five["wbgt"]
     assert five["wbgt_strict"] == five["wbgt_bom"] > five["wbgt_globe"]
     noon = heat.wbgt_cautious(45.9, 7, 17.1, 786, 506, 280, _ist(14), lat, lon, 948.6)
     assert noon["source"] == "bom" and heat.heat_category(noon["wbgt"]) == 5
