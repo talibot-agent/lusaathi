@@ -38,3 +38,16 @@ test('WhatsApp advisory', () => {
   assert.ok(waLink(t).startsWith('https://wa.me/?text='));
   assert.equal(hourRanges([6, 7, 8, 12, 13]), '06:00–09:00, 12:00–14:00');
 });
+
+test('hour answers show wet-bulb and flag an out-of-range heat index', () => {
+  const fc = buildForecast(raw, place, 'moderate', null);
+  const h = fc.hours.find((x) => x.date === '2024-05-29' && x.hour === 14);
+  const en = answer(parseQuestion('Can I work at 2pm tomorrow in Delhi?', NOW), fc, NOW);
+  assert.match(en, new RegExp(`wet-bulb ${h.tw.toFixed(1)}°C`));
+  const hi = answer(parseQuestion('कल दोपहर 2 बजे दिल्ली में काम करना सुरक्षित है?', NOW), fc, NOW);
+  assert.match(hi, /वेट-बल्ब/);
+  const dry = { ...h, tC: 45.9, rh: 7, hiOutOfRange: true };
+  const fc2 = { ...fc, hours: fc.hours.map((x) => (x === h ? dry : x)) };
+  assert.match(answer(parseQuestion('Can I work at 2pm tomorrow in Delhi?', NOW), fc2, NOW), /rough: formula not valid/);
+  assert.equal(h.hiOutOfRange, h.rh < 13 && h.tC * 9 / 5 + 32 > 112);
+});

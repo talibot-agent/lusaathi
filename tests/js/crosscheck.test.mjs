@@ -21,7 +21,7 @@ cases=json.loads(sys.stdin.read())
 out=[]
 for c in cases:
     o=heat.wbgt_outdoor(c['tC'],c['rh'],c['wind10kmh'],c['ghi'],c['direct'],c['diffuse'],c['utcMs'],c['lat'],c['lon'])
-    out.append([o['wbgt'],heat.heat_index_c(c['tC'],c['rh']),heat.heat_category(o['wbgt']),imd.imd_heatwave(c['tC'],c['tC']-5,'plains')['level']])
+    out.append([o['wbgt'],heat.heat_index_c(c['tC'],c['rh']),heat.heat_category(o['wbgt']),imd.imd_heatwave(c['tC'],c['tC']-5,'plains')['level'],heat.heat_index_out_of_range(c['tC'],c['rh']),heat.wet_bulb_in_range(c['tC'],c['rh'])])
 print(json.dumps(out))`;
   const res = JSON.parse(execFileSync('python3', ['-c', py], { input: JSON.stringify(cases) }).toString());
   cases.forEach((c, i) => {
@@ -30,5 +30,7 @@ print(json.dumps(out))`;
     assert.ok(Math.abs(H.heatIndexC(c.tC, c.rh) - res[i][1]) < 1e-6);
     assert.equal(H.heatCategory(o.wbgt), res[i][2]);
     assert.equal(I.imdHeatwave(c.tC, c.tC - 5, 'plains').level, res[i][3]);
+    assert.equal(H.heatIndexOutOfRange(c.tC, c.rh), res[i][4]);
+    assert.equal(H.wetBulbInRange(c.tC, c.rh), res[i][5]);
   });
 });

@@ -33,6 +33,16 @@ def heat_index_c(t_c, rh):
     return f_to_c(hi)
 
 
+def heat_index_out_of_range(t_c, rh):
+    """NWS low-RH adjustment is only defined for RH < 13 % at 80-112 F; beyond that the regression is unreliable."""
+    return rh < 13 and c_to_f(t_c) > 112
+
+
+def wet_bulb_in_range(t_c, rh):
+    """Stull (2011) validity: RH 5-99 %, T -20..50 C."""
+    return 5 <= rh <= 99 and -20 <= t_c <= 50
+
+
 def heat_index_band(hi_c):
     f = c_to_f(hi_c)
     for thr, band in ((125, 4), (103, 3), (90, 2), (80, 1)):

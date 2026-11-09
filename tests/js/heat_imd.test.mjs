@@ -32,3 +32,14 @@ test('region classification', () => {
   assert.equal(I.classifyRegion(28.65, 77.23, 216), 'plains');
   assert.equal(I.classifyRegion(31.1, 77.17, 2200), 'hills');
 });
+
+test('formula validity flags: NWS heat index range, Stull wet-bulb range (Jaipur 29 May 2024 14:00 IST case)', () => {
+  // Archived Open-Meteo replay values for Jaipur: 45.9 °C, 7 % RH (114.6 °F > 112 °F, RH < 13 %)
+  assert.equal(H.heatIndexOutOfRange(45.9, 7), true);
+  assert.equal(H.heatIndexOutOfRange(40, 7), false);   // 104 °F: NWS low-RH adjustment is defined
+  assert.equal(H.heatIndexOutOfRange(46, 20), false);
+  assert.equal(H.wetBulbInRange(45.9, 7), true);       // Stull 2011: RH 5–99 %, −20…50 °C
+  assert.equal(H.wetBulbInRange(45, 3), false);
+  assert.equal(H.wetBulbInRange(51, 30), false);
+  assert.ok(Math.abs(H.wetBulbStullC(45.9, 7) - 20.12) < 0.01);
+});

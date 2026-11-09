@@ -58,6 +58,15 @@ ERA5 reanalysis — full tables, caveats and code in [VALIDATION.md](VALIDATION.
 
 These are retrospective model-vs-reanalysis numbers. **No field deployment, user or health-outcome data exists yet.**
 
+### Why the 2024 Jaipur replay says "yes, with breaks" at 46 °C
+
+On 29 May 2024 at 14:00 the archived forecast for Jaipur was 45.9 °C but only 7 % humidity, so the Stull (2011) wet-bulb
+temperature is just **20.1 °C**; with sun (globe 51.7 °C) the app's outdoor WBGT is 0.7·20.1 + 0.2·51.7 + 0.1·45.9 =
+**29.0 °C**, TB MED 507 Category 2, i.e. 50 min work / 10 min rest for moderate work. The NWS heat index (41.7 °C) is
+outside the range that formula is defined for at this humidity, so the app marks it `*` and does not use it. This is a
+model estimate, and the less conservative one: the simpler BoM cross-check gives 32.7 °C (Category 5). Full table:
+[docs/METHODS.md §3a](docs/METHODS.md#3a-worked-example-why-the-2024-jaipur-replay-says-yes-with-breaks-at-46-c).
+
 ## Screenshots
 
 Phone-width captures of the live app (replay mode, archived forecasts for the May 2024 heat wave):
@@ -70,7 +79,7 @@ Phone-width captures of the live app (replay mode, archived forecasts for the Ma
 
 1. Open https://talibot-agent.github.io/lusaathi/ on any phone and type a place (English or हिन्दी).
 2. Pick the type of work (light / moderate / heavy). Read the **Daily outlook**: IMD heat-wave status, peak WBGT and the
-   work/rest rule at the hottest hour; the **Next 72 hours** table shows every hour.
+   work/rest rule at the hottest hour; the **Next 72 hours** table shows every hour (air, humidity, wet-bulb, heat index, WBGT).
 3. Or ask a question — "Can I work on the roof at 2pm tomorrow in Nagpur?" / "कल दोपहर जयपुर में काम करना सुरक्षित है?".
 4. Tap **Share advisory on WhatsApp** to send the 3-day advisory to a crew, a contractor group or an ASHA worker.
 

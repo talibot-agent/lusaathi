@@ -36,7 +36,7 @@ Up to 380 million Indians, about 75% of the workforce, do heat-exposed work: con
 
 **Key features**
 - Any Indian place, typed in English or Devanagari (e.g. "जयपुर").
-- 72-hour hourly heat stress: NWS heat index + sun-exposed WBGT estimate (Dimiceli–Piltz globe + Stull wet-bulb, OSHA outdoor weighting; BoM approximation as cross-check).
+- 72-hour hourly heat stress: air temperature, humidity, Stull wet-bulb, NWS heat index (marked * where the formula is out of range) and a sun-exposed WBGT estimate (Dimiceli–Piltz globe + Stull wet-bulb, OSHA outdoor weighting; BoM approximation as cross-check).
 - Work/rest minutes and litres of water per hour for light / moderate / heavy work (US Army TB MED 507 heat categories 1–5), plus NDMA's 12–3 pm advice on heat-wave days.
 - IMD heat-wave criteria (plains / coastal / hills thresholds, departure from an ERA5 1991–2020 normal), with automatic region classification.
 - Ask in your language: "Can I work on the roof at 2pm tomorrow in Nagpur?" / "कल दोपहर जयपुर में छत पर काम करना सुरक्षित है?" → the agent extracts place, day, hour and work type, fetches the forecast, and answers with the numbers, a verdict, the work/rest schedule, a safer time that day and the IMD status, in the same language.
@@ -44,7 +44,9 @@ Up to 380 million Indians, about 75% of the workforce, do heat-exposed work: con
 - Replay of the May 2024 heat wave from archived forecasts: https://talibot-agent.github.io/lusaathi/?place=Delhi&replay=2024-05-28
 - Works offline after first load (service worker), ~30 kB gzipped, no login, no API key, no server, mobile-first.
 
-**Tech.** Static HTML/CSS + vanilla ES modules on GitHub Pages; Open-Meteo geocoding, forecast, ERA5 archive and historical-forecast APIs (CC BY 4.0, called from the browser). The agent is deterministic and rule-based (no paid LLM; nothing leaves the phone except the weather API calls), so every answer is explainable and traceable to a cited formula in docs/METHODS.md. The same math is implemented in Python (python/lusaathi_core) and a cross-check test asserts JS == Python. 39 automated tests (20 pytest + 19 node:test); GitHub Actions runs both suites before every Pages deploy. Reproducible 2024 backtest in validation/ → VALIDATION.md.
+**Why the 2024 Jaipur replay says "yes, with breaks" at 46 °C.** On 29 May 2024 at 14:00 the archived forecast was 45.9 °C with only 7 % humidity, so the Stull (2011) wet-bulb is just 20.1 °C, and the app's outdoor WBGT is 0.7×20.1 + 0.2×51.7 (globe) + 0.1×45.9 = 29.0 °C: TB MED 507 Category 2, i.e. 50 min work / 10 min rest for moderate work. The NWS heat index (41.7 °C) is outside the range that formula is defined for at this humidity, so the app marks it with * and does not use it; and because this is a model estimate, we also say plainly that the simpler BoM cross-check puts the same hour at 32.7 °C (Category 5). Details: docs/METHODS.md §3a.
+
+**Tech.** Static HTML/CSS + vanilla ES modules on GitHub Pages; Open-Meteo geocoding, forecast, ERA5 archive and historical-forecast APIs (CC BY 4.0, called from the browser). The agent is deterministic and rule-based (no paid LLM; nothing leaves the phone except the weather API calls), so every answer is explainable and traceable to a cited formula in docs/METHODS.md. The same math is implemented in Python (python/lusaathi_core) and a cross-check test asserts JS == Python. 43 automated tests (22 pytest + 21 node:test); GitHub Actions runs both suites before every Pages deploy. Reproducible 2024 backtest in validation/ → VALIDATION.md.
 
 **How we used AgentFoundry (AF).** <<FILL IN ONLY AFTER IT HAPPENS — dated, specific, checkable; see docs/AGENTFOUNDRY.md. Must state plainly that the first version (9 Nov 2026) was built outside AF with an AI coding agent, and what was then built in AF.>>
 
@@ -82,13 +84,13 @@ Live app: https://talibot-agent.github.io/lusaathi/ · 2024 heat-wave replay: ht
 
 ### Deployment & impact data
 ```
-**Deployment:** live on GitHub Pages since 9 Nov 2026 (https://talibot-agent.github.io/lusaathi/), open source (MIT), free, no login; works on low-end phones and slow connections.
+**Backtest (retrospective, not field data):** run on archived day-ahead forecasts for 25 Indian cities, 1 Apr–30 Jun 2024, scored against ERA5 reanalysis. LuSaathi's day-ahead IMD heat-wave alerts caught **120 of 125 heat-wave city-days (recall 0.96, precision 0.45, F1 0.61)** with the Open-Meteo best_match model mix the app uses, and its day-ahead dangerous-work-hour flag (WBGT Category 4–5) scored **precision 0.73, recall 0.73, F1 0.73**, flagging 5,274 city work-hours one day ahead for mandatory rest breaks. In that season, 5,249 of 29,575 city work-hours (17.7 %) were at Category 4–5 in the ERA5 reference. Reproducible scripts: validation/ → https://github.com/talibot-agent/lusaathi/blob/main/VALIDATION.md
 
-**Validation (retrospective BACKTEST, clearly not field data)** — reproducible scripts in `validation/`, full tables in https://github.com/talibot-agent/lusaathi/blob/main/VALIDATION.md . Archived day-ahead forecasts (Open-Meteo Previous Runs API) for 25 Indian cities, 1 Apr–30 Jun 2024, scored against ERA5 reanalysis:
-- **Day-ahead IMD heat-wave alerts** (the model mix the app uses, Open-Meteo best_match): **recall 0.96, precision 0.45, F1 0.61** (120 of 125 heat-wave city-days caught one day ahead; 148 false alarms). ECMWF IFS alone: precision 0.57, recall 0.75, F1 0.65.
-- **Day-ahead dangerous work-hour flag (WBGT Cat 4–5): precision 0.73, recall 0.73, F1 0.73**; 5,274 city work-hours flagged one day ahead for mandatory rest breaks.
-- **Day+1 Tmax MAE 1.23 °C** (best_match), 1.12 °C (ECMWF IFS).
-- Caveats stated in VALIDATION.md: ERA5 smooths peaks vs IMD stations, single-point IMD criteria, modelled (not measured) WBGT, coastal warm bias at Chennai.
+- ECMWF IFS alone: heat-wave alerts precision 0.57, recall 0.75, F1 0.65; dangerous-hour flag precision 0.76, recall 0.53.
+- Day+1 Tmax mean absolute error: 1.23 °C (best_match), 1.12 °C (ECMWF IFS).
+- Caveats (in VALIDATION.md): ERA5 smooths peaks compared with IMD stations; IMD criteria applied at a single point; WBGT is modelled, not measured; warm forecast bias at coastal Chennai; the alerts trade precision for recall (148 false-alarm city-days).
+
+**Deployment:** live on GitHub Pages since 9 Nov 2026 (https://talibot-agent.github.io/lusaathi/), open source (MIT), free, no login; works on low-end phones and slow connections.
 
 **Field data:** none yet. No users, outcomes or before/after measurements have been collected; we do not claim any.
 ```

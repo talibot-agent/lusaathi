@@ -102,3 +102,18 @@ def test_work_rest_table():
 def test_niosh_rel():
     assert abs(heat.niosh_rel(300) - 28.2) < 0.1
     assert heat.niosh_ral(300) < heat.niosh_rel(300)
+
+
+def test_heat_index_out_of_range_flag():
+    # NWS: low-RH adjustment only defined for RH < 13 % and 80-112 F; Jaipur 29 May 2024 14:00 = 45.9 C (114.6 F), 7 %
+    assert heat.heat_index_out_of_range(45.9, 7) is True
+    assert heat.heat_index_out_of_range(40, 7) is False
+    assert heat.heat_index_out_of_range(46, 20) is False
+
+
+def test_wet_bulb_validity_and_jaipur_value():
+    # Stull (2011): valid for RH 5-99 % and -20..50 C
+    assert heat.wet_bulb_in_range(45.9, 7)
+    assert not heat.wet_bulb_in_range(45, 3)
+    assert not heat.wet_bulb_in_range(51, 30)
+    assert abs(heat.wet_bulb_stull_c(45.9, 7) - 20.12) < 0.01

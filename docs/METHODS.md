@@ -18,6 +18,8 @@ Open-Meteo terms: free for non-commercial use, attribution required (CC BY 4.0 d
 
 * **Heat index** — US NWS Rothfusz regression incl. low/high-humidity adjustments,
   https://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml . Bands at 80/90/103/125 °F (Caution / Extreme caution / Danger / Extreme danger).
+  Shown for information only. Flagged `*` (`heatIndexOutOfRange`) when RH < 13 % and T > 112 °F, where NWS defines no adjustment.
+  The hourly table also shows the Stull wet-bulb; `wetBulbInRange` checks Stull's stated range (RH 5–99 %, −20…50 °C).
 * **Outdoor WBGT** = 0.7·T<sub>nwb</sub> + 0.2·T<sub>g</sub> + 0.1·T<sub>db</sub> (OSHA Technical Manual Sec. III Ch. 4,
   https://www.osha.gov/otm/section-3-health-hazards/chapter-4).
   * **Globe temperature T<sub>g</sub>** — Dimiceli & Piltz (NWS Tulsa), *Estimation of Black Globe Temperature for
@@ -57,6 +59,27 @@ REL = 56.7 − 11.5·log<sub>10</sub>M, RAL = 59.9 − 14.1·log<sub>10</sub>M (
 Recommended Standard: Occupational Exposure to Heat and Hot Environments*, DHHS (NIOSH) 2016-106,
 https://www.cdc.gov/niosh/docs/2016-106/pdfs/2016-106.pdf . OSHA notes un-acclimatised workers need 7–14 days of
 gradually increasing exposure (OSHA OTM above).
+
+## 3a. Worked example: why the 2024 Jaipur replay says "yes, with breaks" at 46 °C
+
+Archived forecast (Open-Meteo Historical Forecast API) for Jaipur, **29 May 2024, 14:00 IST**: air 45.9 °C, relative
+humidity 7 %, 10 m wind 17.1 km/h, global radiation 786 W/m², surface pressure 948.6 hPa. Computed by `lib/heat.js`
+(`assessHour`); reproduced by the tests in `tests/js/heat_imd.test.mjs` and `tests/test_heat.py`:
+
+| Quantity | Formula (source) | Value | Within the formula's stated range? |
+|---|---|---|---|
+| Wet-bulb T<sub>w</sub> | Stull (2011) | **20.1 °C** | Yes — Stull states RH 5–99 %, −20…50 °C (fit at sea-level pressure; Jaipur is at ~949 hPa) |
+| Globe T<sub>g</sub> | Dimiceli & Piltz eq. 10 | 51.7 °C | — |
+| **Outdoor WBGT** | 0.7·T<sub>w</sub> + 0.2·T<sub>g</sub> + 0.1·T = 14.1 + 10.3 + 4.6 (OSHA) | **29.0 °C (84.2 °F)** | — |
+| TB MED 507 category | 82–84.9 °F | **Category 2** → moderate work 50 min work / 10 min rest, 0.71 L/h | — |
+| Heat index | NWS Rothfusz regression | 41.7 °C (107 °F) | **No** — 114.6 °F with RH < 13 %: the NWS low-humidity adjustment is only defined up to 112 °F, and NWS says the regression "is not valid for extreme temperature and relative humidity conditions beyond the range of data considered by Steadman". The app marks such values with `*` and does **not** use the heat index for work/rest. |
+| Cross-check WBGT | BoM approximation | 32.7 °C → Category 5 | Assumes moderate sun and light wind |
+
+**Plain reading:** in air this dry, sweat evaporates fast, so the wet-bulb temperature is only 20.1 °C, and the wet-bulb
+term carries 70 % of the WBGT weight; that keeps the sun-exposed WBGT at 29.0 °C, just 0.4 °C below the Category 3
+threshold. The verdict is what the model computes, not a measured safe limit: the simpler BoM cross-check puts the same
+hour in Category 5, and the psychrometric wet-bulb can underestimate the natural wet-bulb in full sun (§5, item 4), so
+the app's figure is the less conservative of the two estimates.
 
 ## 4. IMD heat-wave criteria (`lib/imd.js`)
 

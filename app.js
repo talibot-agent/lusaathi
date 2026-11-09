@@ -111,20 +111,22 @@ function render() {
     days.appendChild(div);
   }
   const th = $('hours').querySelector('thead');
-  th.innerHTML = `<tr><th>${T.hour}</th><th>${T.temp}</th><th>${T.rh}</th><th>${T.hi}</th><th>${T.wbgt}</th><th>${T.cat}</th><th>${T.wr}</th><th>${T.water}</th></tr>`;
+  th.innerHTML = `<tr><th>${T.hour}</th><th>${T.temp}</th><th>${T.rh}</th><th>${T.tw}</th><th>${T.hi}</th><th>${T.wbgt}</th><th>${T.cat}</th><th>${T.wr}</th><th>${T.water}</th></tr>`;
   const tb = $('hours').querySelector('tbody'); tb.innerHTML = '';
   const now = nowLocal().toISOString().slice(0, 13);
   const hrs = fc.hours.filter((h) => h.time.slice(0, 13) >= now).slice(0, 72);
   let lastDate = '';
   const rows = [];
   for (const h of hrs) {
-    if (h.date !== lastDate) { rows.push(`<tr class="daysep"><td colspan="8">${fmtDate(h.date, L)}</td></tr>`); lastDate = h.date; }
+    if (h.date !== lastDate) { rows.push(`<tr class="daysep"><td colspan="9">${fmtDate(h.date, L)}</td></tr>`); lastDate = h.date; }
     const off = h.hour < WORK_START || h.hour > WORK_END;
-    rows.push(`<tr class="${off ? 'off' : ''}"><td>${fmtHour(h.hour)}</td><td>${r0(h.tC)}</td><td>${r0(h.rh)}</td><td>${r0(h.hi)}</td>`
+    rows.push(`<tr class="${off ? 'off' : ''}"><td>${fmtHour(h.hour)}</td><td>${r0(h.tC)}</td><td>${r0(h.rh)}</td><td>${r1(h.tw)}</td><td>${r0(h.hi)}${h.hiOutOfRange ? '*' : ''}</td>`
       + `<td>${r1(h.wbgt)}</td><td><span class="pill c${h.category}">${h.category || '–'}</span></td>`
       + `<td>${h.workRest.noLimit ? T.noLimit : `${h.workRest.workMin}/${h.workRest.restMin}`}</td><td>${h.workRest.waterLph} L</td></tr>`);
   }
   tb.innerHTML = rows.join('');
+  $('hiNote').textContent = T.hiNote;
+  $('hiNote').hidden = !hrs.some((h) => h.hiOutOfRange);
   const share = location.origin + location.pathname + '?place=' + encodeURIComponent(fc.place.name) + '&lang=' + L + (REPLAY ? '&replay=' + REPLAY : '');
   const text = advisoryText(fc, L, S.workload, share);
   $('wa').href = waLink(text);
