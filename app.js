@@ -7,7 +7,14 @@ import { answer, advisoryText, waLink } from './lib/advisor.js';
 const $ = (id) => document.getElementById(id);
 const qs = new URLSearchParams(location.search);
 const S = {
-  lang: qs.get('lang') || localStorage.getItem('ls_lang') || ((navigator.language || '').startsWith('hi') ? 'hi' : 'en'),
+  lang: (() => {
+    const raw = qs.get('lang') || localStorage.getItem('ls_lang');
+    if (raw === 'hi' || raw === 'mr' || raw === 'en') return raw;
+    const nav = (navigator.language || '').toLowerCase();
+    if (nav.startsWith('mr')) return 'mr';
+    if (nav.startsWith('hi')) return 'hi';
+    return 'en';
+  })(),
   workload: qs.get('w') || localStorage.getItem('ls_w') || 'moderate',
   place: null, raw: null, normals: null, fc: null,
 };
@@ -163,7 +170,12 @@ $('place').addEventListener('input', () => {
 $('workload').value = S.workload;
 $('workload').addEventListener('change', () => { S.workload = $('workload').value; localStorage.setItem('ls_w', S.workload); if (S.raw) { rebuild(); render(); } });
 $('region').addEventListener('change', () => { if (S.raw) { rebuild(); render(); } });
-$('lang').addEventListener('click', () => { S.lang = S.lang === 'en' ? 'hi' : 'en'; localStorage.setItem('ls_lang', S.lang); applyLang(); });
+const LANG_CYCLE = ['en', 'hi', 'mr'];
+$('lang').addEventListener('click', () => {
+  S.lang = LANG_CYCLE[(LANG_CYCLE.indexOf(S.lang) + 1) % LANG_CYCLE.length];
+  localStorage.setItem('ls_lang', S.lang);
+  applyLang();
+});
 
 async function ask() {
   const text = $('q').value.trim() || $('q').placeholder;
@@ -176,7 +188,12 @@ async function ask() {
     if (!ok) { out.textContent = UI[q.lang].notFound; return; }
   }
   if (!S.fc && !q.place) await searchAndLoad(qs.get('place') || 'Nagpur');
-  if (!S.fc) { out.textContent = q.lang === 'hi' ? 'पहले जगह का नाम लिखें या सवाल में जगह बताएँ।' : 'Please name a place (in the question or the box above).'; return; }
+  if (!S.fc) {
+    out.textContent = q.lang === 'hi' ? 'पहले जगह का नाम लिखें या सवाल में जगह बताएँ।'
+      : q.lang === 'mr' ? 'आधी ठिकाणाचे नाव लिहा किंवा प्रश्नात ठिकाण सांगा.'
+        : 'Please name a place (in the question or the box above).';
+    return;
+  }
   if (q.workload && q.workload !== S.workload) { $('workload').value = q.workload; S.workload = q.workload; rebuild(); render(); }
   out.textContent = answer(q, S.fc, nowLocal(), S.workload);
 }

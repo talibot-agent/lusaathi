@@ -5,5 +5,5 @@
   "description": "LuSaathi – heat-stress safety agent for India's outdoor workers (static web app)",
   "type": "module",
   "license": "MIT",
-  "scripts": { "test": "node --test tests/js/*.test.mjs" }
+  "scripts": { "test": "node --test tests/js/*.test.mjs tests/js/*.test.js" }
 }

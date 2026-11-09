@@ -5,3 +5,6 @@ node_modules/
 .pytest_cache/
 validation/run.log
 validation/run.err
+
+# AgentFoundry IDE local state (tokens/sessions); keep agent-studio manifests when added
+.codenow/sessions/

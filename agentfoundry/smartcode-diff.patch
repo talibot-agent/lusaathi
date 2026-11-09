@@ -1,0 +1,245 @@
+# SMART-Code produced diff (pre hand-fix). Saved before any Builder edits.
+# Generated: 2026-11-09
+
+diff --git a/lib/i18n.js b/lib/i18n.js
+index c5f57e2..f982305 100644
+--- a/lib/i18n.js
++++ b/lib/i18n.js
+@@ -2,18 +2,22 @@
+ export const CAT = {
+   en: ['Low – below Cat 1', 'Cat 1 – Caution', 'Cat 2 – Elevated', 'Cat 3 – High', 'Cat 4 – Very high', 'Cat 5 – Extreme'],
+   hi: ['कम – श्रेणी 1 से नीचे', 'श्रेणी 1 – सावधानी', 'श्रेणी 2 – बढ़ा हुआ', 'श्रेणी 3 – अधिक', 'श्रेणी 4 – बहुत अधिक', 'श्रेणी 5 – अत्यधिक'],
++  mr: ['कम – वर्ग 1 खाली', 'वर्ग 1 – सावधानी', 'वर्ग 2 – वाढला', 'वर्ग 3 – अधिक', 'वर्ग 4 – खूप अधिक', 'वर्ग 5 – अत्यंत'],
+ };
+ export const IMD = {
+   en: ['No IMD heat-wave criterion met', 'IMD heat-wave criterion met', 'IMD SEVERE heat-wave criterion met'],
+   hi: ['IMD लू (हीट वेव) मानदंड पूरा नहीं', 'IMD लू (हीट वेव) मानदंड पूरा', 'IMD गंभीर लू मानदंड पूरा'],
++  mr: ['IMD लू निकष पूर्ण नाही', 'IMD लू निकष पूर्ण', 'IMD गंभीर लू निकष पूर्ण'],
+ };
+ export const WORKLOAD = {
+   en: { easy: 'light work', moderate: 'moderate work', hard: 'heavy work' },
+   hi: { easy: 'हल्का काम', moderate: 'मध्यम काम', hard: 'भारी काम' },
++  mr: { easy: 'हलका काम', moderate: 'मध्यम काम', hard: 'जड काम' },
+ };
+ export const REGION = {
+   en: { plains: 'plains', coastal: 'coastal', hills: 'hills' },
+   hi: { plains: 'मैदानी', coastal: 'तटीय', hills: 'पहाड़ी' },
++  mr: { plains: 'सपाट भाग', coastal: 'किनारी', hills: 'डोंगर' },
+ };
+ 
+ export const UI = {
+@@ -57,12 +61,32 @@ export const UI = {
+     wbgtNote: 'WBGT: जब पूर्वानुमान में तेज़ धूप हो (सौर विकिरण ≥ 600 W/m²), तो दो अनुमानों में से ज़्यादा (ज़्यादा सतर्क) वाला: G = धूप/ग्लोब मॉडल (Dimiceli–Piltz + Stull), B = BoM सूत्र। बाकी समय (हल्की धूप, सुबह-शाम, रात) सिर्फ़ G, क्योंकि BoM सूत्र तेज़ धूप मानकर बना है। श्रेणी और काम/आराम इसी मान से तय होते हैं।',
+     hiNote: '* इतनी कम नमी (13% से कम) और 44.4°C से ज़्यादा तापमान पर हीट इंडेक्स का NWS सूत्र भरोसेमंद नहीं — इसे मोटा अनुमान मानें। काम/आराम WBGT से तय होता है, जो मुख्यतः वेट-बल्ब तापमान पर निर्भर है।',
+   },
++  mr: {
++    title: 'लू साथी', tagline: 'बाहेर काम करणार्‍यांसाठी उष्णतेची सुरक्षितता',
++    placeLabel: 'ठिकाण (शहर / तालुका / गाव)', placeholder: 'उदा. Nagpur किंवा जयपूर', search: 'पहा',
++    workload: 'कामाचा प्रकार', region: 'IMD प्रदेश', auto: 'ऑटो',
++    ask: 'प्रश्न विचारा', askPlaceholder: 'काल दुपारी नागपूरमध्ये छतावर काम करू शकतो का?', askBtn: 'उत्तर',
++    share: 'WhatsApp वर सल्ला पाठवा', copy: 'मजकूर कॉपी करा', copied: 'कॉपी केले',
++    next72: 'पुढील 72 तास (कामाचे तास 06:00–18:00 हायलाइट)', days: 'दैनंदिन स्थिती',
++    hour: 'वेळ', temp: 'वातावरण °C', rh: 'आर्द्रता %', tw: 'वेट-बलब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'वर्ग',
++    wr: 'प्रत्येक तास काम/विराम', water: 'पाणी',
++    loading: 'पूर्वानुमान लोड करीत आहे…', notFound: 'भारतात हे ठिकाण आढळले नाही. वेगळ्या हिज्जे वापरून पाहा.',
++    netErr: 'पूर्वानुमान सेवा उपलब्ध नाही. तुमची कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',
++    tmax: 'कमाल तापमान', normal: 'सामान्य', dep: 'फरक', peak: 'अधिकतम WBGT', dangerous: 'वर्ग 4–5 कामाचे तास',
++    none: 'काही नाही', noLimit: 'मर्यादा नाही', normalPending: 'सामान्य लोड नाही (फरक तपास वगळला)',
++    sources: 'पद्धती, स्रोत आणि मर्यादा', disclaimer: 'हे हवामान-मॉडेल अंदाजावर आधारित आहेत, स्थानिक नोंदी नाहीत. अधिकृत IMD/NDMA/राज्याच्या सूचना पाळा. लूचे लक्षण दिसल्यास (गोंधळ, गरम व कोरडी त्वचा, बेहोशी) लगेच 108/112 ला कॉल करा.',
++    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON मिश्रण). सामान्य: ERA5 1991–2020.',
++    replayBanner: 'रीप्ले मोड: मागील कालावधीचा संग्रहित पूर्वानुमान (2024 लू डेमो), आजचे हवामान नाही.', replayLink: 'डेमो: मे 2024 ची लू पाहा (दिल्ली, 28 मे 2024)', live: 'लाइव्ह पूर्वानुमानवर परत या',
++    lang: 'मराठी',
++    wbgtNote: 'WBGT: जर पूर्वानुमानात जोरदार सूर्य दिसून आला (shortwave विकिरण ≥ 600 W/m²), तर दोन अंदाजांपैकी जास्त (जास्त सावध) वापरतात: G = सूर्य/ग्लोब मॉडेल (Dimiceli–Piltz + Stull), B = BoM सूत्र. इतर वेळा (सकाळ/संध्याकाळ/रात किंवा कमी धूप) फक्त G वापरतात, कारण BoM सूत्र जोरदार सूर्य गृहीत धरते. वर्ग आणि काम/विराम हा हा मूल्य वापरून ठरवतात.',
++    hiNote: '* हीट इंडेक्स NWS सूत्रासाठी ठरवलेल्या श्रेणीबाहेर आहे (13% पेक्षा कमी आर्द्रता व 44.4°C पेक्षा जास्त तापमान) — याला अंदाज म्हणून घ्या. काम/विराम WBGT वर आधारित असतात, जे मुख्यतः वेट-बलब तापमानावर अवलंबून असते.',
++  },
+ };
+ 
+ const pad = (n) => String(n).padStart(2, '0');
+-const DOW = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], hi: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'] };
++const DOW = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], hi: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'], mr: ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'] };
+ const MON = { en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+-  hi: ['जन', 'फ़र', 'मार्च', 'अप्रै', 'मई', 'जून', 'जुला', 'अग', 'सित', 'अक्टू', 'नव', 'दिस'] };
++  hi: ['जन', 'फ़र', 'मार्च', 'अप्रै', 'मई', 'जून', 'जुला', 'अग', 'सित', 'अक्टू', 'नव', 'दिस'], mr: ['जन', 'फेब', 'मार्च', 'एप्रि', 'मे', 'जून', 'जुलै', 'ऑग', 'सप्ट', 'ऑक्ट', 'नोव्ह', 'डिस'] };
+ export function fmtDate(iso, lang) {
+   const [y, m, d] = iso.split('-').map(Number);
+   const w = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+diff --git a/lib/intent.js b/lib/intent.js
+index 070c76a..03941cb 100644
+--- a/lib/intent.js
++++ b/lib/intent.js
+@@ -6,6 +6,11 @@ const DEV_DIGITS = '०१२३४५६७८९';
+ export const normDigits = (s) => s.replace(/[०-९]/g, (d) => String(DEV_DIGITS.indexOf(d)));
+ export const isDevanagari = (s) => /[\u0900-\u097F]/.test(s);
+ 
++const MARATHI_ONLY = /आहे|आहेत|उद्या|परवा|मध्ये|वाजता|दुपारी|सकाळी|संध्याकाळी|रात्री|शकतो|शकतो का|काय|करू/;
++function isMarathi(text) {
++  return MARATHI_ONLY.test(text);
++}
++
+ const WEEKDAYS = [
+   ['sunday', 'sun', 'रविवार', 'इतवार', 'ravivar'],
+   ['monday', 'mon', 'सोमवार', 'somvar'],
+@@ -17,9 +22,9 @@ const WEEKDAYS = [
+ ];
+ 
+ const WORKLOAD = [
+-  ['hard', /\b(carry|carrying|lift|lifting|dig|digging|brick|bricks|load|loading|unload|cement|mason|masonry|shovel|heavy|harvest by hand)\b|ढो|उठा|खुदाई|ईंट|बोझ|भारी|मज़दूरी|मजदूरी/i],
+-  ['moderate', /\b(roof|roofing|construction|site|deliver|delivery|ride|riding|cycle|rickshaw|farm|field|harvest|walk|walking|plaster|paint|painting|weld)\b|छत|निर्माण|डिलीवरी|खेत|कटाई|रिक्शा|साइकिल|चलना/i],
+-  ['easy', /\b(sit|sitting|stall|vend|vendor|guard|watchman|traffic|light work|selling)\b|बैठ|ठेला|दुकान|चौकीदार|गार्ड|हल्का/i],
++  ['hard', /\b(carry|carrying|lift|lifting|dig|digging|brick|bricks|load|loading|unload|cement|mason|masonry|shovel|heavy|harvest by hand)\b|ढो|उठा|खुदाई|ईंट|बोझ|भारी|मज़दूरी|मजदूरी|दुष्कर|अजड|कठीण|जड|अवजड/i],
++  ['moderate', /\b(roof|roofing|construction|site|deliver|delivery|ride|riding|cycle|rickshaw|farm|field|harvest|walk|walking|plaster|paint|painting|weld)\b|छत|निर्माण|डिलीवरी|खेत|कटाई|रिक्शा|साइकिल|चलना|मध्यम|मध्यम काम/i],
++  ['easy', /\b(sit|sitting|stall|vend|vendor|guard|watchman|traffic|light work|selling)\b|बैठ|ठेला|दुकान|चौकीदार|गार्ड|हल्का|सुलभ|सोपं|सोपं आहे|हलका|हलके काम/i],
+ ];
+ 
+ const STOP = new Set(['tomorrow', 'today', 'tonight', 'now', 'at', 'on', 'the', 'day', 'after', 'morning', 'afternoon',
+@@ -44,11 +49,20 @@ function findPlace(text) {
+     const words = m[1].split(/\s+/).filter((w) => !STOP.has(w.toLowerCase()));
+     if (words.length) return { place: words.join(' '), placeSource: 'pattern' };
+   }
+-  // Hindi pattern: "<Place> में" (word before "में")
++  // Marathi/Hindi pattern: "<Place> मध्ये" or "<Place> में" (word before the preposition)
++  const marathi = text.match(/([\u0900-\u097F]{2,})\s*मध्ये/);
++  if (marathi && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(marathi[1])) {
++    return { place: marathi[1], placeSource: 'pattern' };
++  }
+   const h = text.match(/([\u0900-\u097F]{2,})\s+में/);
+   if (h && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(h[1])) {
+     return { place: h[1], placeSource: 'pattern' };
+   }
++  // Marathi locative suffixes like "पुण्यात" (base name + "ात" / "्यात")
++  const loc = text.match(/([\u0900-\u097F]{2,}?)(?:्यात|ात)\b/);
++  if (loc && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत', 'आत', 'आता'].includes(loc[1])) {
++    return { place: loc[1], placeSource: 'pattern' };
++  }
+   const hl = text.match(/\b([A-Za-z]{3,})\s+(?:mein|me|mai)\b/i);
+   if (hl && !STOP.has(hl[1].toLowerCase())) return { place: hl[1], placeSource: 'pattern' };
+   return { place: null, placeSource: null };
+@@ -56,9 +70,9 @@ function findPlace(text) {
+ 
+ function findDay(text, nowLocal) {
+   const t = text.toLowerCase();
+-  if (/day after tomorrow|परसों|\bparson\b|\bparso\b/.test(t)) return 2;
+-  if (/tomorrow|\btmrw\b|कल|\bkal\b/.test(t)) return 1; // "kal" = tomorrow in a forecast context
+-  if (/today|tonight|\bnow\b|आज|अभी|\baaj\b|\babhi\b/.test(t)) return 0;
++  if (/day after tomorrow|परसों|\bparson\b|\bparso\b|परवा/.test(t)) return 2;
++  if (/tomorrow|\btmrw\b|कल|\bkal\b|उद्या|उद्य/.test(t)) return 1; // "kal" = tomorrow in a forecast context
++  if (/today|tonight|\bnow\b|आज|अभी|\baaj\b|\babhi\b|आत|आता/.test(t)) return 0;
+   const dow = nowLocal.getUTCDay();
+   for (let i = 0; i < 7; i++) {
+     for (const w of WEEKDAYS[i]) {
+@@ -79,16 +93,17 @@ function findHour(text) {
+   }
+   m = t.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/);
+   if (m) return Number(m[1]);
+-  const period = /दोपहर|dopahar|dopehar|afternoon/.test(t) ? 'aft'
+-    : /शाम|shaam|sham\b|evening/.test(t) ? 'eve'
+-      : /रात|raat|night|tonight/.test(t) ? 'night'
+-        : /सुबह|subah|morning/.test(t) ? 'morn'
++  const period = /दुपारी|दोपहर|dopahar|dopehar|afternoon|दपारी/.test(t) ? 'aft'
++    : /संध्याकाळी|संध्याकाळ|शाम|shaam|sham\b|evening|सकाळी/.test(t) ? 'eve'
++      : /रात्री|रात|raat|night|tonight/.test(t) ? 'night'
++        : /सकाळ|सुबह|subah|morning/.test(t) ? 'morn'
+           : /\bnoon\b|midday|दोपहर 12/.test(t) ? 'noon' : null;
+-  m = t.match(/(\d{1,2})\s*(?:बजे|baje|o'?clock)/) || t.match(/\bat\s+(\d{1,2})\b(?!\s*(?:km|°|c\b|%))/);
++  m = t.match(/(\d{1,2})\s*(?:बजे|baje|o'?clock|वाजता)/) || t.match(/\bat\s+(\d{1,2})\b(?!\s*(?:km|°|c\b|%))/);
+   if (m) {
+     let h = Number(m[1]);
+     if (h > 23) return null;
+-    if (period === 'aft' || period === 'eve') { if (h < 12) h += 12; } else if (period === 'night') {
++    // Marathi specifics: दुपारी/दपारी -> PM by default (14:00), सकाळी -> AM, संध्याकाळी/शाम -> PM, रात्री -> night PM
++    if (period === 'aft') { if (h < 12) h += 12; } else if (period === 'eve') { if (h < 12) h += 12; } else if (period === 'night') {
+       if (h >= 6 && h < 12) h += 12;
+     } else if (period === 'morn') { if (h === 12) h = 0; } else if (h >= 1 && h <= 6) h += 12; // "at 2" -> 14:00
+     return h;
+@@ -108,10 +123,11 @@ function findWorkload(text) {
+ 
+ /** nowLocal: a Date whose UTC fields represent local wall-clock time at the place (IST). */
+ export function parseQuestion(text, nowLocal = new Date()) {
+-  const hinglish = (text.toLowerCase().match(/\b(kal|aaj|parson|mein|hai|kaam|karna|baje|dopahar|subah|shaam|raat|abhi|kya|sakta|sakte|garmi)\b/g) || []).length;
+-  const lang = isDevanagari(text) || hinglish >= 2 ? 'hi' : 'en';
++  const t = text.toLowerCase();
++  const hinglish = (t.match(/\b(kal|aaj|parson|mein|hai|kaam|karna|baje|dopahar|subah|shaam|raat|abhi|kya|sakta|sakte|garmi)\b/g) || []).length;
++  const lang = isDevanagari(text) || hinglish >= 2 ? (isMarathi(text) ? 'mr' : 'hi') : 'en';
+   const { place, placeSource } = findPlace(text);
+-  const wantsNow = /\bnow\b|\bright now\b|अभी|\babhi\b/i.test(text);
++  const wantsNow = /\bnow\b|\bright now\b|अभी|\babhi\b|आत\b|आता\b/i.test(text);
+   let dayOffset = findDay(text, nowLocal);
+   let hour = findHour(text);
+   if (wantsNow) { dayOffset = 0; hour = nowLocal.getUTCHours(); }
+
+# ==== NEW FILE: tests/js/marathi.test.js ====
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { parseQuestion } from '../../lib/intent.js';
+import { UI } from '../../lib/i18n.js';
+
+const NOW = new Date(Date.UTC(2026, 10, 9, 11, 0)); // Monday 9 Nov 2026, 11:00 IST
+
+// ============================================================================
+// Marathi language detection and parsing
+// ============================================================================
+
+test('Marathi: उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकतो का?', () => {
+  const q = parseQuestion('उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकतो का?', NOW);
+  assert.equal(q.lang, 'mr', 'should detect as Marathi (mr)');
+  assert.equal(q.place, 'Pune', 'should parse पुण्यात (locative) as Pune');
+  assert.equal(q.dayOffset, 1, 'should parse उद्या as tomorrow (dayOffset 1)');
+  assert.equal(q.hour, 15, 'should parse दुपारी 3 वाजता as 15:00 (3 PM)');
+  assert.equal(q.workload, 'moderate', 'should parse छत (roof) as moderate work');
+});
+
+test('Marathi: आज मुंबईमध्ये जड काम सुरक्षित आहे का?', () => {
+  const q = parseQuestion('आज मुंबईमध्ये जड काम सुरक्षित आहे का?', NOW);
+  assert.equal(q.lang, 'mr', 'should detect as Marathi (mr)');
+  assert.equal(q.place, 'Mumbai', 'should parse मुंबई (before मध्ये) as Mumbai');
+  assert.equal(q.dayOffset, 0, 'should parse आज as today (dayOffset 0)');
+  assert.equal(q.workload, 'hard', 'should parse जड as hard work');
+});
+
+test('Marathi: नागपूर मध्ये उद्या सकाळी 10 वाजता हलके काम', () => {
+  const q = parseQuestion('नागपूर मध्ये उद्या सकाळी 10 वाजता हलके काम', NOW);
+  assert.equal(q.lang, 'mr', 'should detect as Marathi (mr)');
+  assert.equal(q.place, 'Nagpur', 'should parse नागपूर as Nagpur');
+  assert.equal(q.dayOffset, 1, 'should parse उद्या as tomorrow (dayOffset 1)');
+  assert.equal(q.hour, 10, 'should parse सकाळी 10 वाजता as 10:00 (morning)');
+  assert.equal(q.workload, 'easy', 'should parse हलके as easy work');
+});
+
+// ============================================================================
+// Hindi should remain Hindi
+// ============================================================================
+
+test('Hindi: कल दोपहर 3 बजे जयपुर में काम कर सकते हैं? (must stay hi, not mr)', () => {
+  const q = parseQuestion('कल दोपहर 3 बजे जयपुर में काम कर सकते हैं?', NOW);
+  assert.equal(q.lang, 'hi', 'should remain Hindi (hi), not Marathi');
+  assert.equal(q.place, 'Jaipur', 'should parse जयपुर as Jaipur');
+  assert.equal(q.dayOffset, 1, 'should parse कल as tomorrow (dayOffset 1)');
+  assert.equal(q.hour, 15, 'should parse दोपहर 3 बजे as 15:00 (3 PM)');
+});
+
+// ============================================================================
+// UI.mr completeness check: every key in UI.hi must exist in UI.mr
+// ============================================================================
+
+test('UI.mr has all keys from UI.hi', () => {
+  const hiKeys = Object.keys(UI.hi);
+  const mrKeys = Object.keys(UI.mr);
+
+  for (const key of hiKeys) {
+    assert.ok(
+      mrKeys.includes(key),
+      `UI.mr is missing key '${key}' that exists in UI.hi`
+    );
+  }
+});
+
+test('UI.mr values are not empty strings (basic sanity check)', () => {
+  for (const key in UI.mr) {
+    assert.notEqual(
+      UI.mr[key],
+      '',
+      `UI.mr['${key}'] should not be empty`
+    );
+  }
+});

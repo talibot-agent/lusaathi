@@ -1,0 +1,502 @@
+SMART-Code session transcript (including tool calls and results)
+
+{
+  "role": "user",
+  "content": "Create tests/js/marathi.test.js using the same test runner and import style as the existing tests in tests/js. Test parseQuestion from lib/intent.js on: 'उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकतो का?', 'आज मुंबईमध्ये जड काम सुरक्षित आहे का?', 'नागपूर मध्ये उद्या सकाळी 10 वाजता हलके काम', expecting lang 'mr' and the right place/day/hour/workload; plus the Hindi 'कल दोपहर 3 बजे जयपुर में काम कर सकते हैं?' must stay lang 'hi'. Also test that every key in the UI.hi object of lib/i18n.js exists in UI.mr. Note that पुण्यात is the locative of पुणे, so handle the '-ात' locative in intent.js too if needed."
+}
+
+{
+  "role": "assistant",
+  "content": "I'll help you create comprehensive tests for Marathi language support. Let me first explore the existing test structure and the code we need to test.",
+  "toolUses": [
+    {
+      "id": "toolu_01Uo1XpQSPioPzJXNLtN3yYH",
+      "name": "list_files",
+      "input": {
+        "path": "tests/js"
+      },
+      "status": "done",
+      "preview": "📄 advisor.test.mjs\n📄 crosscheck.test.mjs\n📄 heat_imd.test.mjs\n📄 intent.test.mjs"
+    },
+    {
+      "id": "toolu_012AF5EeaRmLtp6fYQ8Yjit1",
+      "name": "read_file",
+      "input": {
+        "path": "lib/intent.js"
+      },
+      "status": "done",
+      "preview": "```\n// lib/intent.js\n// Rule-based intent parser for English, Hindi (Devanagari) and Hinglish questions. No LLM.\n// pars…"
+    },
+    {
+      "id": "toolu_01S1bVD1i3BeYHRRxm7nzQ9S",
+      "name": "read_file",
+      "input": {
+        "path": "lib/i18n.js"
+      },
+      "status": "done",
+      "preview": "```\n// lib/i18n.js\n// UI + answer strings. English / हिन्दी.\nexport const CAT = {\n  en: ['Low – below Cat 1', 'Cat 1 – C…"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01Uo1XpQSPioPzJXNLtN3yYH",
+      "content": "📄 advisor.test.mjs\n📄 crosscheck.test.mjs\n📄 heat_imd.test.mjs\n📄 intent.test.mjs",
+      "is_error": false
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_012AF5EeaRmLtp6fYQ8Yjit1",
+      "content": "```\n// lib/intent.js\n// Rule-based intent parser for English, Hindi (Devanagari) and Hinglish questions. No LLM.\n// parseQuestion(text, nowLocal) -> {lang, place, placeSource, dayOffset, hour, workload, wantsNow}\nimport { PLACES } from './gazetteer.js';\n\nconst DEV_DIGITS = '०१२३४५६७८९';\nexport const normDigits = (s) => s.replace(/[०-९]/g, (d) => String(DEV_DIGITS.indexOf(d)));\nexport const isDevanagari = (s) => /[\\u0900-\\u097F]/.test(s);\n\nconst MARATHI_ONLY = /आहे|आहेत|उद्या|परवा|मध्ये|वाजता|दुपारी|सकाळी|संध्याकाळी|रात्री|शकतो|शकतो का|काय|करू/;\nfunction isMarathi(text) {\n  return MARATHI_ONLY.test(text);\n}\n\nconst WEEKDAYS = [\n  ['sunday', 'sun', 'रविवार', 'इतवार', 'ravivar'],\n  ['monday', 'mon', 'सोमवार', 'somvar'],\n  ['tuesday', 'tue', 'मंगलवार', 'mangalvar'],\n  ['wednesday', 'wed', 'बुधवार', 'budhvar'],\n  ['thursday', 'thu', 'गुरुवार', 'बृहस्पतिवार', 'guruvar'],\n  ['friday', 'fri', 'शुक्रवार', 'shukravar'],\n  ['saturday', 'sat', 'शनिवार', 'shanivar'],\n];\n\nconst WORKLOAD = [\n  ['hard', /\\b(carry|carrying|lift|lifting|dig|digging|brick|bricks|load|loading|unload|cement|mason|masonry|shovel|heavy|harvest by hand)\\b|ढो|उठा|खुदाई|ईंट|बोझ|भारी|मज़दूरी|मजदूरी|दुष्कर|अजड|कठीण|जड|अवजड/i],\n  ['moderate', /\\b(roof|roofing|construction|site|deliver|delivery|ride|riding|cycle|rickshaw|farm|field|harvest|walk|walking|plaster|paint|painting|weld)\\b|छत|निर्माण|डिलीवरी|खेत|कटाई|रिक्शा|साइकिल|चलना|मध्यम|मध्यम काम/i],\n  ['easy', /\\b(sit|sitting|stall|vend|vendor|guard|watchman|traffic|light work|selling)\\b|बैठ|ठेला|दुकान|चौकीदार|गार्ड|हल्का|सुलभ|सोपं|सोपं आहे|हलका|हलके काम/i],\n];\n\nconst STOP = new Set(['tomorrow', 'today', 'tonight', 'now', 'at', 'on', 'the', 'day', 'after', 'morning', 'afternoon',\n  'evening', 'night', 'noon', 'safe', 'work', 'working', 'is', 'it', 'to', 'for', 'this', 'next', 'kal', 'aaj',\n  'am', 'pm', 'roof', 'outside', 'outdoors', 'site']);\n\nfunction findPlace(text) {\n  const low = ` ${text.toLowerCase()} `;\n  let best = null;\n  for (const [name, aliases] of PLACES) {\n    for (const a of aliases) {\n      const re = isDevanagari(a)\n        ? new RegExp(`(^|[\\\\s,.?!।])${a}($|[\\\\s,.?!।])`)\n        : new RegExp(`[^a-z]${a.replace(/ /g, '\\\\s+')}[^a-z]`);\n      if (re.test(low) && (!best || a.length > best.len)) best = { name, len: a.length };\n    }\n  }\n  if (best) return { place: best.name, placeSource: 'gazetteer' };\n  // English pattern: \"in/at/near/for <Place words>\"\n  const m = text.match(/\\b(?:in|at|near|for|around)\\s+([A-Z][A-Za-z.-]+(?:\\s+[A-Z][A-Za-z.-]+){0,2})/);\n  if (m) {\n    const words = m[1].split(/\\s+/).filter((w) => !STOP.has(w.toLowerCase()));\n    if (words.length) return { place: words.join(' '), placeSource: 'pattern' };\n  }\n  // Marathi/Hindi pattern: \"<Place> मध्ये\" or \"<Place> में\" (word before the preposition)\n  const marathi = text.match(/([\\u0900-\\u097F]{2,})\\s*मध्ये/);\n  if (marathi && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(marathi[1])) {\n    return { place: marathi[1], placeSource: 'pattern' };\n  }\n  const h = text.match(/([\\u0900-\\u097F]{2,})\\s+में/);\n  if (h && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(h[1])) {\n    return { place: h[1], placeSource: 'pattern' };\n  }\n  const hl = text.match(/\\b([A-Za-z]{3,})\\s+(?:mein|me|mai)\\b/i);\n  if (hl && !STOP.has(hl[1].toLowerCase())) return { place: hl[1], placeSource: 'pattern' };\n  return { place: null, placeSource: null };\n}\n\nfunction findDay(text, nowLocal) {\n  const t = text.toLowerCase();\n  if (/day after tomorrow|परसों|\\bparson\\b|\\bparso\\b|परवा/.test(t)) return 2;\n  if (/tomorrow|\\btmrw\\b|कल|\\bkal\\b|उद्या|उद्य/.test(t)) return 1; // \"kal\" = tomorrow in a forecast context\n  if (/today|tonight|\\bnow\\b|आज|अभी|\\baaj\\b|\\babhi\\b|आत|आता/.test(t)) return 0;\n  const dow = nowLocal.getUTCDay();\n  for (let i = 0; i < 7; i++) {\n    for (const w of WEEKDAYS[i]) {\n      const re = isDevanagari(w) ? new RegExp(w) : new RegExp(`\\\\b${w}\\\\b`);\n      if (re.test(t)) return (i - dow + 7) % 7;\n    }\n  }\n  return null;\n}\n\nfunction findHour(text) {\n  const t = normDigits(text.toLowerCase());\n  let m = t.match(/\\b(\\d{1,2})(?::(\\d{2}))?\\s*(a\\.?m\\.?|p\\.?m\\.?)/);\n  if (m) {\n    let h = Number(m[1]) % 12;\n    if (m[3].startsWith('p')) h += 12;\n    return h;\n  }\n  m = t.match(/\\b([01]?\\d|2[0-3]):([0-5]\\d)\\b/);\n  if (m) return Number(m[1]);\n  const period = /दुपारी|दोपहर|dopahar|dopehar|afternoon|दपारी/.test(t) ? 'aft'\n    : /संध्याकाळी|संध्याकाळ|शाम|shaam|sham\\b|evening|सकाळी/.test(t) ? 'eve'\n      : /रात्री|रात|raat|night|tonight/.test(t) ? 'night'\n        : /सकाळ|सुबह|subah|morning/.test(t) ? 'morn'\n          : /\\bnoon\\b|midday|दोपहर 12/.test(t) ? 'noon' : null;\n  m = t.match(/(\\d{1,2})\\s*(?:बजे|baje|o'?clock|वाजता)/) || t.match(/\\bat\\s+(\\d{1,2})\\b(?!\\s*(?:km|°|c\\b|%))/);\n  if (m) {\n    let h = Number(m[1]);\n    if (h > 23) return null;\n    // Marathi specifics: दुपारी/दपारी -> PM by default (14:00), सकाळी -> AM, संध्याकाळी/शाम -> PM, रात्री -> night PM\n    if (period === 'aft') { if (h < 12) h += 12; } else if (period === 'eve') { if (h < 12) h += 12; } else if (period === 'night') {\n      if (h >= 6 && h < 12) h += 12;\n    } else if (period === 'morn') { if (h === 12) h = 0; } else if (h >= 1 && h <= 6) h += 12; // \"at 2\" -> 14:00\n    return h;\n  }\n  if (period === 'noon') return 12;\n  if (period === 'aft') return 14;\n  if (period === 'eve') return 17;\n  if (period === 'night') return 21;\n  if (period === 'morn') return 8;\n  return null;\n}\n\nfunction findWorkload(text) {\n  for (const [w, re] of WORKLOAD) if (re.test(text)) return w;\n  return null;\n}\n\n/** nowLocal: a Date whose UTC fields represent local wall-clock time at the place (IST). */\nexport function parseQuestion(text, nowLocal = new Date()) {\n  const t = text.toLowerCase();\n  const hinglish = (t.match(/\\b(kal|aaj|parson|mein|hai|kaam|karna|baje|dopahar|subah|shaam|raat|abhi|kya|sakta|sakte|garmi)\\b/g) || []).length;\n  const lang = isDevanagari(text) || hinglish >= 2 ? (isMarathi(text) ? 'mr' : 'hi') : 'en';\n  const { place, placeSource } = findPlace(text);\n  const wantsNow = /\\bnow\\b|\\bright now\\b|अभी|\\babhi\\b|आत\\b|आता\\b/i.test(text);\n  let dayOffset = findDay(text, nowLocal);\n  let hour = findHour(text);\n  if (wantsNow) { dayOffset = 0; hour = nowLocal.getUTCHours(); }\n  return { lang, place, placeSource, dayOffset, hour, workload: findWorkload(text), wantsNow };\n}\n\n```",
+      "is_error": false
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01S1bVD1i3BeYHRRxm7nzQ9S",
+      "content": "```\n// lib/i18n.js\n// UI + answer strings. English / हिन्दी.\nexport const CAT = {\n  en: ['Low – below Cat 1', 'Cat 1 – Caution', 'Cat 2 – Elevated', 'Cat 3 – High', 'Cat 4 – Very high', 'Cat 5 – Extreme'],\n  hi: ['कम – श्रेणी 1 से नीचे', 'श्रेणी 1 – सावधानी', 'श्रेणी 2 – बढ़ा हुआ', 'श्रेणी 3 – अधिक', 'श्रेणी 4 – बहुत अधिक', 'श्रेणी 5 – अत्यधिक'],\n  mr: ['कम – वर्ग 1 खाली', 'वर्ग 1 – सावधानी', 'वर्ग 2 – वाढला', 'वर्ग 3 – अधिक', 'वर्ग 4 – खूप अधिक', 'वर्ग 5 – अत्यंत'],\n};\nexport const IMD = {\n  en: ['No IMD heat-wave criterion met', 'IMD heat-wave criterion met', 'IMD SEVERE heat-wave criterion met'],\n  hi: ['IMD लू (हीट वेव) मानदंड पूरा नहीं', 'IMD लू (हीट वेव) मानदंड पूरा', 'IMD गंभीर लू मानदंड पूरा'],\n  mr: ['IMD लू निकष पूर्ण नाही', 'IMD लू निकष पूर्ण', 'IMD गंभीर लू निकष पूर्ण'],\n};\nexport const WORKLOAD = {\n  en: { easy: 'light work', moderate: 'moderate work', hard: 'heavy work' },\n  hi: { easy: 'हल्का काम', moderate: 'मध्यम काम', hard: 'भारी काम' },\n  mr: { easy: 'हलका काम', moderate: 'मध्यम काम', hard: 'जड काम' },\n};\nexport const REGION = {\n  en: { plains: 'plains', coastal: 'coastal', hills: 'hills' },\n  hi: { plains: 'मैदानी', coastal: 'तटीय', hills: 'पहाड़ी' },\n  mr: { plains: 'सपाट भाग', coastal: 'किनारी', hills: 'डोंगर' },\n};\n\nexport const UI = {\n  en: {\n    title: 'LuSaathi', tagline: 'Heat-safety helper for outdoor workers',\n    placeLabel: 'Place (city / town / village)', placeholder: 'e.g. Nagpur or जयपुर', search: 'Check',\n    workload: 'Type of work', region: 'IMD region', auto: 'auto',\n    ask: 'Ask a question', askPlaceholder: 'Can I work on the roof at 2pm tomorrow in Nagpur?', askBtn: 'Answer',\n    share: 'Share advisory on WhatsApp', copy: 'Copy text', copied: 'Copied',\n    next72: 'Next 72 hours (work hours 06:00–18:00 highlighted)', days: 'Daily outlook',\n    hour: 'Time', temp: 'Air °C', rh: 'RH %', tw: 'Wet-bulb °C', hi: 'Heat index °C', wbgt: 'WBGT °C (G/B)', cat: 'Category',\n    wr: 'Work/rest per hour', water: 'Water',\n    loading: 'Loading forecast…', notFound: 'Place not found in India. Try another spelling.',\n    netErr: 'Could not reach the forecast service. Check your connection and try again.',\n    tmax: 'Max temp', normal: 'Normal', dep: 'Departure', peak: 'Peak WBGT', dangerous: 'Cat 4–5 work hours',\n    none: 'none', noLimit: 'no limit', normalPending: 'normal not loaded (departure test skipped)',\n    sources: 'Methods, sources & limitations', disclaimer: 'Estimates from weather-model forecasts, not on-site measurements. Follow official IMD/NDMA/State Heat Action Plan alerts. If someone shows heat-stroke signs (confusion, hot dry skin, collapse) call 108/112 immediately.',\n    forecastBy: 'Forecast: Open-Meteo (ECMWF/GFS/ICON blend). Normals: ERA5 1991–2020.',\n    replayBanner: 'REPLAY MODE: archived forecast for a past date (2024 heatwave demo), not today’s weather.', replayLink: 'Demo: replay the May 2024 heatwave (Delhi, 28 May 2024)', live: 'Back to live forecast',\n    lang: 'हिन्दी',\n    wbgtNote: 'WBGT: when the forecast shows strong sun (shortwave radiation ≥ 600 W/m²), the higher (more cautious) of two estimates: G = sun/globe model (Dimiceli–Piltz + Stull), B = BoM formula. Otherwise (weaker sun, early morning, evening, night) G only, because the BoM formula assumes strong sun. Category and work/rest use this value.',\n    hiNote: '* Heat index is outside the range the NWS formula is defined for (humidity below 13 % above 112 °F / 44.4 °C) — treat it as rough. Work/rest uses WBGT, which depends mostly on the wet-bulb temperature.',\n  },\n  hi: {\n    title: 'लू साथी', tagline: 'बाहर काम करने वालों के लिए गर्मी-सुरक्षा साथी',\n    placeLabel: 'जगह (शहर / कस्बा / गाँव)', placeholder: 'जैसे नागपुर या Jaipur', search: 'देखें',\n    workload: 'काम का प्रकार', region: 'IMD क्षेत्र', auto: 'स्वतः',\n    ask: 'सवाल पूछें', askPlaceholder: 'कल दोपहर जयपुर में काम करना सुरक्षित है?', askBtn: 'जवाब',\n    share: 'WhatsApp पर सलाह भेजें', copy: 'टेक्स्ट कॉपी करें', copied: 'कॉपी हो गया',\n    next72: 'अगले 72 घंटे (काम के घंटे 06:00–18:00 हाइलाइट)', days: 'दैनिक स्थिति',\n    hour: 'समय', temp: 'तापमान °C', rh: 'नमी %', tw: 'वेट-बल्ब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'श्रेणी',\n    wr: 'हर घंटे काम/आराम', water: 'पानी',\n    loading: 'पूर्वानुमान लोड हो रहा है…', notFound: 'भारत में यह जगह नहीं मिली। दूसरी वर्तनी आज़माएँ।',\n    netErr: 'पूर्वानुमान सेवा से जुड़ नहीं पाए। इंटरनेट जाँचें और फिर कोशिश करें।',\n    tmax: 'अधिकतम तापमान', normal: 'सामान्य', dep: 'विचलन', peak: 'अधिकतम WBGT', dangerous: 'श्रेणी 4–5 काम के घंटे',\n    none: 'कोई नहीं', noLimit: 'कोई सीमा नहीं', normalPending: 'सामान्य तापमान लोड नहीं (विचलन जाँच नहीं हुई)',\n    sources: 'तरीका, स्रोत और सीमाएँ', disclaimer: 'ये मौसम-मॉडल पूर्वानुमान पर आधारित अनुमान हैं, साइट पर मापे गए आँकड़े नहीं। IMD/NDMA/राज्य हीट एक्शन प्लान की आधिकारिक चेतावनी मानें। लू लगने के लक्षण (भ्रम, गर्म सूखी त्वचा, बेहोशी) दिखें तो तुरंत 108/112 पर कॉल करें।',\n    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON)। सामान्य: ERA5 1991–2020।',\n    replayBanner: 'रीप्ले मोड: पिछली तारीख का संग्रहित पूर्वानुमान (2024 लू डेमो), आज का मौसम नहीं।', replayLink: 'डेमो: मई 2024 की लू दोबारा देखें (दिल्ली, 28 मई 2024)', live: 'लाइव पूर्वानुमान पर लौटें',\n    lang: 'English',\n    wbgtNote: 'WBGT: जब पूर्वानुमान में तेज़ धूप हो (सौर विकिरण ≥ 600 W/m²), तो दो अनुमानों में से ज़्यादा (ज़्यादा सतर्क) वाला: G = धूप/ग्लोब मॉडल (Dimiceli–Piltz + Stull), B = BoM सूत्र। बाकी समय (हल्की धूप, सुबह-शाम, रात) सिर्फ़ G, क्योंकि BoM सूत्र तेज़ धूप मानकर बना है। श्रेणी और काम/आराम इसी मान से तय होते हैं।',\n    hiNote: '* इतनी कम नमी (13% से कम) और 44.4°C से ज़्यादा तापमान पर हीट इंडेक्स का NWS सूत्र भरोसेमंद नहीं — इसे मोटा अनुमान मानें। काम/आराम WBGT से तय होता है, जो मुख्यतः वेट-बल्ब तापमान पर निर्भर है।',\n  },\n  mr: {\n    title: 'लू साथी', tagline: 'बाहेर काम करणार्‍यांसाठी उष्णतेची सुरक्षितता',\n    placeLabel: 'ठिकाण (शहर / तालुका / गाव)', placeholder: 'उदा. Nagpur किंवा जयपूर', search: 'पहा',\n    workload: 'कामाचा प्रकार', region: 'IMD प्रदेश', auto: 'ऑटो',\n    ask: 'प्रश्न विचारा', askPlaceholder: 'काल दुपारी नागपूरमध्ये छतावर काम करू शकतो का?', askBtn: 'उत्तर',\n    share: 'WhatsApp वर सल्ला पाठवा', copy: 'मजकूर कॉपी करा', copied: 'कॉपी केले',\n    next72: 'पुढील 72 तास (कामाचे तास 06:00–18:00 हायलाइट)', days: 'दैनंदिन स्थिती',\n    hour: 'वेळ', temp: 'वातावरण °C', rh: 'आर्द्रता %', tw: 'वेट-बलब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'वर्ग',\n    wr: 'प्रत्येक तास काम/विराम', water: 'पाणी',\n    loading: 'पूर्वानुमान लोड करीत आहे…', notFound: 'भारतात हे ठिकाण आढळले नाही. वेगळ्या हिज्जे वापरून पाहा.',\n    netErr: 'पूर्वानुमान सेवा उपलब्ध नाही. तुमची कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',\n    tmax: 'कमाल तापमान', normal: 'सामान्य', dep: 'फरक', peak: 'अधिकतम WBGT', dangerous: 'वर्ग 4–5 कामाचे तास',\n    none: 'काही नाही', noLimit: 'मर्यादा नाही', normalPending: 'सामान्य लोड नाही (फरक तपास वगळला)',\n    sources: 'पद्धती, स्रोत आणि मर्यादा', disclaimer: 'हे हवामान-मॉडेल अंदाजावर आधारित आहेत, स्थानिक नोंदी नाहीत. अधिकृत IMD/NDMA/राज्याच्या सूचना पाळा. लूचे लक्षण दिसल्यास (गोंधळ, गरम व कोरडी त्वचा, बेहोशी) लगेच 108/112 ला कॉल करा.',\n    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON मिश्रण). सामान्य: ERA5 1991–2020.',\n    replayBanner: 'रीप्ले मोड: मागील कालावधीचा संग्रहित पूर्वानुमान (2024 लू डेमो), आजचे हवामान नाही.', replayLink: 'डेमो: मे 2024 ची लू पाहा (दिल्ली, 28 मे 2024)', live: 'लाइव्ह पूर्वानुमानवर परत या',\n    lang: 'मराठी',\n    wbgtNote: 'WBGT: जर पूर्वानुमानात जोरदार सूर्य दिसून आला (shortwave विकिरण ≥ 600 W/m²), तर दोन अंदाजांपैकी जास्त (जास्त सावध) वापरतात: G = सूर्य/ग्लोब मॉडेल (Dimiceli–Piltz + Stull), B = BoM सूत्र. इतर वेळा (सकाळ/संध्याकाळ/रात किंवा कमी धूप) फक्त G वापरतात, कारण BoM सूत्र जोरदार सूर्य गृहीत धरते. वर्ग आणि काम/विराम हा हा मूल्य वापरून ठरवतात.',\n    hiNote: '* हीट इंडेक्स NWS सूत्रासाठी ठरवलेल्या श्रेणीबाहेर आहे (13% पेक्षा कमी आर्द्रता व 44.4°C पेक्षा जास्त तापमान) — याला अंदाज म्हणून घ्या. काम/विराम WBGT वर आधारित असतात, जे मुख्यतः वेट-बलब तापमानावर अवलंबून असते.',\n  },\n};\n\nconst pad = (n) => String(n).padStart(2, '0');\nconst DOW = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], hi: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'], mr: ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'] };\nconst MON = { en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],\n  hi: ['जन', 'फ़र', 'मार्च', 'अप्रै', 'मई', 'जून', 'जुला', 'अग', 'सित', 'अक्टू', 'नव', 'दिस'], mr: ['जन', 'फेब', 'मार्च', 'एप्रि', 'मे', 'जून', 'जुलै', 'ऑग', 'सप्ट', 'ऑक्ट', 'नोव्ह', 'डिस'] };\nexport function fmtDate(iso, lang) {\n  const [y, m, d] = iso.split('-').map(Number);\n  const w = new Date(Date.UTC(y, m - 1, d)).getUTCDay();\n  return `${DOW[lang][w]} ${d} ${MON[lang][m - 1]}`;\n}\nexport const fmtHour = (h) => `${pad(h)}:00`;\nexport const r1 = (x) => (Math.round(x * 10) / 10).toFixed(1);\nexport const r0 = (x) => String(Math.round(x));\n\nexport function workRestText(wr, lang) {\n  if (wr.noLimit) return lang === 'hi' ? 'कोई समय-सीमा नहीं' : 'no work-time limit';\n  return lang === 'hi' ? `${wr.workMin} मिनट काम / ${wr.restMin} मिनट छाँव में आराम` : `${wr.workMin} min work / ${wr.restMin} min rest in shade`;\n}\n\n/** Which WBGT estimate drove the answer (cautious rule: the higher one). */\nexport const SRC = {\n  en: { globe: 'sun/globe model', bom: 'BoM formula' },\n  hi: { globe: 'धूप/ग्लोब मॉडल', bom: 'BoM सूत्र' },\n};\n\n```",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "Now let me look at an existing test file to understand the test structure and import style:",
+  "toolUses": [
+    {
+      "id": "toolu_01QYjeZ4wj3qgeL5k6FGtYtX",
+      "name": "read_file",
+      "input": {
+        "path": "tests/js/intent.test.mjs"
+      },
+      "status": "done",
+      "preview": "```\n// tests/js/intent.test.mjs\nimport test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseQue…"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01QYjeZ4wj3qgeL5k6FGtYtX",
+      "content": "```\n// tests/js/intent.test.mjs\nimport test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseQuestion } from '../../lib/intent.js';\n\nconst NOW = new Date(Date.UTC(2026, 10, 9, 11, 0)); // Monday 9 Nov 2026, 11:00 IST\n\ntest('English example from the brief', () => {\n  const q = parseQuestion('Can I work on the roof at 2pm tomorrow in Nagpur?', NOW);\n  assert.deepEqual([q.lang, q.place, q.dayOffset, q.hour, q.workload], ['en', 'Nagpur', 1, 14, 'moderate']);\n});\n\ntest('Hindi example from the brief', () => {\n  const q = parseQuestion('कल दोपहर जयपुर में काम करना सुरक्षित है?', NOW);\n  assert.deepEqual([q.lang, q.place, q.dayOffset, q.hour], ['hi', 'Jaipur', 1, 14]);\n});\n\ntest('Hindi with Devanagari digits and evening', () => {\n  const q = parseQuestion('शाम ५ बजे गोंडा में मज़दूरी ठीक है?', NOW);\n  assert.equal(q.place, 'गोंडा');\n  assert.equal(q.hour, 17);\n  assert.equal(q.workload, 'hard');\n});\n\ntest('day after tomorrow + morning in Hindi', () => {\n  const q = parseQuestion('परसों सुबह 7 बजे लखनऊ में खेत में काम?', NOW);\n  assert.deepEqual([q.place, q.dayOffset, q.hour], ['Lucknow', 2, 7]);\n});\n\ntest('Hinglish answered in Hindi', () => {\n  const q = parseQuestion('kal dopahar 3 baje Patna mein kaam safe hai?', NOW);\n  assert.deepEqual([q.lang, q.place, q.dayOffset, q.hour], ['hi', 'Patna', 1, 15]);\n});\n\ntest('weekday names and 24h clock', () => {\n  const q = parseQuestion('Is it safe to carry bricks in Banda on Wednesday at 13:30', NOW);\n  assert.deepEqual([q.place, q.dayOffset, q.hour, q.workload], ['Banda', 2, 13, 'hard']);\n});\n\ntest('unknown place via \"in X\" pattern', () => {\n  const q = parseQuestion('What about at 4 in Bhiwandi tomorrow?', NOW);\n  assert.deepEqual([q.place, q.placeSource, q.hour], ['Bhiwandi', 'pattern', 16]);\n});\n\ntest('now / abhi', () => {\n  const q = parseQuestion('अभी दिल्ली में बाहर काम?', NOW);\n  assert.deepEqual([q.place, q.dayOffset, q.hour, q.wantsNow], ['Delhi', 0, 11, true]);\n});\n\ntest('12 am / 12 pm', () => {\n  assert.equal(parseQuestion('Pune at 12 pm', NOW).hour, 12);\n  assert.equal(parseQuestion('Pune at 12 am', NOW).hour, 0);\n});\n\ntest('aliases (Bombay, Gurgaon)', () => {\n  assert.equal(parseQuestion('bombay tomorrow 3pm', NOW).place, 'Mumbai');\n  assert.equal(parseQuestion('site work in gurgaon today', NOW).place, 'Gurugram');\n});\n\n```",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "Perfect! Now I have all the context. Let me check the gazetteer to see if Pune is in there (since the test uses पुण्यात):",
+  "toolUses": [
+    {
+      "id": "toolu_01QQtZ45LXy5nMbZTbe3tRHw",
+      "name": "grep_code",
+      "input": {
+        "query": "पुणे|Pune",
+        "fileGlob": "lib/gazetteer.js"
+      },
+      "status": "done",
+      "preview": "No matches for: पुणे|Pune"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01QQtZ45LXy5nMbZTbe3tRHw",
+      "content": "No matches for: पुणे|Pune",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "Let me check the gazetteer file:",
+  "toolUses": [
+    {
+      "id": "toolu_01NcazLmieysJYkk1GS7kmGH",
+      "name": "read_file",
+      "input": {
+        "path": "lib/gazetteer.js"
+      },
+      "status": "done",
+      "preview": "```\n// lib/gazetteer.js\n// Small built-in gazetteer so the Q&A parser can spot common place names (English, Hindi, Hingl…"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01NcazLmieysJYkk1GS7kmGH",
+      "content": "```\n// lib/gazetteer.js\n// Small built-in gazetteer so the Q&A parser can spot common place names (English, Hindi, Hinglish)\n// inside a free-text question. Anything not listed is still found via the \"in X\" / \"X में\" patterns\n// and resolved with the Open-Meteo geocoding API (which itself accepts Hindi names).\nexport const PLACES = [\n  ['Delhi', ['delhi', 'new delhi', 'dilli', 'दिल्ली', 'नई दिल्ली']],\n  ['Mumbai', ['mumbai', 'bombay', 'मुंबई', 'मुम्बई']],\n  ['Kolkata', ['kolkata', 'calcutta', 'कोलकाता']],\n  ['Chennai', ['chennai', 'madras', 'चेन्नई']],\n  ['Bengaluru', ['bengaluru', 'bangalore', 'बेंगलुरु', 'बंगलौर', 'बैंगलोर']],\n  ['Hyderabad', ['hyderabad', 'हैदराबाद']],\n  ['Ahmedabad', ['ahmedabad', 'अहमदाबाद']],\n  ['Pune', ['pune', 'poona', 'पुणे']],\n  ['Jaipur', ['jaipur', 'जयपुर']],\n  ['Lucknow', ['lucknow', 'लखनऊ']],\n  ['Kanpur', ['kanpur', 'कानपुर']],\n  ['Nagpur', ['nagpur', 'नागपुर']],\n  ['Indore', ['indore', 'इंदौर']],\n  ['Bhopal', ['bhopal', 'भोपाल']],\n  ['Patna', ['patna', 'पटना']],\n  ['Varanasi', ['varanasi', 'banaras', 'benares', 'वाराणसी', 'बनारस']],\n  ['Prayagraj', ['prayagraj', 'allahabad', 'प्रयागराज', 'इलाहाबाद']],\n  ['Agra', ['agra', 'आगरा']],\n  ['Ludhiana', ['ludhiana', 'लुधियाना']],\n  ['Jodhpur', ['jodhpur', 'जोधपुर']],\n  ['Bikaner', ['bikaner', 'बीकानेर']],\n  ['Raipur', ['raipur', 'रायपुर']],\n  ['Bhubaneswar', ['bhubaneswar', 'भुवनेश्वर']],\n  ['Visakhapatnam', ['visakhapatnam', 'vizag', 'विशाखापत्तनम']],\n  ['Vijayawada', ['vijayawada', 'विजयवाड़ा']],\n  ['Chandigarh', ['chandigarh', 'चंडीगढ़']],\n  ['Gurugram', ['gurugram', 'gurgaon', 'गुरुग्राम', 'गुड़गांव']],\n  ['Noida', ['noida', 'नोएडा']],\n  ['Ghaziabad', ['ghaziabad', 'गाज़ियाबाद', 'गाजियाबाद']],\n  ['Surat', ['surat', 'सूरत']],\n  ['Vadodara', ['vadodara', 'baroda', 'वडोदरा']],\n  ['Rajkot', ['rajkot', 'राजकोट']],\n  ['Kota', ['kota', 'कोटा']],\n  ['Ajmer', ['ajmer', 'अजमेर']],\n  ['Udaipur', ['udaipur', 'उदयपुर']],\n  ['Gwalior', ['gwalior', 'ग्वालियर']],\n  ['Jabalpur', ['jabalpur', 'जबलपुर']],\n  ['Ranchi', ['ranchi', 'रांची', 'राँची']],\n  ['Gaya', ['gaya', 'गया']],\n  ['Meerut', ['meerut', 'मेरठ']],\n  ['Bareilly', ['bareilly', 'बरेली']],\n  ['Gorakhpur', ['gorakhpur', 'गोरखपुर']],\n  ['Jhansi', ['jhansi', 'झांसी', 'झाँसी']],\n  ['Banda', ['banda', 'बांदा']],\n  ['Amritsar', ['amritsar', 'अमृतसर']],\n  ['Dehradun', ['dehradun', 'देहरादून']],\n  ['Shimla', ['shimla', 'शिमला']],\n  ['Srinagar', ['srinagar', 'श्रीनगर']],\n  ['Guwahati', ['guwahati', 'गुवाहाटी']],\n  ['Kochi', ['kochi', 'cochin', 'कोच्चि']],\n  ['Thiruvananthapuram', ['thiruvananthapuram', 'trivandrum', 'तिरुवनंतपुरम']],\n  ['Coimbatore', ['coimbatore', 'कोयंबटूर']],\n  ['Madurai', ['madurai', 'मदुरै']],\n  ['Nellore', ['nellore', 'नेल्लोर']],\n  ['Warangal', ['warangal', 'वारंगल']],\n  ['Aurangabad', ['aurangabad', 'chhatrapati sambhajinagar', 'औरंगाबाद']],\n  ['Nashik', ['nashik', 'नासिक']],\n  ['Akola', ['akola', 'अकोला']],\n  ['Chandrapur', ['chandrapur', 'चंद्रपुर']],\n  ['Wardha', ['wardha', 'वर्धा']],\n  ['Bhuj', ['bhuj', 'भुज']],\n  ['Sri Ganganagar', ['sri ganganagar', 'ganganagar', 'श्रीगंगानगर', 'गंगानगर']],\n  ['Barmer', ['barmer', 'बाड़मेर']],\n  ['Phalodi', ['phalodi', 'फलोदी']],\n  ['Churu', ['churu', 'चूरू']],\n];\n\n```",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "Great! Pune is in the gazetteer. Now I need to update `intent.js` to handle the Marathi locative case `-ात` (as in पुण्यात). Let me check the current pattern more carefully and create the test file. First, let me understand what needs to be done:\n\n1. The Marathi sentences use पुण्यात (locative of पुणे), मुंबईमध्ये, नागपूर\n2. Need to add support for `-ात` locative ending in the place pattern\n3. Test Hindi should remain 'hi'\n4. Test that all UI.hi keys exist in UI.mr\n\nLet me create the test file:",
+  "toolUses": [
+    {
+      "id": "toolu_01Xu55YeVGXvGW6FuXzQC6b4",
+      "name": "create_file",
+      "input": {
+        "path": "tests/js/marathi.test.js",
+        "content": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseQuestion } from '../../lib/intent.js';\nimport { UI } from '../../lib/i18n.js';\n\nconst NOW = new Date(Date.UTC(2026, 10, 9, 11, 0)); // Monday 9 Nov 2026, 11:00 IST\n\n// ============================================================================\n// Marathi language detection and parsing\n// ============================================================================\n\ntest('Marathi: उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकतो का?', () => {\n  const q = parseQuestion('उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकतो का?', NOW);\n  assert.equal(q.lang, 'mr', 'should detect as Marathi (mr)');\n  assert.equal(q.place, 'Pune', 'should parse पुण्यात (locative) as Pune');\n  assert.equal(q.dayOffset, 1, 'should parse उद्या as tomorrow (dayOffset 1)');\n  assert.equal(q.hour, 15, 'should parse दुपारी 3 वाजता as 15:00 (3 PM)');\n  assert.equal(q.workload, 'moderate', 'should parse छत (roof) as moderate work');\n});\n\ntest('Marathi: आज मुंबईमध्ये जड काम सुरक्षित आहे का?', () => {\n  const q = parseQuestion('आज मुंबईमध्ये जड काम सुरक्षित आहे का?', NOW);\n  assert.equal(q.lang, 'mr', 'should detect as Marathi (mr)');\n  assert.equal(q.place, 'Mumbai', 'should parse मुंबई (before मध्ये) as Mumbai');\n  assert.equal(q.dayOffset, 0, 'should parse आज as today (dayOffset 0)');\n  assert.equal(q.workload, 'hard', 'should parse जड as hard work');\n});\n\ntest('Marathi: नागपूर मध्ये उद्या सकाळी 10 वाजता हलके काम', () => {\n  const q = parseQuestion('नागपूर मध्ये उद्या सकाळी 10 वाजता हलके काम', NOW);\n  assert.equal(q.lang, 'mr', 'should detect as Marathi (mr)');\n  assert.equal(q.place, 'Nagpur', 'should parse नागपूर as Nagpur');\n  assert.equal(q.dayOffset, 1, 'should parse उद्या as tomorrow (dayOffset 1)');\n  assert.equal(q.hour, 10, 'should parse सकाळी 10 वाजता as 10:00 (morning)');\n  assert.equal(q.workload, 'easy', 'should parse हलके as easy work');\n});\n\n// ============================================================================\n// Hindi should remain Hindi\n// ============================================================================\n\ntest('Hindi: कल दोपहर 3 बजे जयपुर में काम कर सकते हैं? (must stay hi, not mr)', () => {\n  const q = parseQuestion('कल दोपहर 3 बजे जयपुर में काम कर सकते हैं?', NOW);\n  assert.equal(q.lang, 'hi', 'should remain Hindi (hi), not Marathi');\n  assert.equal(q.place, 'Jaipur', 'should parse जयपुर as Jaipur');\n  assert.equal(q.dayOffset, 1, 'should parse कल as tomorrow (dayOffset 1)');\n  assert.equal(q.hour, 15, 'should parse दोपहर 3 बजे as 15:00 (3 PM)');\n});\n\n// ============================================================================\n// UI.mr completeness check: every key in UI.hi must exist in UI.mr\n// ============================================================================\n\ntest('UI.mr has all keys from UI.hi', () => {\n  const hiKeys = Object.keys(UI.hi);\n  const mrKeys = Object.keys(UI.mr);\n\n  for (const key of hiKeys) {\n    assert.ok(\n      mrKeys.includes(key),\n      `UI.mr is missing key '${key}' that exists in UI.hi`\n    );\n  }\n});\n\ntest('UI.mr values are not empty strings (basic sanity check)', () => {\n  for (const key in UI.mr) {\n    assert.notEqual(\n      UI.mr[key],\n      '',\n      `UI.mr['${key}'] should not be empty`\n    );\n  }\n});\n"
+      },
+      "status": "done",
+      "preview": "Created tests/js/marathi.test.js (3291 bytes)"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01Xu55YeVGXvGW6FuXzQC6b4",
+      "content": "Created tests/js/marathi.test.js (3291 bytes)",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_7jJaJnUtKjMDDvBYvTuyAzIu",
+      "name": "edit_file",
+      "input": {
+        "path": "lib/intent.js",
+        "old_string": "  const marathi = text.match(/([\\u0900-\\u097F]{2,})\\s*मध्ये/);\n  if (marathi && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(marathi[1])) {\n    return { place: marathi[1], placeSource: 'pattern' };\n  }\n  const h = text.match(/([\\u0900-\\u097F]{2,})\\s+में/);\n  if (h && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(h[1])) {\n    return { place: h[1], placeSource: 'pattern' };\n  }",
+        "new_string": "  const marathi = text.match(/([\\u0900-\\u097F]{2,})\\s*मध्ये/);\n  if (marathi && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(marathi[1])) {\n    return { place: marathi[1], placeSource: 'pattern' };\n  }\n  const h = text.match(/([\\u0900-\\u097F]{2,})\\s+में/);\n  if (h && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(h[1])) {\n    return { place: h[1], placeSource: 'pattern' };\n  }\n  // Marathi locative suffixes like \"पुण्यात\" (base name + \"ात\" / \"्यात\")\n  const loc = text.match(/([\\u0900-\\u097F]{2,}?)(?:्यात|ात)\\b/);\n  if (loc && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत', 'आत', 'आता'].includes(loc[1])) {\n    return { place: loc[1], placeSource: 'pattern' };\n  }",
+        "replace_all": false
+      },
+      "status": "done",
+      "preview": "Edited lib/intent.js (6675 bytes, 1 replacement(s))"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "6 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_7jJaJnUtKjMDDvBYvTuyAzIu",
+      "content": "Edited lib/intent.js (6675 bytes, 1 replacement(s))",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "I've added the Marathi tests and a small fix to intent.js to handle Marathi locative endings.\n\nWhat I changed\n- Created tests/js/marathi.test.js\n  - Tests parseQuestion on three Marathi inputs, checking lang 'mr', place, dayOffset, hour, and workload.\n  - Tests the Hindi example stays lang 'hi'.\n  - Tests that every key in UI.hi exists in UI.mr and that UI.mr values are not empty strings.\n- Updated lib/intent.js\n  - Added a pattern to match Marathi locative suffixes like \"पुण्यात\" by stripping suffixes \"ात\" or \"्यात\" and returning the base word as the place.\n\nNotes\n- The test file uses the same import and test runner style as existing tests (node:test + assert/strict).\n- The intent change is conservative: it looks for Devanagari words followed by the locative suffixes and excludes common words like 'आज', 'कल', 'छत', etc., similar to other patterns.\n\nRun the tests with your usual test command (e.g. node --test). If anything else needs adjusting (e.g. more suffix forms or edge cases), tell me which examples to include.",
+  "toolUses": [],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "7 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}

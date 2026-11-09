@@ -1,0 +1,1166 @@
+SMART-Code session transcript (including tool calls and results)
+
+{
+  "role": "user",
+  "content": "Add Marathi (language code 'mr') as a third language to this app, alongside English ('en') and Hindi ('hi').\n1. lib/i18n.js: add an 'mr' entry next to every 'hi' entry: category labels, IMD heat-wave status, workload labels, terrain labels, table headers, and all advice and answer strings. Use natural, plain Marathi a construction worker or farmer would understand, and keep technical terms like WBGT, IMD and °C as they are.\n2. lib/intent.js: Marathi is also written in Devanagari, so detect it with Marathi-specific words (for example आहे, उद्या, आज, परवा, मध्ये, वाजता, दुपारी, सकाळी, संध्याकाळी, रात्री, काम करू शकतो, काय) before falling back to Hindi. Parse the place ('<Place>मध्ये' / '<Place> मध्ये'), the day (आज/उद्या/परवा), the time ('3 वाजता', दुपारी/सकाळी/संध्याकाळी/रात्री) and the workload (हलके/मध्यम/जड काम), and return lang 'mr'.\n3. Wherever the UI or advisor picks a language (a language switcher, the answer text or the WhatsApp advisory), make 'mr' work the same way 'hi' does. If there's a language selector, add मराठी.\n4. Add node tests under tests/js for Marathi intent parsing: Pune, Mumbai and Nagpur questions, for today and tomorrow, with a time, plus a Hindi question that must still be detected as 'hi'. Also add a test that every 'hi' key has an 'mr' counterpart.\nDon't change any heat-stress formulas or thresholds."
+}
+
+{
+  "role": "assistant",
+  "content": "I'll help you add Marathi support to this app. Let me start by exploring the project structure to understand the codebase.",
+  "toolUses": [
+    {
+      "id": "toolu_01KKjWXeVsVCZeBh68pRVyrv",
+      "name": "list_files",
+      "input": {
+        "path": "."
+      },
+      "status": "done",
+      "preview": "📄 docs\n📄 lib\n📄 python\n📄 tests\n📄 validation\n📄 .gitignore\n📄 app.js\n📄 icon.svg\n📄 index.html\n📄 LICENSE\n📄 manifest…"
+    },
+    {
+      "id": "toolu_012Lwjk6iSPpYvSwkWPmW1Pd",
+      "name": "read_file",
+      "input": {
+        "path": "lib/i18n.js"
+      },
+      "status": "done",
+      "preview": "```\n// lib/i18n.js\n// UI + answer strings. English / हिन्दी.\nexport const CAT = {\n  en: ['Low – below Cat 1', 'Cat 1 – C…"
+    },
+    {
+      "id": "toolu_01ErQxPWWQqkhEXiJS3AYZvJ",
+      "name": "read_file",
+      "input": {
+        "path": "lib/intent.js"
+      },
+      "status": "done",
+      "preview": "```\n// lib/intent.js\n// Rule-based intent parser for English, Hindi (Devanagari) and Hinglish questions. No LLM.\n// pars…"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01KKjWXeVsVCZeBh68pRVyrv",
+      "content": "📄 docs\n📄 lib\n📄 python\n📄 tests\n📄 validation\n📄 .gitignore\n📄 app.js\n📄 icon.svg\n📄 index.html\n📄 LICENSE\n📄 manifest.webmanifest\n📄 package.json\n📄 README.md\n📄 requirements.txt\n📄 style.css\n📄 sw.js\n📄 VALIDATION.md",
+      "is_error": false
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_012Lwjk6iSPpYvSwkWPmW1Pd",
+      "content": "```\n// lib/i18n.js\n// UI + answer strings. English / हिन्दी.\nexport const CAT = {\n  en: ['Low – below Cat 1', 'Cat 1 – Caution', 'Cat 2 – Elevated', 'Cat 3 – High', 'Cat 4 – Very high', 'Cat 5 – Extreme'],\n  hi: ['कम – श्रेणी 1 से नीचे', 'श्रेणी 1 – सावधानी', 'श्रेणी 2 – बढ़ा हुआ', 'श्रेणी 3 – अधिक', 'श्रेणी 4 – बहुत अधिक', 'श्रेणी 5 – अत्यधिक'],\n};\nexport const IMD = {\n  en: ['No IMD heat-wave criterion met', 'IMD heat-wave criterion met', 'IMD SEVERE heat-wave criterion met'],\n  hi: ['IMD लू (हीट वेव) मानदंड पूरा नहीं', 'IMD लू (हीट वेव) मानदंड पूरा', 'IMD गंभीर लू मानदंड पूरा'],\n};\nexport const WORKLOAD = {\n  en: { easy: 'light work', moderate: 'moderate work', hard: 'heavy work' },\n  hi: { easy: 'हल्का काम', moderate: 'मध्यम काम', hard: 'भारी काम' },\n};\nexport const REGION = {\n  en: { plains: 'plains', coastal: 'coastal', hills: 'hills' },\n  hi: { plains: 'मैदानी', coastal: 'तटीय', hills: 'पहाड़ी' },\n};\n\nexport const UI = {\n  en: {\n    title: 'LuSaathi', tagline: 'Heat-safety helper for outdoor workers',\n    placeLabel: 'Place (city / town / village)', placeholder: 'e.g. Nagpur or जयपुर', search: 'Check',\n    workload: 'Type of work', region: 'IMD region', auto: 'auto',\n    ask: 'Ask a question', askPlaceholder: 'Can I work on the roof at 2pm tomorrow in Nagpur?', askBtn: 'Answer',\n    share: 'Share advisory on WhatsApp', copy: 'Copy text', copied: 'Copied',\n    next72: 'Next 72 hours (work hours 06:00–18:00 highlighted)', days: 'Daily outlook',\n    hour: 'Time', temp: 'Air °C', rh: 'RH %', tw: 'Wet-bulb °C', hi: 'Heat index °C', wbgt: 'WBGT °C (G/B)', cat: 'Category',\n    wr: 'Work/rest per hour', water: 'Water',\n    loading: 'Loading forecast…', notFound: 'Place not found in India. Try another spelling.',\n    netErr: 'Could not reach the forecast service. Check your connection and try again.',\n    tmax: 'Max temp', normal: 'Normal', dep: 'Departure', peak: 'Peak WBGT', dangerous: 'Cat 4–5 work hours',\n    none: 'none', noLimit: 'no limit', normalPending: 'normal not loaded (departure test skipped)',\n    sources: 'Methods, sources & limitations', disclaimer: 'Estimates from weather-model forecasts, not on-site measurements. Follow official IMD/NDMA/State Heat Action Plan alerts. If someone shows heat-stroke signs (confusion, hot dry skin, collapse) call 108/112 immediately.',\n    forecastBy: 'Forecast: Open-Meteo (ECMWF/GFS/ICON blend). Normals: ERA5 1991–2020.',\n    replayBanner: 'REPLAY MODE: archived forecast for a past date (2024 heatwave demo), not today’s weather.', replayLink: 'Demo: replay the May 2024 heatwave (Delhi, 28 May 2024)', live: 'Back to live forecast',\n    lang: 'हिन्दी',\n    wbgtNote: 'WBGT: when the forecast shows strong sun (shortwave radiation ≥ 600 W/m²), the higher (more cautious) of two estimates: G = sun/globe model (Dimiceli–Piltz + Stull), B = BoM formula. Otherwise (weaker sun, early morning, evening, night) G only, because the BoM formula assumes strong sun. Category and work/rest use this value.',\n    hiNote: '* Heat index is outside the range the NWS formula is defined for (humidity below 13 % above 112 °F / 44.4 °C) — treat it as rough. Work/rest uses WBGT, which depends mostly on the wet-bulb temperature.',\n  },\n  hi: {\n    title: 'लू साथी', tagline: 'बाहर काम करने वालों के लिए गर्मी-सुरक्षा साथी',\n    placeLabel: 'जगह (शहर / कस्बा / गाँव)', placeholder: 'जैसे नागपुर या Jaipur', search: 'देखें',\n    workload: 'काम का प्रकार', region: 'IMD क्षेत्र', auto: 'स्वतः',\n    ask: 'सवाल पूछें', askPlaceholder: 'कल दोपहर जयपुर में काम करना सुरक्षित है?', askBtn: 'जवाब',\n    share: 'WhatsApp पर सलाह भेजें', copy: 'टेक्स्ट कॉपी करें', copied: 'कॉपी हो गया',\n    next72: 'अगले 72 घंटे (काम के घंटे 06:00–18:00 हाइलाइट)', days: 'दैनिक स्थिति',\n    hour: 'समय', temp: 'तापमान °C', rh: 'नमी %', tw: 'वेट-बल्ब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'श्रेणी',\n    wr: 'हर घंटे काम/आराम', water: 'पानी',\n    loading: 'पूर्वानुमान लोड हो रहा है…', notFound: 'भारत में यह जगह नहीं मिली। दूसरी वर्तनी आज़माएँ।',\n    netErr: 'पूर्वानुमान सेवा से जुड़ नहीं पाए। इंटरनेट जाँचें और फिर कोशिश करें।',\n    tmax: 'अधिकतम तापमान', normal: 'सामान्य', dep: 'विचलन', peak: 'अधिकतम WBGT', dangerous: 'श्रेणी 4–5 काम के घंटे',\n    none: 'कोई नहीं', noLimit: 'कोई सीमा नहीं', normalPending: 'सामान्य तापमान लोड नहीं (विचलन जाँच नहीं हुई)',\n    sources: 'तरीका, स्रोत और सीमाएँ', disclaimer: 'ये मौसम-मॉडल पूर्वानुमान पर आधारित अनुमान हैं, साइट पर मापे गए आँकड़े नहीं। IMD/NDMA/राज्य हीट एक्शन प्लान की आधिकारिक चेतावनी मानें। लू लगने के लक्षण (भ्रम, गर्म सूखी त्वचा, बेहोशी) दिखें तो तुरंत 108/112 पर कॉल करें।',\n    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON)। सामान्य: ERA5 1991–2020।',\n    replayBanner: 'रीप्ले मोड: पिछली तारीख का संग्रहित पूर्वानुमान (2024 लू डेमो), आज का मौसम नहीं।', replayLink: 'डेमो: मई 2024 की लू दोबारा देखें (दिल्ली, 28 मई 2024)', live: 'लाइव पूर्वानुमान पर लौटें',\n    lang: 'English',\n    wbgtNote: 'WBGT: जब पूर्वानुमान में तेज़ धूप हो (सौर विकिरण ≥ 600 W/m²), तो दो अनुमानों में से ज़्यादा (ज़्यादा सतर्क) वाला: G = धूप/ग्लोब मॉडल (Dimiceli–Piltz + Stull), B = BoM सूत्र। बाकी समय (हल्की धूप, सुबह-शाम, रात) सिर्फ़ G, क्योंकि BoM सूत्र तेज़ धूप मानकर बना है। श्रेणी और काम/आराम इसी मान से तय होते हैं।',\n    hiNote: '* इतनी कम नमी (13% से कम) और 44.4°C से ज़्यादा तापमान पर हीट इंडेक्स का NWS सूत्र भरोसेमंद नहीं — इसे मोटा अनुमान मानें। काम/आराम WBGT से तय होता है, जो मुख्यतः वेट-बल्ब तापमान पर निर्भर है।',\n  },\n};\n\nconst pad = (n) => String(n).padStart(2, '0');\nconst DOW = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], hi: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'] };\nconst MON = { en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],\n  hi: ['जन', 'फ़र', 'मार्च', 'अप्रै', 'मई', 'जून', 'जुला', 'अग', 'सित', 'अक्टू', 'नव', 'दिस'] };\nexport function fmtDate(iso, lang) {\n  const [y, m, d] = iso.split('-').map(Number);\n  const w = new Date(Date.UTC(y, m - 1, d)).getUTCDay();\n  return `${DOW[lang][w]} ${d} ${MON[lang][m - 1]}`;\n}\nexport const fmtHour = (h) => `${pad(h)}:00`;\nexport const r1 = (x) => (Math.round(x * 10) / 10).toFixed(1);\nexport const r0 = (x) => String(Math.round(x));\n\nexport function workRestText(wr, lang) {\n  if (wr.noLimit) return lang === 'hi' ? 'कोई समय-सीमा नहीं' : 'no work-time limit';\n  return lang === 'hi' ? `${wr.workMin} मिनट काम / ${wr.restMin} मिनट छाँव में आराम` : `${wr.workMin} min work / ${wr.restMin} min rest in shade`;\n}\n\n/** Which WBGT estimate drove the answer (cautious rule: the higher one). */\nexport const SRC = {\n  en: { globe: 'sun/globe model', bom: 'BoM formula' },\n  hi: { globe: 'धूप/ग्लोब मॉडल', bom: 'BoM सूत्र' },\n};\n\n```",
+      "is_error": false
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01ErQxPWWQqkhEXiJS3AYZvJ",
+      "content": "```\n// lib/intent.js\n// Rule-based intent parser for English, Hindi (Devanagari) and Hinglish questions. No LLM.\n// parseQuestion(text, nowLocal) -> {lang, place, placeSource, dayOffset, hour, workload, wantsNow}\nimport { PLACES } from './gazetteer.js';\n\nconst DEV_DIGITS = '०१२३४५६७८९';\nexport const normDigits = (s) => s.replace(/[०-९]/g, (d) => String(DEV_DIGITS.indexOf(d)));\nexport const isDevanagari = (s) => /[\\u0900-\\u097F]/.test(s);\n\nconst WEEKDAYS = [\n  ['sunday', 'sun', 'रविवार', 'इतवार', 'ravivar'],\n  ['monday', 'mon', 'सोमवार', 'somvar'],\n  ['tuesday', 'tue', 'मंगलवार', 'mangalvar'],\n  ['wednesday', 'wed', 'बुधवार', 'budhvar'],\n  ['thursday', 'thu', 'गुरुवार', 'बृहस्पतिवार', 'guruvar'],\n  ['friday', 'fri', 'शुक्रवार', 'shukravar'],\n  ['saturday', 'sat', 'शनिवार', 'shanivar'],\n];\n\nconst WORKLOAD = [\n  ['hard', /\\b(carry|carrying|lift|lifting|dig|digging|brick|bricks|load|loading|unload|cement|mason|masonry|shovel|heavy|harvest by hand)\\b|ढो|उठा|खुदाई|ईंट|बोझ|भारी|मज़दूरी|मजदूरी/i],\n  ['moderate', /\\b(roof|roofing|construction|site|deliver|delivery|ride|riding|cycle|rickshaw|farm|field|harvest|walk|walking|plaster|paint|painting|weld)\\b|छत|निर्माण|डिलीवरी|खेत|कटाई|रिक्शा|साइकिल|चलना/i],\n  ['easy', /\\b(sit|sitting|stall|vend|vendor|guard|watchman|traffic|light work|selling)\\b|बैठ|ठेला|दुकान|चौकीदार|गार्ड|हल्का/i],\n];\n\nconst STOP = new Set(['tomorrow', 'today', 'tonight', 'now', 'at', 'on', 'the', 'day', 'after', 'morning', 'afternoon',\n  'evening', 'night', 'noon', 'safe', 'work', 'working', 'is', 'it', 'to', 'for', 'this', 'next', 'kal', 'aaj',\n  'am', 'pm', 'roof', 'outside', 'outdoors', 'site']);\n\nfunction findPlace(text) {\n  const low = ` ${text.toLowerCase()} `;\n  let best = null;\n  for (const [name, aliases] of PLACES) {\n    for (const a of aliases) {\n      const re = isDevanagari(a)\n        ? new RegExp(`(^|[\\\\s,.?!।])${a}($|[\\\\s,.?!।])`)\n        : new RegExp(`[^a-z]${a.replace(/ /g, '\\\\s+')}[^a-z]`);\n      if (re.test(low) && (!best || a.length > best.len)) best = { name, len: a.length };\n    }\n  }\n  if (best) return { place: best.name, placeSource: 'gazetteer' };\n  // English pattern: \"in/at/near/for <Place words>\"\n  const m = text.match(/\\b(?:in|at|near|for|around)\\s+([A-Z][A-Za-z.-]+(?:\\s+[A-Z][A-Za-z.-]+){0,2})/);\n  if (m) {\n    const words = m[1].split(/\\s+/).filter((w) => !STOP.has(w.toLowerCase()));\n    if (words.length) return { place: words.join(' '), placeSource: 'pattern' };\n  }\n  // Hindi pattern: \"<Place> में\" (word before \"में\")\n  const h = text.match(/([\\u0900-\\u097F]{2,})\\s+में/);\n  if (h && !['आज', 'कल', 'परसों', 'दोपहर', 'सुबह', 'शाम', 'रात', 'धूप', 'छत', 'खेत'].includes(h[1])) {\n    return { place: h[1], placeSource: 'pattern' };\n  }\n  const hl = text.match(/\\b([A-Za-z]{3,})\\s+(?:mein|me|mai)\\b/i);\n  if (hl && !STOP.has(hl[1].toLowerCase())) return { place: hl[1], placeSource: 'pattern' };\n  return { place: null, placeSource: null };\n}\n\nfunction findDay(text, nowLocal) {\n  const t = text.toLowerCase();\n  if (/day after tomorrow|परसों|\\bparson\\b|\\bparso\\b/.test(t)) return 2;\n  if (/tomorrow|\\btmrw\\b|कल|\\bkal\\b/.test(t)) return 1; // \"kal\" = tomorrow in a forecast context\n  if (/today|tonight|\\bnow\\b|आज|अभी|\\baaj\\b|\\babhi\\b/.test(t)) return 0;\n  const dow = nowLocal.getUTCDay();\n  for (let i = 0; i < 7; i++) {\n    for (const w of WEEKDAYS[i]) {\n      const re = isDevanagari(w) ? new RegExp(w) : new RegExp(`\\\\b${w}\\\\b`);\n      if (re.test(t)) return (i - dow + 7) % 7;\n    }\n  }\n  return null;\n}\n\nfunction findHour(text) {\n  const t = normDigits(text.toLowerCase());\n  let m = t.match(/\\b(\\d{1,2})(?::(\\d{2}))?\\s*(a\\.?m\\.?|p\\.?m\\.?)/);\n  if (m) {\n    let h = Number(m[1]) % 12;\n    if (m[3].startsWith('p')) h += 12;\n    return h;\n  }\n  m = t.match(/\\b([01]?\\d|2[0-3]):([0-5]\\d)\\b/);\n  if (m) return Number(m[1]);\n  const period = /दोपहर|dopahar|dopehar|afternoon/.test(t) ? 'aft'\n    : /शाम|shaam|sham\\b|evening/.test(t) ? 'eve'\n      : /रात|raat|night|tonight/.test(t) ? 'night'\n        : /सुबह|subah|morning/.test(t) ? 'morn'\n          : /\\bnoon\\b|midday|दोपहर 12/.test(t) ? 'noon' : null;\n  m = t.match(/(\\d{1,2})\\s*(?:बजे|baje|o'?clock)/) || t.match(/\\bat\\s+(\\d{1,2})\\b(?!\\s*(?:km|°|c\\b|%))/);\n  if (m) {\n    let h = Number(m[1]);\n    if (h > 23) return null;\n    if (period === 'aft' || period === 'eve') { if (h < 12) h += 12; } else if (period === 'night') {\n      if (h >= 6 && h < 12) h += 12;\n    } else if (period === 'morn') { if (h === 12) h = 0; } else if (h >= 1 && h <= 6) h += 12; // \"at 2\" -> 14:00\n    return h;\n  }\n  if (period === 'noon') return 12;\n  if (period === 'aft') return 14;\n  if (period === 'eve') return 17;\n  if (period === 'night') return 21;\n  if (period === 'morn') return 8;\n  return null;\n}\n\nfunction findWorkload(text) {\n  for (const [w, re] of WORKLOAD) if (re.test(text)) return w;\n  return null;\n}\n\n/** nowLocal: a Date whose UTC fields represent local wall-clock time at the place (IST). */\nexport function parseQuestion(text, nowLocal = new Date()) {\n  const hinglish = (text.toLowerCase().match(/\\b(kal|aaj|parson|mein|hai|kaam|karna|baje|dopahar|subah|shaam|raat|abhi|kya|sakta|sakte|garmi)\\b/g) || []).length;\n  const lang = isDevanagari(text) || hinglish >= 2 ? 'hi' : 'en';\n  const { place, placeSource } = findPlace(text);\n  const wantsNow = /\\bnow\\b|\\bright now\\b|अभी|\\babhi\\b/i.test(text);\n  let dayOffset = findDay(text, nowLocal);\n  let hour = findHour(text);\n  if (wantsNow) { dayOffset = 0; hour = nowLocal.getUTCHours(); }\n  return { lang, place, placeSource, dayOffset, hour, workload: findWorkload(text), wantsNow };\n}\n\n```",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "Now let me look at the test files and other relevant files:",
+  "toolUses": [
+    {
+      "id": "toolu_019QcEmkjuj62GEeGxCvbJxh",
+      "name": "list_files",
+      "input": {
+        "path": "tests"
+      },
+      "status": "done",
+      "preview": "📄 __pycache__\n📄 fixtures\n📄 js\n📄 test_heat.py\n📄 test_imd.py"
+    },
+    {
+      "id": "toolu_01DDFdCXki28UtTmDejQdJ3E",
+      "name": "read_file",
+      "input": {
+        "path": "app.js"
+      },
+      "status": "done",
+      "preview": "```\n// app.js\nimport { UI, CAT, IMD, WORKLOAD, REGION, SRC, fmtDate, fmtHour, r0, r1, workRestText } from './lib/i18n.js…"
+    },
+    {
+      "id": "toolu_014ZVhNZ1wys1TafTTW2z5Ha",
+      "name": "read_file",
+      "input": {
+        "path": "index.html"
+      },
+      "status": "done",
+      "preview": "```\n// index.html\n<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=de…"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_019QcEmkjuj62GEeGxCvbJxh",
+      "content": "📄 __pycache__\n📄 fixtures\n📄 js\n📄 test_heat.py\n📄 test_imd.py",
+      "is_error": false
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01DDFdCXki28UtTmDejQdJ3E",
+      "content": "```\n// app.js\nimport { UI, CAT, IMD, WORKLOAD, REGION, SRC, fmtDate, fmtHour, r0, r1, workRestText } from './lib/i18n.js';\nimport { classifyRegion } from './lib/imd.js';\nimport { parseQuestion, isDevanagari } from './lib/intent.js';\nimport { buildForecast, forecastUrl, replayUrl, normalsUrl, geocodeUrl, needsNormal, hourRanges, WORK_START, WORK_END } from './lib/model.js';\nimport { answer, advisoryText, waLink } from './lib/advisor.js';\n\nconst $ = (id) => document.getElementById(id);\nconst qs = new URLSearchParams(location.search);\nconst S = {\n  lang: qs.get('lang') || localStorage.getItem('ls_lang') || ((navigator.language || '').startsWith('hi') ? 'hi' : 'en'),\n  workload: qs.get('w') || localStorage.getItem('ls_w') || 'moderate',\n  place: null, raw: null, normals: null, fc: null,\n};\nconst REPLAY = /^\\d{4}-\\d{2}-\\d{2}$/.test(qs.get('replay') || '') ? qs.get('replay') : null;\n// IST wall clock in UTC fields (in replay mode: 06:00 on the replay date)\nconst nowLocal = () => (REPLAY ? new Date(REPLAY + 'T06:00:00Z') : new Date(Date.now() + 19800 * 1000));\n\nasync function getJSON(url) {\n  const r = await fetch(url);\n  if (!r.ok) throw new Error('HTTP ' + r.status);\n  return r.json();\n}\n\nfunction applyLang() {\n  const T = UI[S.lang];\n  document.documentElement.lang = S.lang;\n  for (const k of ['title', 'tagline', 'placeLabel', 'search', 'workload', 'region', 'ask', 'askBtn', 'days', 'next72', 'disclaimer', 'forecastBy', 'sources']) {\n    const el = $('t-' + k); if (el) el.textContent = T[k];\n  }\n  $('lang').textContent = T.lang;\n  $('place').placeholder = T.placeholder; $('q').placeholder = T.askPlaceholder;\n  $('wa').textContent = T.share; $('copy').textContent = T.copy;\n  const ws = $('workload');\n  ['easy', 'moderate', 'hard'].forEach((w, i) => { ws.options[i].textContent = WORKLOAD[S.lang][w]; });\n  const rs = $('region');\n  rs.options[0].textContent = T.auto;\n  ['plains', 'coastal', 'hills'].forEach((r, i) => { rs.options[i + 1].textContent = REGION[S.lang][r]; });\n  const rl = $('replay');\n  rl.textContent = REPLAY ? T.live : T.replayLink;\n  rl.href = REPLAY ? location.pathname : '?place=Delhi&replay=2024-05-28&lang=' + S.lang;\n  $('banner').textContent = REPLAY ? T.replayBanner + ' (' + REPLAY + ')' : '';\n  $('banner').hidden = !REPLAY;\n  if (S.fc) render();\n}\n\nasync function geocode(name, lang) {\n  const d = await getJSON(geocodeUrl(name, lang || (isDevanagari(name) ? 'hi' : 'en')));\n  return (d.results || []).filter((r) => r.country_code === 'IN');\n}\n\nasync function loadNormals(place) {\n  const key = `ls_n_${place.lat.toFixed(2)}_${place.lon.toFixed(2)}`;\n  const cached = localStorage.getItem(key);\n  let start; let tmax;\n  if (cached) ({ start, tmax } = JSON.parse(cached));\n  else {\n    const d = await getJSON(normalsUrl(place.lat, place.lon));\n    start = d.daily.time[0]; tmax = d.daily.temperature_2m_max;\n    try { localStorage.setItem(key, JSON.stringify({ start, tmax })); } catch (e) { /* quota */ }\n  }\n  const t0 = Date.parse(start + 'T00:00:00Z');\n  const dates = tmax.map((_, i) => new Date(t0 + i * 86400000).toISOString().slice(0, 10));\n  return { dates, tmax };\n}\n\nfunction rebuild() {\n  const region = $('region').value === 'auto' ? S.place.autoRegion : $('region').value;\n  S.place.region = region;\n  S.fc = buildForecast(S.raw, S.place, S.workload, S.normals);\n}\n\nasync function loadPlace(result) {\n  const T = UI[S.lang];\n  $('status').textContent = T.loading;\n  const place = {\n    name: result.name, displayName: result.name + (result.admin1 ? ', ' + result.admin1 : ''),\n    lat: result.latitude, lon: result.longitude, elevation: result.elevation,\n  };\n  place.autoRegion = classifyRegion(place.lat, place.lon, place.elevation);\n  S.place = place;\n  S.raw = await getJSON(REPLAY ? replayUrl(place.lat, place.lon, REPLAY) : forecastUrl(place.lat, place.lon));\n  S.normals = null;\n  rebuild();\n  if (S.fc.days.some((d) => needsNormal(d.tmax, place.region))) {\n    try { S.normals = await loadNormals(place); rebuild(); } catch (e) { /* departure test skipped; shown in UI */ }\n  }\n  localStorage.setItem('ls_last', JSON.stringify({ result, raw: S.raw, at: Date.now() }));\n  $('status').textContent = '';\n  const u = new URL(location.href); u.searchParams.set('place', result.name); history.replaceState(null, '', u);\n  if (REPLAY) localStorage.removeItem('ls_last');\n  render();\n}\n\nfunction render() {\n  const T = UI[S.lang]; const L = S.lang; const fc = S.fc;\n  $('result').hidden = false;\n  $('place-title').textContent = fc.place.displayName;\n  $('place-meta').textContent = `${r1(fc.place.lat)}°N ${r1(fc.place.lon)}°E · ${fc.place.elevation ?? '?'} m · ${T.region}: ${REGION[L][fc.place.region]} · ${WORKLOAD[L][S.workload]}`;\n  const days = $('days'); days.innerHTML = '';\n  for (const d of fc.days.slice(0, 4)) {\n    const div = document.createElement('div');\n    div.className = 'day b' + d.peakCat;\n    const dep = d.imd.departure != null ? `${d.imd.departure >= 0 ? '+' : ''}${r1(d.imd.departure)}°C` : (d.needsNormal ? T.normalPending : '–');\n    const wr = fc.hours.find((h) => h.date === d.date && h.hour === d.peakHour)?.workRest;\n    div.innerHTML = `<h4>${fmtDate(d.date, L)}</h4>\n      <p>${T.tmax}: <b>${r1(d.tmax)}°C</b>${d.normal != null ? ` · ${T.normal} ${r1(d.normal)}°C` : ''} · ${T.dep}: ${dep}</p>\n      <p class=\"${d.imd.level ? 'hw' : ''}\">${IMD[L][d.imd.level]}</p>\n      <p>${T.peak}: <span class=\"pill c${d.peakCat}\">${r1(d.peakWbgt)}°C · ${CAT[L][d.peakCat]}</span> @ ${fmtHour(d.peakHour)} <span class=\"muted\">(${SRC[L][d.peakSource]})</span></p>\n      <p>${T.wr}: ${wr ? workRestText(wr, L) : '–'}</p>\n      <p>${T.dangerous}: ${d.dangerousHours.length ? hourRanges(d.dangerousHours) : T.none}</p>`;\n    days.appendChild(div);\n  }\n  const th = $('hours').querySelector('thead');\n  th.innerHTML = `<tr><th>${T.hour}</th><th>${T.temp}</th><th>${T.rh}</th><th>${T.tw}</th><th>${T.hi}</th><th>${T.wbgt}</th><th>${T.cat}</th><th>${T.wr}</th><th>${T.water}</th></tr>`;\n  const tb = $('hours').querySelector('tbody'); tb.innerHTML = '';\n  const now = nowLocal().toISOString().slice(0, 13);\n  const hrs = fc.hours.filter((h) => h.time.slice(0, 13) >= now).slice(0, 72);\n  let lastDate = '';\n  const rows = [];\n  for (const h of hrs) {\n    if (h.date !== lastDate) { rows.push(`<tr class=\"daysep\"><td colspan=\"9\">${fmtDate(h.date, L)}</td></tr>`); lastDate = h.date; }\n    const off = h.hour < WORK_START || h.hour > WORK_END;\n    rows.push(`<tr class=\"${off ? 'off' : ''}\"><td>${fmtHour(h.hour)}</td><td>${r0(h.tC)}</td><td>${r0(h.rh)}</td><td>${r1(h.tw)}</td><td>${r0(h.hi)}${h.hiOutOfRange ? '*' : ''}</td>`\n      + `<td>${r1(h.wbgt)}<sup>${h.wbgtSource === 'bom' ? 'B' : 'G'}</sup></td><td><span class=\"pill c${h.category}\">${h.category || '–'}</span></td>`\n      + `<td>${h.workRest.noLimit ? T.noLimit : `${h.workRest.workMin}/${h.workRest.restMin}`}</td><td>${h.workRest.waterLph} L</td></tr>`);\n  }\n  tb.innerHTML = rows.join('');\n  $('wbgtNote').textContent = T.wbgtNote;\n  $('hiNote').textContent = T.hiNote;\n  $('hiNote').hidden = !hrs.some((h) => h.hiOutOfRange);\n  const share = location.origin + location.pathname + '?place=' + encodeURIComponent(fc.place.name) + '&lang=' + L + (REPLAY ? '&replay=' + REPLAY : '');\n  const text = advisoryText(fc, L, S.workload, share);\n  $('wa').href = waLink(text);\n  $('copy').onclick = () => navigator.clipboard?.writeText(text).then(() => { $('copy').textContent = T.copied; });\n}\n\nasync function searchAndLoad(name, lang) {\n  const T = UI[S.lang];\n  try {\n    const res = await geocode(name, lang);\n    if (!res.length) { $('status').textContent = T.notFound; return false; }\n    await loadPlace(res[0]);\n    return true;\n  } catch (e) {\n    $('status').textContent = T.netErr;\n    return false;\n  }\n}\n\n$('place-form').addEventListener('submit', (e) => { e.preventDefault(); const v = $('place').value.trim(); if (v) searchAndLoad(v); });\nlet sugT;\n$('place').addEventListener('input', () => {\n  clearTimeout(sugT);\n  const v = $('place').value.trim();\n  if (v.length < 3) return;\n  sugT = setTimeout(async () => {\n    try {\n      const res = await geocode(v);\n      $('place-list').innerHTML = res.map((r) => `<option value=\"${r.name}\">${r.admin1 || ''}</option>`).join('');\n    } catch (e) { /* ignore */ }\n  }, 400);\n});\n$('workload').value = S.workload;\n$('workload').addEventListener('change', () => { S.workload = $('workload').value; localStorage.setItem('ls_w', S.workload); if (S.raw) { rebuild(); render(); } });\n$('region').addEventListener('change', () => { if (S.raw) { rebuild(); render(); } });\n$('lang').addEventListener('click', () => { S.lang = S.lang === 'en' ? 'hi' : 'en'; localStorage.setItem('ls_lang', S.lang); applyLang(); });\n\nasync function ask() {\n  const text = $('q').value.trim() || $('q').placeholder;\n  const q = parseQuestion(text, nowLocal());\n  const out = $('answer');\n  if (q.lang !== S.lang) { S.lang = q.lang; localStorage.setItem('ls_lang', S.lang); applyLang(); }\n  if (q.place && (!S.place || (q.place.toLowerCase() !== S.place.name.toLowerCase()))) {\n    out.textContent = UI[q.lang].loading;\n    const ok = await searchAndLoad(q.place, q.lang);\n    if (!ok) { out.textContent = UI[q.lang].notFound; return; }\n  }\n  if (!S.fc && !q.place) await searchAndLoad(qs.get('place') || 'Nagpur');\n  if (!S.fc) { out.textContent = q.lang === 'hi' ? 'पहले जगह का नाम लिखें या सवाल में जगह बताएँ।' : 'Please name a place (in the question or the box above).'; return; }\n  if (q.workload && q.workload !== S.workload) { $('workload').value = q.workload; S.workload = q.workload; rebuild(); render(); }\n  out.textContent = answer(q, S.fc, nowLocal(), S.workload);\n}\n$('t-askBtn').addEventListener('click', ask);\n$('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') ask(); });\n\napplyLang();\nif ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});\nconst start = qs.get('place');\nconst last = REPLAY ? null : JSON.parse(localStorage.getItem('ls_last') || 'null');\nif (qs.get('q')) { $('q').value = qs.get('q'); if (start) $('place').value = start; ask(); } else if (start) { $('place').value = start; searchAndLoad(start); } else if (last && Date.now() - last.at < 3 * 3600e3) {\n  $('place').value = last.result.name; loadPlace(last.result).catch(() => {\n    S.raw = last.raw; S.place = { name: last.result.name, displayName: last.result.name, lat: last.result.latitude, lon: last.result.longitude, elevation: last.result.elevation };\n    S.place.autoRegion = classifyRegion(S.place.lat, S.place.lon, S.place.elevation); rebuild(); render();\n  });\n} else { $('place').value = 'Nagpur'; searchAndLoad('Nagpur'); }\n\n```",
+      "is_error": false
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_014ZVhNZ1wys1TafTTW2z5Ha",
+      "content": "```\n// index.html\n<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>LuSaathi (लू साथी) – heat-safety helper for outdoor workers</title>\n<meta name=\"description\" content=\"Free heatwave and heat-stress (WBGT) work/rest advisor for India's outdoor workers. English / हिन्दी.\">\n<meta name=\"theme-color\" content=\"#b23c17\">\n<link rel=\"manifest\" href=\"manifest.webmanifest\">\n<link rel=\"icon\" href=\"icon.svg\" type=\"image/svg+xml\">\n<link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n<header>\n  <div class=\"brand\"><img src=\"icon.svg\" alt=\"\" width=\"32\" height=\"32\"><div><h1 id=\"t-title\">LuSaathi</h1><p id=\"t-tagline\">Heat-safety helper for outdoor workers</p></div></div>\n  <button id=\"lang\" type=\"button\" aria-label=\"Switch language\">हिन्दी</button>\n</header>\n<main>\n  <p id=\"banner\" class=\"banner\" hidden></p>\n  <p class=\"replay\"><a id=\"replay\" href=\"?place=Delhi&amp;replay=2024-05-28\">Demo: replay the May 2024 heatwave</a></p>\n  <form id=\"place-form\" class=\"card\" autocomplete=\"off\">\n    <label for=\"place\" id=\"t-placeLabel\">Place</label>\n    <div class=\"row\"><input id=\"place\" name=\"place\" list=\"place-list\" required><button id=\"t-search\" type=\"submit\">Check</button></div>\n    <datalist id=\"place-list\"></datalist>\n    <div class=\"row opts\">\n      <label><span id=\"t-workload\">Type of work</span>\n        <select id=\"workload\"><option value=\"easy\">light</option><option value=\"moderate\" selected>moderate</option><option value=\"hard\">heavy</option></select></label>\n      <label><span id=\"t-region\">IMD region</span>\n        <select id=\"region\"><option value=\"auto\">auto</option><option value=\"plains\">plains</option><option value=\"coastal\">coastal</option><option value=\"hills\">hills</option></select></label>\n    </div>\n  </form>\n\n  <section class=\"card\" id=\"qa\">\n    <label for=\"q\" id=\"t-ask\">Ask a question</label>\n    <div class=\"row\"><input id=\"q\" type=\"text\"><button id=\"t-askBtn\" type=\"button\">Answer</button></div>\n    <pre id=\"answer\" aria-live=\"polite\"></pre>\n  </section>\n\n  <div id=\"status\" role=\"status\"></div>\n  <section id=\"result\" hidden>\n    <h2 id=\"place-title\"></h2>\n    <p id=\"place-meta\" class=\"muted\"></p>\n    <div class=\"row share\"><a id=\"wa\" class=\"btn wa\" target=\"_blank\" rel=\"noopener\">WhatsApp</a><button id=\"copy\" type=\"button\">Copy</button></div>\n    <h3 id=\"t-days\">Daily outlook</h3>\n    <div id=\"days\" class=\"days\"></div>\n    <h3 id=\"t-next72\">Next 72 hours</h3>\n    <div class=\"tablewrap\"><table id=\"hours\"><thead></thead><tbody></tbody></table></div>\n    <p id=\"wbgtNote\" class=\"muted\"></p>\n    <p id=\"hiNote\" class=\"muted\" hidden></p>\n  </section>\n\n  <section class=\"card small\">\n    <p id=\"t-disclaimer\"></p>\n    <p id=\"t-forecastBy\" class=\"muted\"></p>\n    <p><a href=\"https://github.com/talibot-agent/lusaathi#methods\" id=\"t-sources\">Methods, sources &amp; limitations</a> · <a href=\"https://github.com/talibot-agent/lusaathi/blob/main/VALIDATION.md\">Backtest (VALIDATION.md)</a> · MIT</p>\n  </section>\n</main>\n<script type=\"module\" src=\"app.js\"></script>\n</body>\n</html>\n\n```",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "Now let me check the advisor.js to understand how the language is used there:",
+  "toolUses": [
+    {
+      "id": "toolu_01JYFZU3uB8ndCAFuhV3wfkE",
+      "name": "read_file",
+      "input": {
+        "path": "lib/advisor.js"
+      },
+      "status": "done",
+      "preview": "```\n// lib/advisor.js\n// Builds answers to parsed questions and the WhatsApp advisory text, using only numbers from the …"
+    },
+    {
+      "id": "toolu_01YYNoyT8sS1x3GztDMxLvkX",
+      "name": "list_files",
+      "input": {
+        "path": "tests/js"
+      },
+      "status": "done",
+      "preview": "📄 advisor.test.mjs\n📄 crosscheck.test.mjs\n📄 heat_imd.test.mjs\n📄 intent.test.mjs"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01JYFZU3uB8ndCAFuhV3wfkE",
+      "content": "```\n// lib/advisor.js\n// Builds answers to parsed questions and the WhatsApp advisory text, using only numbers from the forecast.\nimport { CAT, IMD, WORKLOAD, REGION, SRC, fmtDate, fmtHour, r0, r1, workRestText } from './i18n.js';\nimport { hourRanges, WORK_START, WORK_END } from './model.js';\nimport { workRest, BOM_MIN_SW_WM2 } from './heat.js';\n\nexport const NDMA_NOON = [12, 13, 14]; // NDMA: avoid going out in the sun 12:00–15:00 during heat waves\n\nfunction imdLine(day, lang) {\n  let s = IMD[lang][day.imd.level];\n  if (day.imd.departure != null) {\n    s += lang === 'hi' ? ` (विचलन ${day.imd.departure >= 0 ? '+' : ''}${r1(day.imd.departure)}°C)` : ` (departure ${day.imd.departure >= 0 ? '+' : ''}${r1(day.imd.departure)}°C)`;\n  } else if (day.needsNormal) {\n    s += lang === 'hi' ? ' (सामान्य तापमान उपलब्ध नहीं – केवल निरपेक्ष जाँच)' : ' (normal unavailable – absolute test only)';\n  }\n  return s;\n}\n\n/** Coolest-category alternative hour on the same day within work hours (earliest hour of lowest category). */\nexport function bestAlternative(fc, date) {\n  const hs = fc.hours.filter((h) => h.date === date && h.hour >= WORK_START && h.hour <= WORK_END);\n  if (!hs.length) return null;\n  const minCat = Math.min(...hs.map((h) => h.category));\n  return { cat: minCat, hours: hs.filter((h) => h.category === minCat).map((h) => h.hour) };\n}\n\n/**\n * @param q parsed question; @param fc forecast from buildForecast; @param nowLocal Date (UTC fields = local time)\n */\nexport function answer(q, fc, nowLocal, defaultWorkload = 'moderate') {\n  const lang = q.lang;\n  const wl = q.workload || defaultWorkload;\n  const todayIso = nowLocal.toISOString().slice(0, 10);\n  const placeName = fc.place.displayName || fc.place.name;\n  const dayOffset = q.dayOffset ?? (q.hour != null && q.hour <= nowLocal.getUTCHours() ? 1 : 0);\n  const target = new Date(Date.parse(todayIso + 'T00:00:00Z') + dayOffset * 86400000).toISOString().slice(0, 10);\n  const day = fc.days.find((d) => d.date === target);\n  if (!day) {\n    return lang === 'hi'\n      ? `${placeName}: यह तारीख अगले 72 घंटों के पूर्वानुमान से बाहर है। आज, कल या परसों के बारे में पूछें।`\n      : `${placeName}: that date is outside the 72-hour forecast window. Ask about today, tomorrow or the day after.`;\n  }\n  const L = [];\n  if (q.hour != null) {\n    const h = fc.hours.find((x) => x.date === target && x.hour === q.hour);\n    if (!h) return lang === 'hi' ? `${placeName}: उस समय का डेटा नहीं मिला।` : `${placeName}: no forecast for that hour.`;\n    const wr = workRest(h.category, wl);\n    const head = `${placeName}, ${fmtDate(target, lang)} ${fmtHour(q.hour)}`;\n    if (lang === 'hi') {\n      L.push(`${head}: हवा ${r0(h.tC)}°C, नमी ${r0(h.rh)}%, वेट-बल्ब ${r1(h.tw)}°C, हीट इंडेक्स ${r0(h.hi)}°C${h.hiOutOfRange ? ' (इतनी सूखी हवा में मोटा अनुमान)' : ''}, अनुमानित WBGT ${r1(h.wbgt)}°C (${h.strongSun === false ? `धूप/ग्लोब मॉडल; अनुमानित धूप ${r0(h.shortwave)} W/m² है, ${BOM_MIN_SW_WM2} से कम, और BoM सूत्र तेज़ धूप मानकर बना है, इसलिए वह लागू नहीं` : `दो अनुमानों में ज़्यादा वाला: ${SRC.hi[h.wbgtSource]}; ${h.wbgtSource === 'bom' ? `धूप/ग्लोब मॉडल ${r1(h.wbgtGlobe)}°C` : `BoM सूत्र ${r1(h.wbgtBom)}°C`}`}) → ${CAT.hi[h.category]}.`);\n      L.push(`${WORKLOAD.hi[wl]} के लिए: ${workRestText(wr, 'hi')}; हर घंटे लगभग ${wr.waterLph} लीटर पानी (दिन में 11 लीटर से ज़्यादा नहीं)।`);\n    } else {\n      L.push(`${head}: air ${r0(h.tC)}°C, humidity ${r0(h.rh)}%, wet-bulb ${r1(h.tw)}°C, heat index ${r0(h.hi)}°C${h.hiOutOfRange ? ' (rough: formula not valid in air this dry)' : ''}, estimated WBGT ${r1(h.wbgt)}°C (${h.strongSun === false ? `sun/globe model; forecast sunshine is ${r0(h.shortwave)} W/m², below ${BOM_MIN_SW_WM2}, and the BoM formula assumes strong sun, so it is not used` : `the higher of two estimates, from the ${SRC.en[h.wbgtSource]}; ${h.wbgtSource === 'bom' ? `sun/globe model ${r1(h.wbgtGlobe)}°C` : `BoM formula ${r1(h.wbgtBom)}°C`}`}) → ${CAT.en[h.category]}.`);\n      L.push(`For ${WORKLOAD.en[wl]}: ${workRestText(wr, 'en')}; drink about ${wr.waterLph} L water per hour (not more than ~1.4 L/hour or ~11 L/day).`);\n    }\n    let verdict;\n    if (wr.noLimit) verdict = lang === 'hi' ? 'जवाब: हाँ, सामान्य सावधानी के साथ (छाँव, पानी, हल्के कपड़े)।' : 'Answer: Yes, with normal precautions (shade, water, light clothing).';\n    else if (wr.workMin >= 30) verdict = lang === 'hi' ? `जवाब: हाँ, लेकिन केवल तय आराम-अंतराल के साथ (${workRestText(wr, 'hi')})।` : `Answer: Yes, but only with the scheduled breaks (${workRestText(wr, 'en')}).`;\n    else verdict = lang === 'hi' ? `जवाब: जोखिम अधिक – इस घंटे में सिर्फ़ ${wr.workMin} मिनट काम की सीमा है; काम ठंडे समय पर करें।` : `Answer: High risk – the guideline allows only ${wr.workMin} min of work in this hour; move the work to a cooler time.`;\n    L.unshift(verdict);\n    if (!wr.noLimit) {\n      const alt = bestAlternative(fc, target);\n      if (alt && alt.cat < h.category) {\n        L.push(lang === 'hi' ? `उसी दिन बेहतर समय: ${hourRanges(alt.hours)} (${CAT.hi[alt.cat]})।` : `Better time that day: ${hourRanges(alt.hours)} (${CAT.en[alt.cat]}).`);\n      }\n    }\n    if (NDMA_NOON.includes(q.hour) && (day.imd.level > 0 || h.category >= 3)) {\n      L.push(lang === 'hi' ? 'NDMA लू दिशानिर्देश: दोपहर 12 से 3 बजे तक धूप में जाने से बचें; मेहनत वाला काम ठंडे समय पर करें।' : 'NDMA heat-wave guidance: avoid going out in the sun 12:00–15:00 and schedule strenuous jobs to cooler times of the day.');\n    }\n  } else {\n    if (lang === 'hi') {\n      L.push(`${placeName}, ${fmtDate(target, lang)}: अधिकतम ${r1(day.tmax)}°C; सबसे ज़्यादा WBGT ${r1(day.peakWbgt)}°C (${fmtHour(day.peakHour)}, ${CAT.hi[day.peakCat]}; ${SRC.hi[day.peakSource]})।`);\n      L.push(day.restrictedHours.length ? `${WORKLOAD.hi[wl]} पर समय-सीमा वाले घंटे: ${hourRanges(day.restrictedHours)}।` : 'काम के घंटों में कोई समय-सीमा नहीं।');\n    } else {\n      L.push(`${placeName}, ${fmtDate(target, lang)}: max ${r1(day.tmax)}°C; peak WBGT ${r1(day.peakWbgt)}°C at ${fmtHour(day.peakHour)} (${CAT.en[day.peakCat]}; ${SRC.en[day.peakSource]}).`);\n      L.push(day.restrictedHours.length ? `Hours needing work/rest limits (${WORKLOAD.en[wl]}): ${hourRanges(day.restrictedHours)}.` : 'No work-time limits needed during work hours.');\n    }\n  }\n  L.push(imdLine(day, lang) + (lang === 'hi' ? ` [${REGION.hi[fc.place.region]}]` : ` [${REGION.en[fc.place.region]}]`));\n  return L.join('\\n');\n}\n\n/** WhatsApp advisory text for employers / supervisors / ASHA workers. */\nexport function advisoryText(fc, lang, workload = 'moderate', url = '') {\n  const name = fc.place.displayName || fc.place.name;\n  const L = [];\n  L.push(lang === 'hi' ? `🌡️ लू साथी – गर्मी सलाह: ${name}` : `🌡️ LuSaathi heat advisory: ${name}`);\n  for (const d of fc.days.slice(0, 3)) {\n    const cat = CAT[lang][d.peakCat];\n    const lim = d.restrictedHours.length ? hourRanges(d.restrictedHours) : (lang === 'hi' ? 'कोई नहीं' : 'none');\n    const wr = workRest(d.peakCat, workload);\n    if (lang === 'hi') {\n      L.push(`\\n📅 ${fmtDate(d.date, 'hi')}: अधिकतम ${r0(d.tmax)}°C, अधिकतम WBGT ${r1(d.peakWbgt)}°C (${cat}; ${SRC.hi[d.peakSource]})`);\n      if (d.imd.level) L.push(`⚠️ ${IMD.hi[d.imd.level]}`);\n      L.push(`⏱️ समय-सीमा वाले घंटे (${WORKLOAD.hi[workload]}): ${lim}`);\n      if (!wr.noLimit) L.push(`➡️ सबसे गर्म घंटे में: ${workRestText(wr, 'hi')}, ~${wr.waterLph} ली. पानी/घंटा`);\n    } else {\n      L.push(`\\n📅 ${fmtDate(d.date, 'en')}: max ${r0(d.tmax)}°C, peak WBGT ${r1(d.peakWbgt)}°C (${cat}; ${SRC.en[d.peakSource]})`);\n      if (d.imd.level) L.push(`⚠️ ${IMD.en[d.imd.level]}`);\n      L.push(`⏱️ Hours needing work/rest limits (${WORKLOAD.en[workload]}): ${lim}`);\n      if (!wr.noLimit) L.push(`➡️ At the hottest hour: ${workRestText(wr, 'en')}, ~${wr.waterLph} L water/hour`);\n    }\n  }\n  L.push(lang === 'hi'\n    ? '\\n✅ ठंडा पानी, छाँव, ORS रखें; भारी काम सुबह/शाम करें; नए मज़दूरों को 7–14 दिन में धीरे-धीरे आदत डालें। लू के लक्षण दिखें तो 108/112।'\n    : '\\n✅ Provide cool water, shade and ORS; schedule heavy jobs early/late; acclimatise new workers over 7–14 days. Heat-stroke signs → call 108/112.');\n  L.push(lang === 'hi' ? '(मॉडल अनुमान; IMD/राज्य चेतावनी को प्राथमिकता दें)' : '(Model estimate; official IMD/State alerts take priority)');\n  if (url) L.push(url);\n  return L.join('\\n');\n}\n\nexport const waLink = (text) => 'https://wa.me/?text=' + encodeURIComponent(text);\n\n```",
+      "is_error": false
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01YYNoyT8sS1x3GztDMxLvkX",
+      "content": "📄 advisor.test.mjs\n📄 crosscheck.test.mjs\n📄 heat_imd.test.mjs\n📄 intent.test.mjs",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "Let me check the existing intent tests to understand the test structure:",
+  "toolUses": [
+    {
+      "id": "toolu_016NyDW5AxYcip5MatWLfm8J",
+      "name": "read_file",
+      "input": {
+        "path": "tests/js/intent.test.mjs"
+      },
+      "status": "done",
+      "preview": "```\n// tests/js/intent.test.mjs\nimport test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseQue…"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_016NyDW5AxYcip5MatWLfm8J",
+      "content": "```\n// tests/js/intent.test.mjs\nimport test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseQuestion } from '../../lib/intent.js';\n\nconst NOW = new Date(Date.UTC(2026, 10, 9, 11, 0)); // Monday 9 Nov 2026, 11:00 IST\n\ntest('English example from the brief', () => {\n  const q = parseQuestion('Can I work on the roof at 2pm tomorrow in Nagpur?', NOW);\n  assert.deepEqual([q.lang, q.place, q.dayOffset, q.hour, q.workload], ['en', 'Nagpur', 1, 14, 'moderate']);\n});\n\ntest('Hindi example from the brief', () => {\n  const q = parseQuestion('कल दोपहर जयपुर में काम करना सुरक्षित है?', NOW);\n  assert.deepEqual([q.lang, q.place, q.dayOffset, q.hour], ['hi', 'Jaipur', 1, 14]);\n});\n\ntest('Hindi with Devanagari digits and evening', () => {\n  const q = parseQuestion('शाम ५ बजे गोंडा में मज़दूरी ठीक है?', NOW);\n  assert.equal(q.place, 'गोंडा');\n  assert.equal(q.hour, 17);\n  assert.equal(q.workload, 'hard');\n});\n\ntest('day after tomorrow + morning in Hindi', () => {\n  const q = parseQuestion('परसों सुबह 7 बजे लखनऊ में खेत में काम?', NOW);\n  assert.deepEqual([q.place, q.dayOffset, q.hour], ['Lucknow', 2, 7]);\n});\n\ntest('Hinglish answered in Hindi', () => {\n  const q = parseQuestion('kal dopahar 3 baje Patna mein kaam safe hai?', NOW);\n  assert.deepEqual([q.lang, q.place, q.dayOffset, q.hour], ['hi', 'Patna', 1, 15]);\n});\n\ntest('weekday names and 24h clock', () => {\n  const q = parseQuestion('Is it safe to carry bricks in Banda on Wednesday at 13:30', NOW);\n  assert.deepEqual([q.place, q.dayOffset, q.hour, q.workload], ['Banda', 2, 13, 'hard']);\n});\n\ntest('unknown place via \"in X\" pattern', () => {\n  const q = parseQuestion('What about at 4 in Bhiwandi tomorrow?', NOW);\n  assert.deepEqual([q.place, q.placeSource, q.hour], ['Bhiwandi', 'pattern', 16]);\n});\n\ntest('now / abhi', () => {\n  const q = parseQuestion('अभी दिल्ली में बाहर काम?', NOW);\n  assert.deepEqual([q.place, q.dayOffset, q.hour, q.wantsNow], ['Delhi', 0, 11, true]);\n});\n\ntest('12 am / 12 pm', () => {\n  assert.equal(parseQuestion('Pune at 12 pm', NOW).hour, 12);\n  assert.equal(parseQuestion('Pune at 12 am', NOW).hour, 0);\n});\n\ntest('aliases (Bombay, Gurgaon)', () => {\n  assert.equal(parseQuestion('bombay tomorrow 3pm', NOW).place, 'Mumbai');\n  assert.equal(parseQuestion('site work in gurgaon today', NOW).place, 'Gurugram');\n});\n\n```",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "Perfect! Now I have a good understanding of the structure. Let me create the modifications:\n\n1. **Update lib/i18n.js** - Add 'mr' entries\n2. **Update lib/intent.js** - Add Marathi detection and parsing\n3. **Update app.js** - Add language toggle logic for 'mr'\n4. **Update index.html** - Add Marathi language selector (if needed)\n5. **Create test file** - tests/js/marathi.test.mjs\n\nLet me start with the changes:",
+  "toolUses": [
+    {
+      "id": "toolu_01MRSW1m8EJfz3gwiZDpNtRL",
+      "name": "edit_file",
+      "input": {
+        "path": "lib/i18n.js",
+        "old_string": "export const CAT = {\n  en: ['Low – below Cat 1', 'Cat 1 – Caution', 'Cat 2 – Elevated', 'Cat 3 – High', 'Cat 4 – Very high', 'Cat 5 – Extreme'],\n  hi: ['कम – श्रेणी 1 से नीचे', 'श्रेणी 1 – सावधानी', 'श्रेणी 2 – बढ़ा हुआ', 'श्रेणी 3 – अधिक', 'श्रेणी 4 – बहुत अधिक', 'श्रेणी 5 – अत्यधिक'],\n};",
+        "new_string": "export const CAT = {\n  en: ['Low – below Cat 1', 'Cat 1 – Caution', 'Cat 2 – Elevated', 'Cat 3 – High', 'Cat 4 – Very high', 'Cat 5 – Extreme'],\n  hi: ['कम – श्रेणी 1 से नीचे', 'श्रेणी 1 – सावधानी', 'श्रेणी 2 – बढ़ा हुआ', 'श्रेणी 3 – अधिक', 'श्रेणी 4 – बहुत अधिक', 'श्रेणी 5 – अत्यधिक'],\n  mr: ['कम – वर्ग 1 खाली', 'वर्ग 1 – सावधानी', 'वर्ग 2 – वाढला', 'वर्ग 3 – अधिक', 'वर्ग 4 – खूप अधिक', 'वर्ग 5 – अत्यंत'],\n};"
+      },
+      "status": "done",
+      "preview": "Edited lib/i18n.js (6772 bytes, 1 replacement(s))"
+    }
+  ],
+  "routingInfo": {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "DEFAULT",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01MRSW1m8EJfz3gwiZDpNtRL",
+      "content": "Edited lib/i18n.js (6772 bytes, 1 replacement(s))",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_1sLRu3HF3bbHQiMCV94hehaK",
+      "name": "edit_file",
+      "input": {
+        "path": "lib/i18n.js",
+        "old_string": "export const IMD = {\n  en: ['No IMD heat-wave criterion met', 'IMD heat-wave criterion met', 'IMD SEVERE heat-wave criterion met'],\n  hi: ['IMD लू (हीट वेव) मानदंड पूरा नहीं', 'IMD लू (हीट वेव) मानदंड पूरा', 'IMD गंभीर लू मानदंड पूरा'],\n};",
+        "new_string": "export const IMD = {\n  en: ['No IMD heat-wave criterion met', 'IMD heat-wave criterion met', 'IMD SEVERE heat-wave criterion met'],\n  hi: ['IMD लू (हीट वेव) मानदंड पूरा नहीं', 'IMD लू (हीट वेव) मानदंड पूरा', 'IMD गंभीर लू मानदंड पूरा'],\n  mr: ['IMD लू निकष पूर्ण नाही', 'IMD लू निकष पूर्ण', 'IMD गंभीर लू निकष पूर्ण'],\n};"
+      },
+      "status": "done",
+      "preview": "Edited lib/i18n.js (6854 bytes, 1 replacement(s))"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "6 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_1sLRu3HF3bbHQiMCV94hehaK",
+      "content": "Edited lib/i18n.js (6854 bytes, 1 replacement(s))",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_cAEZiv2qHFNEtBMCEDerBIZf",
+      "name": "edit_file",
+      "input": {
+        "path": "lib/i18n.js",
+        "old_string": "export const WORKLOAD = {\n  en: { easy: 'light work', moderate: 'moderate work', hard: 'heavy work' },\n  hi: { easy: 'हल्का काम', moderate: 'मध्यम काम', hard: 'भारी काम' },\n};",
+        "new_string": "export const WORKLOAD = {\n  en: { easy: 'light work', moderate: 'moderate work', hard: 'heavy work' },\n  hi: { easy: 'हल्का काम', moderate: 'मध्यम काम', hard: 'भारी काम' },\n  mr: { easy: 'हलका काम', moderate: 'मध्यम काम', hard: 'जड काम' },\n};"
+      },
+      "status": "done",
+      "preview": "Edited lib/i18n.js (6921 bytes, 1 replacement(s))"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "7 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_cAEZiv2qHFNEtBMCEDerBIZf",
+      "content": "Edited lib/i18n.js (6921 bytes, 1 replacement(s))",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_6QBgTYBcCLiKk24F9JJO6Rzd",
+      "name": "edit_file",
+      "input": {
+        "path": "lib/i18n.js",
+        "old_string": "export const REGION = {\n  en: { plains: 'plains', coastal: 'coastal', hills: 'hills' },\n  hi: { plains: 'मैदानी', coastal: 'तटीय', hills: 'पहाड़ी' },\n};",
+        "new_string": "export const REGION = {\n  en: { plains: 'plains', coastal: 'coastal', hills: 'hills' },\n  hi: { plains: 'मैदानी', coastal: 'तटीय', hills: 'पहाड़ी' },\n  mr: { plains: 'सपाट भाग', coastal: 'किनारी', hills: 'डोंगर' },\n};"
+      },
+      "status": "done",
+      "preview": "Edited lib/i18n.js (6986 bytes, 1 replacement(s))"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "8 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_6QBgTYBcCLiKk24F9JJO6Rzd",
+      "content": "Edited lib/i18n.js (6986 bytes, 1 replacement(s))",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_mqQJTsIVcQBibMotiiuHi7Xi",
+      "name": "edit_file",
+      "input": {
+        "path": "lib/i18n.js",
+        "old_string": "  en: {\n    title: 'LuSaathi', tagline: 'Heat-safety helper for outdoor workers',\n    placeLabel: 'Place (city / town / village)', placeholder: 'e.g. Nagpur or जयपुर', search: 'Check',\n    workload: 'Type of work', region: 'IMD region', auto: 'auto',\n    ask: 'Ask a question', askPlaceholder: 'Can I work on the roof at 2pm tomorrow in Nagpur?', askBtn: 'Answer',\n    share: 'Share advisory on WhatsApp', copy: 'Copy text', copied: 'Copied',\n    next72: 'Next 72 hours (work hours 06:00–18:00 highlighted)', days: 'Daily outlook',\n    hour: 'Time', temp: 'Air °C', rh: 'RH %', tw: 'Wet-bulb °C', hi: 'Heat index °C', wbgt: 'WBGT °C (G/B)', cat: 'Category',\n    wr: 'Work/rest per hour', water: 'Water',\n    loading: 'Loading forecast…', notFound: 'Place not found in India. Try another spelling.',\n    netErr: 'Could not reach the forecast service. Check your connection and try again.',\n    tmax: 'Max temp', normal: 'Normal', dep: 'Departure', peak: 'Peak WBGT', dangerous: 'Cat 4–5 work hours',\n    none: 'none', noLimit: 'no limit', normalPending: 'normal not loaded (departure test skipped)',\n    sources: 'Methods, sources & limitations', disclaimer: 'Estimates from weather-model forecasts, not on-site measurements. Follow official IMD/NDMA/State Heat Action Plan alerts. If someone shows heat-stroke signs (confusion, hot dry skin, collapse) call 108/112 immediately.',\n    forecastBy: 'Forecast: Open-Meteo (ECMWF/GFS/ICON blend). Normals: ERA5 1991–2020.',\n    replayBanner: 'REPLAY MODE: archived forecast for a past date (2024 heatwave demo), not today’s weather.', replayLink: 'Demo: replay the May 2024 heatwave (Delhi, 28 May 2024)', live: 'Back to live forecast',\n    lang: 'हिन्दी',\n    wbgtNote: 'WBGT: when the forecast shows strong sun (shortwave radiation ≥ 600 W/m²), the higher (more cautious) of two estimates: G = sun/globe model (Dimiceli–Piltz + Stull), B = BoM formula. Otherwise (weaker sun, early morning, evening, night) G only, because the BoM formula assumes strong sun. Category and work/rest use this value.',\n    hiNote: '* Heat index is outside the range the NWS formula is defined for (humidity below 13 % above 112 °F / 44.4 °C) — treat it as rough. Work/rest uses WBGT, which depends mostly on the wet-bulb temperature.',\n  },",
+        "new_string": "  en: {\n    title: 'LuSaathi', tagline: 'Heat-safety helper for outdoor workers',\n    placeLabel: 'Place (city / town / village)', placeholder: 'e.g. Nagpur or जयपुर', search: 'Check',\n    workload: 'Type of work', region: 'IMD region', auto: 'auto',\n    ask: 'Ask a question', askPlaceholder: 'Can I work on the roof at 2pm tomorrow in Nagpur?', askBtn: 'Answer',\n    share: 'Share advisory on WhatsApp', copy: 'Copy text', copied: 'Copied',\n    next72: 'Next 72 hours (work hours 06:00–18:00 highlighted)', days: 'Daily outlook',\n    hour: 'Time', temp: 'Air °C', rh: 'RH %', tw: 'Wet-bulb °C', hi: 'Heat index °C', wbgt: 'WBGT °C (G/B)', cat: 'Category',\n    wr: 'Work/rest per hour', water: 'Water',\n    loading: 'Loading forecast…', notFound: 'Place not found in India. Try another spelling.',\n    netErr: 'Could not reach the forecast service. Check your connection and try again.',\n    tmax: 'Max temp', normal: 'Normal', dep: 'Departure', peak: 'Peak WBGT', dangerous: 'Cat 4–5 work hours',\n    none: 'none', noLimit: 'no limit', normalPending: 'normal not loaded (departure test skipped)',\n    sources: 'Methods, sources & limitations', disclaimer: 'Estimates from weather-model forecasts, not on-site measurements. Follow official IMD/NDMA/State Heat Action Plan alerts. If someone shows heat-stroke signs (confusion, hot dry skin, collapse) call 108/112 immediately.',\n    forecastBy: 'Forecast: Open-Meteo (ECMWF/GFS/ICON blend). Normals: ERA5 1991–2020.',\n    replayBanner: 'REPLAY MODE: archived forecast for a past date (2024 heatwave demo), not today’s weather.', replayLink: 'Demo: replay the May 2024 heatwave (Delhi, 28 May 2024)', live: 'Back to live forecast',\n    lang: 'हिन्दी',\n    wbgtNote: 'WBGT: when the forecast shows strong sun (shortwave radiation ≥ 600 W/m²), the higher (more cautious) of two estimates: G = sun/globe model (Dimiceli–Piltz + Stull), B = BoM formula. Otherwise (weaker sun, early morning, evening, night) G only, because the BoM formula assumes strong sun. Category and work/rest use this value.',\n    hiNote: '* Heat index is outside the range the NWS formula is defined for (humidity below 13 % above 112 °F / 44.4 °C) — treat it as rough. Work/rest uses WBGT, which depends mostly on the wet-bulb temperature.',\n  },"
+      },
+      "status": "done",
+      "preview": "Edited lib/i18n.js (6986 bytes, 1 replacement(s))"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "9 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_mqQJTsIVcQBibMotiiuHi7Xi",
+      "content": "Edited lib/i18n.js (6986 bytes, 1 replacement(s))",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_UKN8mfwhVAiLn5sPFBifj8BR",
+      "name": "edit_file",
+      "input": {
+        "path": "lib/i18n.js",
+        "old_string": "  hi: {\n    title: 'लू साथी', tagline: 'बाहर काम करने वालों के लिए गर्मी-सुरक्षा साथी',\n    placeLabel: 'जगह (शहर / कस्बा / गाँव)', placeholder: 'जैसे नागपुर या Jaipur', search: 'देखें',\n    workload: 'काम का प्रकार', region: 'IMD क्षेत्र', auto: 'स्वतः',\n    ask: 'सवाल पूछें', askPlaceholder: 'कल दोपहर जयपुर में काम करना सुरक्षित है?', askBtn: 'जवाब',\n    share: 'WhatsApp पर सलाह भेजें', copy: 'टेक्स्ट कॉपी करें', copied: 'कॉपी हो गया',\n    next72: 'अगले 72 घंटे (काम के घंटे 06:00–18:00 हाइलाइट)', days: 'दैनिक स्थिति',\n    hour: 'समय', temp: 'तापमान °C', rh: 'नमी %', tw: 'वेट-बल्ब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'श्रेणी',\n    wr: 'हर घंटे काम/आराम', water: 'पानी',\n    loading: 'पूर्वानुमान लोड हो रहा है…', notFound: 'भारत में यह जगह नहीं मिली। दूसरी वर्तनी आज़माएँ।',\n    netErr: 'पूर्वानुमान सेवा से जुड़ नहीं पाए। इंटरनेट जाँचें और फिर कोशिश करें।',\n    tmax: 'अधिकतम तापमान', normal: 'सामान्य', dep: 'विचलन', peak: 'अधिकतम WBGT', dangerous: 'श्रेणी 4–5 काम के घंटे',\n    none: 'कोई नहीं', noLimit: 'कोई सीमा नहीं', normalPending: 'सामान्य तापमान लोड नहीं (विचलन जाँच नहीं हुई)',\n    sources: 'तरीका, स्रोत और सीमाएँ', disclaimer: 'ये मौसम-मॉडल पूर्वानुमान पर आधारित अनुमान हैं, साइट पर मापे गए आँकड़े नहीं। IMD/NDMA/राज्य हीट एक्शन प्लान की आधिकारिक चेतावनी मानें। लू लगने के लक्षण (भ्रम, गर्म सूखी त्वचा, बेहोशी) दिखें तो तुरंत 108/112 पर कॉल करें।',\n    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON)। सामान्य: ERA5 1991–2020।',\n    replayBanner: 'रीप्ले मोड: पिछली तारीख का संग्रहित पूर्वानुमान (2024 लू डेमो), आज का मौसम नहीं।', replayLink: 'डेमो: मई 2024 की लू दोबारा देखें (दिल्ली, 28 मई 2024)', live: 'लाइव पूर्वानुमान पर लौटें',\n    lang: 'English',\n    wbgtNote: 'WBGT: जब पूर्वानुमान में तेज़ धूप हो (सौर विकिरण ≥ 600 W/m²), तो दो अनुमानों में से ज़्यादा (ज़्यादा सतर्क) वाला: G = धूप/ग्लोब मॉडल (Dimiceli–Piltz + Stull), B = BoM सूत्र। बाकी समय (हल्की धूप, सुबह-शाम, रात) सिर्फ़ G, क्योंकि BoM सूत्र तेज़ धूप मानकर बना है। श्रेणी और काम/आराम इसी मान से तय होते हैं।',\n    hiNote: '* इतनी कम नमी (13% से कम) और 44.4°C से ज़्यादा तापमान पर हीट इंडेक्स का NWS सूत्र भरोसेमंद नहीं — इसे मोटा अनुमान मानें। काम/आराम WBGT से तय होता है, जो मुख्यतः वेट-बल्ब तापमान पर निर्भर है।',\n  },",
+        "new_string": "  hi: {\n    title: 'लू साथी', tagline: 'बाहर काम करने वालों के लिए गर्मी-सुरक्षा साथी',\n    placeLabel: 'जगह (शहर / कस्बा / गाँव)', placeholder: 'जैसे नागपुर या Jaipur', search: 'देखें',\n    workload: 'काम का प्रकार', region: 'IMD क्षेत्र', auto: 'स्वतः',\n    ask: 'सवाल पूछें', askPlaceholder: 'कल दोपहर जयपुर में काम करना सुरक्षित है?', askBtn: 'जवाब',\n    share: 'WhatsApp पर सलाह भेजें', copy: 'टेक्स्ट कॉपी करें', copied: 'कॉपी हो गया',\n    next72: 'अगले 72 घंटे (काम के घंटे 06:00–18:00 हाइलाइट)', days: 'दैनिक स्थिति',\n    hour: 'समय', temp: 'तापमान °C', rh: 'नमी %', tw: 'वेट-बल्ब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'श्रेणी',\n    wr: 'हर घंटे काम/आराम', water: 'पानी',\n    loading: 'पूर्वानुमान लोड हो रहा है…', notFound: 'भारत में यह जगह नहीं मिली। दूसरी वर्तनी आज़माएँ।',\n    netErr: 'पूर्वानुमान सेवा से जुड़ नहीं पाए। इंटरनेट जाँचें और फिर कोशिश करें।',\n    tmax: 'अधिकतम तापमान', normal: 'सामान्य', dep: 'विचलन', peak: 'अधिकतम WBGT', dangerous: 'श्रेणी 4–5 काम के घंटे',\n    none: 'कोई नहीं', noLimit: 'कोई सीमा नहीं', normalPending: 'सामान्य तापमान लोड नहीं (विचलन जाँच नहीं हुई)',\n    sources: 'तरीका, स्रोत और सीमाएँ', disclaimer: 'ये मौसम-मॉडल पूर्वानुमान पर आधारित अनुमान हैं, साइट पर मापे गए आँकड़े नहीं। IMD/NDMA/राज्य हीट एक्शन प्लान की आधिकारिक चेतावनी मानें। लू लगने के लक्षण (भ्रम, गर्म सूखी त्वचा, बेहोशी) दिखें तो तुरंत 108/112 पर कॉल करें।',\n    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON)। सामान्य: ERA5 1991–2020।',\n    replayBanner: 'रीप्ले मोड: पिछली तारीख का संग्रहित पूर्वानुमान (2024 लू डेमो), आज का मौसम नहीं।', replayLink: 'डेमो: मई 2024 की लू दोबारा देखें (दिल्ली, 28 मई 2024)', live: 'लाइव पूर्वानुमान पर लौटें',\n    lang: 'English',\n    wbgtNote: 'WBGT: जब पूर्वानुमान में तेज़ धूप हो (सौर विकिरण ≥ 600 W/m²), तो दो अनुमानों में से ज़्यादा (ज़्यादा सतर्क) वाला: G = धूप/ग्लोब मॉडल (Dimiceli–Piltz + Stull), B = BoM सूत्र। बाकी समय (हल्की धूप, सुबह-शाम, रात) सिर्फ़ G, क्योंकि BoM सूत्र तेज़ धूप मानकर बना है। श्रेणी और काम/आराम इसी मान से तय होते हैं।',\n    hiNote: '* इतनी कम नमी (13% से कम) और 44.4°C से ज़्यादा तापमान पर हीट इंडेक्स का NWS सूत्र भरोसेमंद नहीं — इसे मोटा अनुमान मानें। काम/आराम WBGT से तय होता है, जो मुख्यतः वेट-बल्ब तापमान पर निर्भर है।',\n  },\n  mr: {\n    title: 'लू साथी', tagline: 'बाहेर काम करणार्‍यांसाठी उष्णतेची सुरक्षितता',\n    placeLabel: 'ठिकाण (शहर / तालुका / गाव)', placeholder: 'उदा. Nagpur किंवा जयपूर', search: 'पहा',\n    workload: 'कामाचा प्रकार', region: 'IMD प्रदेश', auto: 'ऑटो',\n    ask: 'प्रश्न विचारा', askPlaceholder: 'काल दुपारी नागपूरमध्ये छतावर काम करू शकतो का?', askBtn: 'उत्तर',\n    share: 'WhatsApp वर सल्ला पाठवा', copy: 'मजकूर कॉपी करा', copied: 'कॉपी केले',\n    next72: 'पुढील 72 तास (कामाचे तास 06:00–18:00 हायलाइट)', days: 'दैनंदिन स्थिती',\n    hour: 'वेळ', temp: 'वातावरण °C', rh: 'आर्द्रता %', tw: 'वेट-बलब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'वर्ग',\n    wr: 'प्रत्येक तास काम/विराम', water: 'पाणी',\n    loading: 'पूर्वानुमान लोड करीत आहे…', notFound: 'भारतात हे ठिकाण आढळले नाही. वेगळ्या हिज्जे वापरून पाहा.',\n    netErr: 'पूर्वानुमान सेवा उपलब्ध नाही. तुमची कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',\n    tmax: 'कमाल तापमान', normal: 'सामान्य', dep: 'फरक', peak: 'अधिकतम WBGT', dangerous: 'वर्ग 4–5 कामाचे तास',\n    none: 'काही नाही', noLimit: 'मर्यादा नाही', normalPending: 'सामान्य लोड नाही (फरक तपास वगळला)',\n    sources: 'पद्धती, स्रोत आणि मर्यादा', disclaimer: 'हे हवामान-मॉडेल अंदाजावर आधारित आहेत, स्थानिक नोंदी नाहीत. अधिकृत IMD/NDMA/राज्याच्या सूचना पाळा. लूचे लक्षण दिसल्यास (गोंधळ, गरम व कोरडी त्वचा, बेहोशी) लगेच 108/112 ला कॉल करा.',\n    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON मिश्रण). सामान्य: ERA5 1991–2020.',\n    replayBanner: 'रीप्ले मोड: मागील कालावधीचा संग्रहित पूर्वानुमान (2024 लू डेमो), आजचे हवामान नाही.', replayLink: 'डेमो: मे 2024 ची लू पाहा (दिल्ली, 28 मे 2024)', live: 'लाइव्ह पूर्वानुमानवर परत या',\n    lang: 'मराठी',\n    wbgtNote: 'WBGT: जर पूर्वानुमानात जोरदार सूर्य दिसून आला (shortwave विकिरण ≥ 600 W/m²), तर दोन अंदाजांपैकी जास्त (जास्त सावध) वापरतात: G = सूर्य/ग्लोब मॉडेल (Dimiceli–Piltz + Stull), B = BoM सूत्र. इतर वेळा (सकाळ/संध्याकाळ/रात किंवा कमी धूप) फक्त G वापरतात, कारण BoM सूत्र जोरदार सूर्य गृहीत धरते. वर्ग आणि काम/विराम हा हा मूल्य वापरून ठरवतात.',\n    hiNote: '* हीट इंडेक्स NWS सूत्रासाठी ठरवलेल्या श्रेणीबाहेर आहे (13% पेक्षा कमी आर्द्रता व 44.4°C पेक्षा जास्त तापमान) — याला अंदाज म्हणून घ्या. काम/विराम WBGT वर आधारित असतात, जे मुख्यतः वेट-बलब तापमानावर अवलंबून असते.',\n  },"
+      },
+      "status": "done",
+      "preview": "Edited lib/i18n.js (9237 bytes, 1 replacement(s))"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "10 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_UKN8mfwhVAiLn5sPFBifj8BR",
+      "content": "Edited lib/i18n.js (9237 bytes, 1 replacement(s))",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_uvFJgyVxHtYvfCAXhZzSN4Rh",
+      "name": "edit_file",
+      "input": {
+        "path": "lib/i18n.js",
+        "old_string": "const pad = (n) => String(n).padStart(2, '0');\nconst DOW = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], hi: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'] };\nconst MON = { en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],\n  hi: ['जन', 'फ़र', 'मार्च', 'अप्रै', 'मई', 'जून', 'जुला', 'अग', 'सित', 'अक्टू', 'नव', 'दिस'] };\nexport function fmtDate(iso, lang) {\n  const [y, m, d] = iso.split('-').map(Number);\n  const w = new Date(Date.UTC(y, m - 1, d)).getUTCDay();\n  return `${DOW[lang][w]} ${d} ${MON[lang][m - 1]}`;\n}\n",
+        "new_string": "const pad = (n) => String(n).padStart(2, '0');\nconst DOW = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], hi: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'], mr: ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'] };\nconst MON = { en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],\n  hi: ['जन', 'फ़र', 'मार्च', 'अप्रै', 'मई', 'जून', 'जुला', 'अग', 'सित', 'अक्टू', 'नव', 'दिस'], mr: ['जन', 'फेब', 'मार्च', 'एप्रि', 'मे', 'जून', 'जुलै', 'ऑग', 'सप्ट', 'ऑक्ट', 'नोव्ह', 'डिस'] };\nexport function fmtDate(iso, lang) {\n  const [y, m, d] = iso.split('-').map(Number);\n  const w = new Date(Date.UTC(y, m - 1, d)).getUTCDay();\n  return `${DOW[lang][w]} ${d} ${MON[lang][m - 1]}`;\n}\n"
+      },
+      "status": "done",
+      "preview": "Edited lib/i18n.js (9392 bytes, 1 replacement(s))"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "11 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_uvFJgyVxHtYvfCAXhZzSN4Rh",
+      "content": "Edited lib/i18n.js (9392 bytes, 1 replacement(s))",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "\n\n[stopped: hit 10-round tool-use cap]",
+  "toolUses": []
+}
+
+{
+  "role": "user",
+  "content": "Continue with the remaining i18n.js strings, then lib/intent.js, the UI/advisor language wiring, and the tests. Make edits in as few, large tool calls as possible."
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_0UPcokhTBV5NRQ4hpDfpIoPg",
+      "name": "read_file",
+      "input": {
+        "path": "tests/js/crosscheck.test.mjs"
+      },
+      "status": "done",
+      "preview": "```\n// tests/js/crosscheck.test.mjs\n// Asserts the browser (JS) and backtest (Python) implementations agree on a grid of…"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "13 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_0UPcokhTBV5NRQ4hpDfpIoPg",
+      "content": "```\n// tests/js/crosscheck.test.mjs\n// Asserts the browser (JS) and backtest (Python) implementations agree on a grid of inputs.\nimport test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { execFileSync } from 'node:child_process';\nimport { fileURLToPath } from 'node:url';\nimport path from 'node:path';\nimport * as H from '../../lib/heat.js';\nimport * as I from '../../lib/imd.js';\n\nconst root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');\nconst cases = [];\n// 09:30 UTC = 15:00 IST (sun up), 21:00 UTC = 02:30 IST (night), 00:10 UTC = 05:40 IST (just after sunrise at Jaipur)\nfor (const utcMs of [1716888600000, 1716843600000, 1716941400000]) for (const tC of [24, 31, 38, 44, 47]) for (const rh of [8, 25, 55, 85]) for (const ghi of [0, 450, 599, 600, 950]) {\n  cases.push({ tC, rh, wind10kmh: 9, ghi, direct: ghi * 0.75, diffuse: ghi * 0.25, utcMs, lat: 26.9, lon: 75.8 });\n}\ntest('JS == Python for WBGT (both estimates, radiation-gated rule, daylight-only variant, solar elevation), heat index, category', () => {\n  const py = `\nimport json,sys\nsys.path.insert(0, ${JSON.stringify(path.join(root, 'python'))})\nfrom lusaathi_core import heat, imd\ncases=json.loads(sys.stdin.read())\nout=[]\nfor c in cases:\n    o=heat.wbgt_outdoor(c['tC'],c['rh'],c['wind10kmh'],c['ghi'],c['direct'],c['diffuse'],c['utcMs'],c['lat'],c['lon'])\n    wc=heat.wbgt_cautious(c['tC'],c['rh'],c['wind10kmh'],c['ghi'],c['direct'],c['diffuse'],c['utcMs'],c['lat'],c['lon'])\n    out.append([o['wbgt'],heat.heat_index_c(c['tC'],c['rh']),heat.heat_category(o['wbgt']),imd.imd_heatwave(c['tC'],c['tC']-5,'plains')['level'],heat.heat_index_out_of_range(c['tC'],c['rh']),heat.wet_bulb_in_range(c['tC'],c['rh']),wc['wbgt'],wc['source'],wc['sun_up'],wc['solar_elevation'],wc['wbgt_strict'],wc['strong_sun'],wc['wbgt_daylight']])\nprint(json.dumps(out))`;\n  const res = JSON.parse(execFileSync('python3', ['-c', py], { input: JSON.stringify(cases) }).toString());\n  cases.forEach((c, i) => {\n    const o = H.wbgtOutdoor(c);\n    assert.ok(Math.abs(o.wbgt - res[i][0]) < 1e-6, `wbgt ${JSON.stringify(c)}`);\n    assert.ok(Math.abs(H.heatIndexC(c.tC, c.rh) - res[i][1]) < 1e-6);\n    assert.equal(H.heatCategory(o.wbgt), res[i][2]);\n    assert.equal(I.imdHeatwave(c.tC, c.tC - 5, 'plains').level, res[i][3]);\n    assert.equal(H.heatIndexOutOfRange(c.tC, c.rh), res[i][4]);\n    assert.equal(H.wetBulbInRange(c.tC, c.rh), res[i][5]);\n    const a = H.assessHour(c);\n    assert.ok(Math.abs(a.wbgt - res[i][6]) < 1e-6, `cautious wbgt ${JSON.stringify(c)}`);\n    assert.equal(a.wbgtSource, res[i][7]);\n    assert.equal(a.sunUp, res[i][8]);\n    assert.ok(Math.abs(a.solarElevation - res[i][9]) < 1e-6);\n    assert.ok(Math.abs(a.wbgtStrict - res[i][10]) < 1e-6);\n    assert.equal(a.strongSun, res[i][11]);\n    assert.ok(Math.abs(a.wbgtDaylight - res[i][12]) < 1e-6);\n  });\n});\n\n```",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [
+    {
+      "id": "call_g9c3dIgcPvOMJ907TgTp9glB",
+      "name": "read_file",
+      "input": {
+        "path": "lib/i18n.js"
+      },
+      "status": "done",
+      "preview": "```\n// lib/i18n.js\n// UI + answer strings. English / हिन्दी.\nexport const CAT = {\n  en: ['Low – below Cat 1', 'Cat 1 – C…"
+    }
+  ],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "14 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "call_g9c3dIgcPvOMJ907TgTp9glB",
+      "content": "```\n// lib/i18n.js\n// UI + answer strings. English / हिन्दी.\nexport const CAT = {\n  en: ['Low – below Cat 1', 'Cat 1 – Caution', 'Cat 2 – Elevated', 'Cat 3 – High', 'Cat 4 – Very high', 'Cat 5 – Extreme'],\n  hi: ['कम – श्रेणी 1 से नीचे', 'श्रेणी 1 – सावधानी', 'श्रेणी 2 – बढ़ा हुआ', 'श्रेणी 3 – अधिक', 'श्रेणी 4 – बहुत अधिक', 'श्रेणी 5 – अत्यधिक'],\n  mr: ['कम – वर्ग 1 खाली', 'वर्ग 1 – सावधानी', 'वर्ग 2 – वाढला', 'वर्ग 3 – अधिक', 'वर्ग 4 – खूप अधिक', 'वर्ग 5 – अत्यंत'],\n};\nexport const IMD = {\n  en: ['No IMD heat-wave criterion met', 'IMD heat-wave criterion met', 'IMD SEVERE heat-wave criterion met'],\n  hi: ['IMD लू (हीट वेव) मानदंड पूरा नहीं', 'IMD लू (हीट वेव) मानदंड पूरा', 'IMD गंभीर लू मानदंड पूरा'],\n  mr: ['IMD लू निकष पूर्ण नाही', 'IMD लू निकष पूर्ण', 'IMD गंभीर लू निकष पूर्ण'],\n};\nexport const WORKLOAD = {\n  en: { easy: 'light work', moderate: 'moderate work', hard: 'heavy work' },\n  hi: { easy: 'हल्का काम', moderate: 'मध्यम काम', hard: 'भारी काम' },\n  mr: { easy: 'हलका काम', moderate: 'मध्यम काम', hard: 'जड काम' },\n};\nexport const REGION = {\n  en: { plains: 'plains', coastal: 'coastal', hills: 'hills' },\n  hi: { plains: 'मैदानी', coastal: 'तटीय', hills: 'पहाड़ी' },\n  mr: { plains: 'सपाट भाग', coastal: 'किनारी', hills: 'डोंगर' },\n};\n\nexport const UI = {\n  en: {\n    title: 'LuSaathi', tagline: 'Heat-safety helper for outdoor workers',\n    placeLabel: 'Place (city / town / village)', placeholder: 'e.g. Nagpur or जयपुर', search: 'Check',\n    workload: 'Type of work', region: 'IMD region', auto: 'auto',\n    ask: 'Ask a question', askPlaceholder: 'Can I work on the roof at 2pm tomorrow in Nagpur?', askBtn: 'Answer',\n    share: 'Share advisory on WhatsApp', copy: 'Copy text', copied: 'Copied',\n    next72: 'Next 72 hours (work hours 06:00–18:00 highlighted)', days: 'Daily outlook',\n    hour: 'Time', temp: 'Air °C', rh: 'RH %', tw: 'Wet-bulb °C', hi: 'Heat index °C', wbgt: 'WBGT °C (G/B)', cat: 'Category',\n    wr: 'Work/rest per hour', water: 'Water',\n    loading: 'Loading forecast…', notFound: 'Place not found in India. Try another spelling.',\n    netErr: 'Could not reach the forecast service. Check your connection and try again.',\n    tmax: 'Max temp', normal: 'Normal', dep: 'Departure', peak: 'Peak WBGT', dangerous: 'Cat 4–5 work hours',\n    none: 'none', noLimit: 'no limit', normalPending: 'normal not loaded (departure test skipped)',\n    sources: 'Methods, sources & limitations', disclaimer: 'Estimates from weather-model forecasts, not on-site measurements. Follow official IMD/NDMA/State Heat Action Plan alerts. If someone shows heat-stroke signs (confusion, hot dry skin, collapse) call 108/112 immediately.',\n    forecastBy: 'Forecast: Open-Meteo (ECMWF/GFS/ICON blend). Normals: ERA5 1991–2020.',\n    replayBanner: 'REPLAY MODE: archived forecast for a past date (2024 heatwave demo), not today’s weather.', replayLink: 'Demo: replay the May 2024 heatwave (Delhi, 28 May 2024)', live: 'Back to live forecast',\n    lang: 'हिन्दी',\n    wbgtNote: 'WBGT: when the forecast shows strong sun (shortwave radiation ≥ 600 W/m²), the higher (more cautious) of two estimates: G = sun/globe model (Dimiceli–Piltz + Stull), B = BoM formula. Otherwise (weaker sun, early morning, evening, night) G only, because the BoM formula assumes strong sun. Category and work/rest use this value.',\n    hiNote: '* Heat index is outside the range the NWS formula is defined for (humidity below 13 % above 112 °F / 44.4 °C) — treat it as rough. Work/rest uses WBGT, which depends mostly on the wet-bulb temperature.',\n  },\n  hi: {\n    title: 'लू साथी', tagline: 'बाहर काम करने वालों के लिए गर्मी-सुरक्षा साथी',\n    placeLabel: 'जगह (शहर / कस्बा / गाँव)', placeholder: 'जैसे नागपुर या Jaipur', search: 'देखें',\n    workload: 'काम का प्रकार', region: 'IMD क्षेत्र', auto: 'स्वतः',\n    ask: 'सवाल पूछें', askPlaceholder: 'कल दोपहर जयपुर में काम करना सुरक्षित है?', askBtn: 'जवाब',\n    share: 'WhatsApp पर सलाह भेजें', copy: 'टेक्स्ट कॉपी करें', copied: 'कॉपी हो गया',\n    next72: 'अगले 72 घंटे (काम के घंटे 06:00–18:00 हाइलाइट)', days: 'दैनिक स्थिति',\n    hour: 'समय', temp: 'तापमान °C', rh: 'नमी %', tw: 'वेट-बल्ब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'श्रेणी',\n    wr: 'हर घंटे काम/आराम', water: 'पानी',\n    loading: 'पूर्वानुमान लोड हो रहा है…', notFound: 'भारत में यह जगह नहीं मिली। दूसरी वर्तनी आज़माएँ।',\n    netErr: 'पूर्वानुमान सेवा से जुड़ नहीं पाए। इंटरनेट जाँचें और फिर कोशिश करें।',\n    tmax: 'अधिकतम तापमान', normal: 'सामान्य', dep: 'विचलन', peak: 'अधिकतम WBGT', dangerous: 'श्रेणी 4–5 काम के घंटे',\n    none: 'कोई नहीं', noLimit: 'कोई सीमा नहीं', normalPending: 'सामान्य तापमान लोड नहीं (विचलन जाँच नहीं हुई)',\n    sources: 'तरीका, स्रोत और सीमाएँ', disclaimer: 'ये मौसम-मॉडल पूर्वानुमान पर आधारित अनुमान हैं, साइट पर मापे गए आँकड़े नहीं। IMD/NDMA/राज्य हीट एक्शन प्लान की आधिकारिक चेतावनी मानें। लू लगने के लक्षण (भ्रम, गर्म सूखी त्वचा, बेहोशी) दिखें तो तुरंत 108/112 पर कॉल करें।',\n    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON)। सामान्य: ERA5 1991–2020।',\n    replayBanner: 'रीप्ले मोड: पिछली तारीख का संग्रहित पूर्वानुमान (2024 लू डेमो), आज का मौसम नहीं।', replayLink: 'डेमो: मई 2024 की लू दोबारा देखें (दिल्ली, 28 मई 2024)', live: 'लाइव पूर्वानुमान पर लौटें',\n    lang: 'English',\n    wbgtNote: 'WBGT: जब पूर्वानुमान में तेज़ धूप हो (सौर विकिरण ≥ 600 W/m²), तो दो अनुमानों में से ज़्यादा (ज़्यादा सतर्क) वाला: G = धूप/ग्लोब मॉडल (Dimiceli–Piltz + Stull), B = BoM सूत्र। बाकी समय (हल्की धूप, सुबह-शाम, रात) सिर्फ़ G, क्योंकि BoM सूत्र तेज़ धूप मानकर बना है। श्रेणी और काम/आराम इसी मान से तय होते हैं।',\n    hiNote: '* इतनी कम नमी (13% से कम) और 44.4°C से ज़्यादा तापमान पर हीट इंडेक्स का NWS सूत्र भरोसेमंद नहीं — इसे मोटा अनुमान मानें। काम/आराम WBGT से तय होता है, जो मुख्यतः वेट-बल्ब तापमान पर निर्भर है।',\n  },\n  mr: {\n    title: 'लू साथी', tagline: 'बाहेर काम करणार्‍यांसाठी उष्णतेची सुरक्षितता',\n    placeLabel: 'ठिकाण (शहर / तालुका / गाव)', placeholder: 'उदा. Nagpur किंवा जयपूर', search: 'पहा',\n    workload: 'कामाचा प्रकार', region: 'IMD प्रदेश', auto: 'ऑटो',\n    ask: 'प्रश्न विचारा', askPlaceholder: 'काल दुपारी नागपूरमध्ये छतावर काम करू शकतो का?', askBtn: 'उत्तर',\n    share: 'WhatsApp वर सल्ला पाठवा', copy: 'मजकूर कॉपी करा', copied: 'कॉपी केले',\n    next72: 'पुढील 72 तास (कामाचे तास 06:00–18:00 हायलाइट)', days: 'दैनंदिन स्थिती',\n    hour: 'वेळ', temp: 'वातावरण °C', rh: 'आर्द्रता %', tw: 'वेट-बलब °C', hi: 'हीट इंडेक्स °C', wbgt: 'WBGT °C (G/B)', cat: 'वर्ग',\n    wr: 'प्रत्येक तास काम/विराम', water: 'पाणी',\n    loading: 'पूर्वानुमान लोड करीत आहे…', notFound: 'भारतात हे ठिकाण आढळले नाही. वेगळ्या हिज्जे वापरून पाहा.',\n    netErr: 'पूर्वानुमान सेवा उपलब्ध नाही. तुमची कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',\n    tmax: 'कमाल तापमान', normal: 'सामान्य', dep: 'फरक', peak: 'अधिकतम WBGT', dangerous: 'वर्ग 4–5 कामाचे तास',\n    none: 'काही नाही', noLimit: 'मर्यादा नाही', normalPending: 'सामान्य लोड नाही (फरक तपास वगळला)',\n    sources: 'पद्धती, स्रोत आणि मर्यादा', disclaimer: 'हे हवामान-मॉडेल अंदाजावर आधारित आहेत, स्थानिक नोंदी नाहीत. अधिकृत IMD/NDMA/राज्याच्या सूचना पाळा. लूचे लक्षण दिसल्यास (गोंधळ, गरम व कोरडी त्वचा, बेहोशी) लगेच 108/112 ला कॉल करा.',\n    forecastBy: 'पूर्वानुमान: Open-Meteo (ECMWF/GFS/ICON मिश्रण). सामान्य: ERA5 1991–2020.',\n    replayBanner: 'रीप्ले मोड: मागील कालावधीचा संग्रहित पूर्वानुमान (2024 लू डेमो), आजचे हवामान नाही.', replayLink: 'डेमो: मे 2024 ची लू पाहा (दिल्ली, 28 मे 2024)', live: 'लाइव्ह पूर्वानुमानवर परत या',\n    lang: 'मराठी',\n    wbgtNote: 'WBGT: जर पूर्वानुमानात जोरदार सूर्य दिसून आला (shortwave विकिरण ≥ 600 W/m²), तर दोन अंदाजांपैकी जास्त (जास्त सावध) वापरतात: G = सूर्य/ग्लोब मॉडेल (Dimiceli–Piltz + Stull), B = BoM सूत्र. इतर वेळा (सकाळ/संध्याकाळ/रात किंवा कमी धूप) फक्त G वापरतात, कारण BoM सूत्र जोरदार सूर्य गृहीत धरते. वर्ग आणि काम/विराम हा हा मूल्य वापरून ठरवतात.',\n    hiNote: '* हीट इंडेक्स NWS सूत्रासाठी ठरवलेल्या श्रेणीबाहेर आहे (13% पेक्षा कमी आर्द्रता व 44.4°C पेक्षा जास्त तापमान) — याला अंदाज म्हणून घ्या. काम/विराम WBGT वर आधारित असतात, जे मुख्यतः वेट-बलब तापमानावर अवलंबून असते.',\n  },\n};\n\nconst pad = (n) => String(n).padStart(2, '0');\nconst DOW = { en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], hi: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'], mr: ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'] };\nconst MON = { en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],\n  hi: ['जन', 'फ़र', 'मार्च', 'अप्रै', 'मई', 'जून', 'जुला', 'अग', 'सित', 'अक्टू', 'नव', 'दिस'], mr: ['जन', 'फेब', 'मार्च', 'एप्रि', 'मे', 'जून', 'जुलै', 'ऑग', 'सप्ट', 'ऑक्ट', 'नोव्ह', 'डिस'] };\nexport function fmtDate(iso, lang) {\n  const [y, m, d] = iso.split('-').map(Number);\n  const w = new Date(Date.UTC(y, m - 1, d)).getUTCDay();\n  return `${DOW[lang][w]} ${d} ${MON[lang][m - 1]}`;\n}\nexport const fmtHour = (h) => `${pad(h)}:00`;\nexport const r1 = (x) => (Math.round(x * 10) / 10).toFixed(1);\nexport const r0 = (x) => String(Math.round(x));\n\nexport function workRestText(wr, lang) {\n  if (wr.noLimit) return lang === 'hi' ? 'कोई समय-सीमा नहीं' : 'no work-time limit';\n  return lang === 'hi' ? `${wr.workMin} मिनट काम / ${wr.restMin} मिनट छाँव में आराम` : `${wr.workMin} min work / ${wr.restMin} min rest in shade`;\n}\n\n/** Which WBGT estimate drove the answer (cautious rule: the higher one). */\nexport const SRC = {\n  en: { globe: 'sun/globe model', bom: 'BoM formula' },\n  hi: { globe: 'धूप/ग्लोब मॉडल', bom: 'BoM सूत्र' },\n};\n\n```",
+      "is_error": false
+    }
+  ]
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "15 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": "Please proceed now and make the edits to lib/intent.js, the language wiring, and the tests."
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "16 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": "Please proceed now and make the edits to lib/intent.js, the language wiring, and the tests."
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": [],
+  "routingInfo": {
+    "provider": "openai",
+    "model": "gpt-5-mini",
+    "trace": [
+      {
+        "signal": "FAST_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "DEEP_INTENT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "REASONING",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "HUGE_CONTEXT",
+        "matched": false,
+        "evidence": null
+      },
+      {
+        "signal": "LONG_THREAD",
+        "matched": true,
+        "evidence": "17 user turns"
+      },
+      {
+        "signal": "STACK_TRACE",
+        "matched": false,
+        "evidence": null
+      }
+    ],
+    "decidedReason": "LONG_THREAD",
+    "isExplicit": false,
+    "speculative": false
+  },
+  "provider": "openai",
+  "model": "gpt-5-mini"
+}
+
+{
+  "role": "user",
+  "content": "Continue with step 2: edit lib/intent.js now to add Marathi detection and parsing returning lang mr."
+}
+
+{
+  "role": "assistant",
+  "content": "",
+  "toolUses": []
+}
+
