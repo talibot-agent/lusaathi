@@ -8,3 +8,6 @@ validation/run.err
 
 # AgentFoundry IDE local state (tokens/sessions); keep agent-studio manifests when added
 .codenow/sessions/
+.env
+.env.local
+.codenow/runs/

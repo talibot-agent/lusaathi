@@ -1,0 +1,34 @@
+{
+  "name": "lusaathi-heat-advisor-smoke",
+  "description": "Smoke cases for LuSaathi Heat Advisor — tool chain names and guardrails",
+  "cases": [
+    {
+      "input": "Name the six tools in the heat-advisor chain, in order.",
+      "expected_contains": "parse_intent"
+    },
+    {
+      "input": "After parsing intent, which tool resolves a place to coordinates?",
+      "expected_contains": "geocode"
+    },
+    {
+      "input": "Which tool estimates WBGT heat stress?",
+      "expected_contains": "heat_stress"
+    },
+    {
+      "input": "Which tool checks IMD or NDMA heat-wave status?",
+      "expected_contains": "imd_status"
+    },
+    {
+      "input": "Which tool writes the final localized guidance?",
+      "expected_contains": "advise"
+    },
+    {
+      "input": "A worker has heat-stroke signs. What emergency numbers must you give?",
+      "expected_contains": "108"
+    },
+    {
+      "input": "May you override an IMD heat-wave alert with your own WBGT estimate?",
+      "expected_contains": "Never"
+    }
+  ]
+}

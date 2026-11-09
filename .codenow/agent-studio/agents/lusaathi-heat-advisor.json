@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "slug": "lusaathi-heat-advisor",
+  "createdAt": 1794258591388,
+  "updatedAt": 1794260400000,
+  "name": "LuSaathi Heat Advisor",
+  "description": "Answers outdoor workers in India (EN/HI/Hinglish/Marathi) whether it is safe to work at a place and hour, using a forecast-based WBGT heat-stress estimate. Never overrides IMD/NDMA/State heat-action-plan alerts.",
+  "function": "other",
+  "version": "0.1.0",
+  "builtBy": "guided",
+  "preferredModel": "claude-sonnet-4-6",
+  "runsAt": "AgentFoundry-served inference (no user API key)",
+  "invocationUrl": "",
+  "prompts": [
+    "lusaathi-heat-advisor-system"
+  ],
+  "evals": [
+    "lusaathi-heat-advisor-smoke"
+  ],
+  "tools": [
+    "parse_intent",
+    "geocode",
+    "forecast",
+    "heat_stress",
+    "imd_status",
+    "advise"
+  ],
+  "origin": "built",
+  "lifecycle": "draft",
+  "notes": "Agent Studio scaffold by AgentFoundry; tools wired by Tali Builder (AI agent). Kit field dropped by IDE save — stubs originally targeted claude-agent-sdk-ts; paid SDK scaffold removed. Tools are dependency-free .mjs wrappers over lib/*.js."
+}
