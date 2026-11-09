@@ -89,6 +89,6 @@ Regression: `tests/js/replay_runs.test.mjs`.
 | Hindi review | `3a5c011` | `hindi-review-decisions.md`, screenshot 05 |
 | Agent Studio | `ab1de4b` | `agent-studio-notes.md`, screenshots 06–07, `tools/*.mjs` |
 | Parser Evals | `6e7b45a` | `evals/parser-results.md`, screenshot 08 |
-| Runs/Replay + docs | (HEAD of this push on main) | `runs/*`, screenshots 09–11, this file |
+| Runs/Replay + docs | `09de88e` | `runs/*`, screenshots 09–11, this file |
 
 Method freeze commit `328ed36` was **not** modified.
