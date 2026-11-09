@@ -55,3 +55,21 @@ test('aliases (Bombay, Gurgaon)', () => {
   assert.equal(parseQuestion('bombay tomorrow 3pm', NOW).place, 'Mumbai');
   assert.equal(parseQuestion('site work in gurgaon today', NOW).place, 'Gurugram');
 });
+
+test('midnight is hour 0 (not 21 via night substring)', () => {
+  assert.equal(parseQuestion('midnight in Delhi tomorrow', NOW).hour, 0);
+  assert.equal(parseQuestion('at midnight in Pune', NOW).hour, 0);
+});
+
+test('welding is moderate workload', () => {
+  assert.equal(parseQuestion('welding in Delhi at 2pm', NOW).workload, 'moderate');
+});
+
+test('Marathi आता sets wantsNow + lang mr', () => {
+  const q = parseQuestion('आता पुण्यात काम?', NOW);
+  assert.equal(q.lang, 'mr');
+  assert.equal(q.wantsNow, true);
+  assert.equal(q.dayOffset, 0);
+  assert.equal(q.hour, 11);
+  assert.equal(q.place, 'Pune');
+});

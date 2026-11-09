@@ -107,6 +107,7 @@ test('manifest lists all 6 tools in order; prompt has 4 guardrails incl. 108/112
     join(root, '.codenow/agent-studio/agents/lusaathi-heat-advisor.json'), 'utf8'));
   assert.deepEqual(manifest.tools, TOOL_ORDER);
   assert.ok(manifest.evals.includes('lusaathi-heat-advisor-smoke'));
+  assert.ok(manifest.evals.includes('lusaathi-parser'));
   assert.notEqual(manifest.runsAt, 'undefined');
   assert.notEqual(manifest.invocationUrl, 'undefined');
 

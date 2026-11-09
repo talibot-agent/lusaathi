@@ -1,0 +1,1127 @@
+{
+  "name": "lusaathi-parser",
+  "description": "parse_intent cases: EN / HI / Hinglish / Marathi + edge cases (12 am/pm, noon, midnight, abhi/now/आता, kal, parso, city aliases, workload, unknown/empty/noise)",
+  "generatedAt": "2026-11-09T21:25:14.536Z",
+  "passed": 40,
+  "total": 40,
+  "byLanguage": [
+    {
+      "name": "en",
+      "total": 19,
+      "pass": 19,
+      "rate": 1
+    },
+    {
+      "name": "hi",
+      "total": 8,
+      "pass": 8,
+      "rate": 1
+    },
+    {
+      "name": "hinglish",
+      "total": 6,
+      "pass": 6,
+      "rate": 1
+    },
+    {
+      "name": "mr",
+      "total": 7,
+      "pass": 7,
+      "rate": 1
+    }
+  ],
+  "byCategory": [
+    {
+      "name": "alias",
+      "total": 3,
+      "pass": 3,
+      "rate": 1
+    },
+    {
+      "name": "alias-workload",
+      "total": 1,
+      "pass": 1,
+      "rate": 1
+    },
+    {
+      "name": "basic",
+      "total": 4,
+      "pass": 4,
+      "rate": 1
+    },
+    {
+      "name": "day-parso",
+      "total": 1,
+      "pass": 1,
+      "rate": 1
+    },
+    {
+      "name": "day-parson",
+      "total": 3,
+      "pass": 3,
+      "rate": 1
+    },
+    {
+      "name": "day-parwa",
+      "total": 1,
+      "pass": 1,
+      "rate": 1
+    },
+    {
+      "name": "dev-digits",
+      "total": 1,
+      "pass": 1,
+      "rate": 1
+    },
+    {
+      "name": "hinglish",
+      "total": 2,
+      "pass": 2,
+      "rate": 1
+    },
+    {
+      "name": "hinglish-edge",
+      "total": 1,
+      "pass": 1,
+      "rate": 1
+    },
+    {
+      "name": "mixed-script",
+      "total": 2,
+      "pass": 2,
+      "rate": 1
+    },
+    {
+      "name": "noise",
+      "total": 3,
+      "pass": 3,
+      "rate": 1
+    },
+    {
+      "name": "now",
+      "total": 6,
+      "pass": 6,
+      "rate": 1
+    },
+    {
+      "name": "time-12am",
+      "total": 2,
+      "pass": 2,
+      "rate": 1
+    },
+    {
+      "name": "time-12pm",
+      "total": 2,
+      "pass": 2,
+      "rate": 1
+    },
+    {
+      "name": "time-midnight",
+      "total": 2,
+      "pass": 2,
+      "rate": 1
+    },
+    {
+      "name": "time-noon",
+      "total": 2,
+      "pass": 2,
+      "rate": 1
+    },
+    {
+      "name": "unknown-city",
+      "total": 1,
+      "pass": 1,
+      "rate": 1
+    },
+    {
+      "name": "weekday",
+      "total": 1,
+      "pass": 1,
+      "rate": 1
+    },
+    {
+      "name": "workload",
+      "total": 2,
+      "pass": 2,
+      "rate": 1
+    }
+  ],
+  "results": [
+    {
+      "id": "en-roof-nagpur",
+      "lang": "en",
+      "category": "basic",
+      "input": "Can I work on the roof at 2pm tomorrow in Nagpur?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Nagpur",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Nagpur",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-dig-delhi-noon",
+      "lang": "en",
+      "category": "time-noon",
+      "input": "Is it safe to dig in Delhi at noon today?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Delhi",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 12,
+        "workload": "hard",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Delhi",
+        "dayOffset": 0,
+        "hour": 12,
+        "workload": "hard",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-12am-bombay",
+      "lang": "en",
+      "category": "time-12am",
+      "input": "Bombay at 12 am tomorrow — can I carry bricks?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Mumbai",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 0,
+        "workload": "hard",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Mumbai",
+        "dayOffset": 1,
+        "hour": 0,
+        "workload": "hard",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-12pm-calcutta",
+      "lang": "en",
+      "category": "time-12pm",
+      "input": "Calcutta 12 pm construction work",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Kolkata",
+        "placeSource": "gazetteer",
+        "dayOffset": null,
+        "hour": 12,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Kolkata",
+        "dayOffset": null,
+        "hour": 12,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-gurgaon-alias",
+      "lang": "en",
+      "category": "alias",
+      "input": "site work in gurgaon today at 3pm",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Gurugram",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 15,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Gurugram",
+        "dayOffset": 0,
+        "hour": 15,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-bangalore-welding",
+      "lang": "en",
+      "category": "alias-workload",
+      "input": "Is Bangalore safe for welding at 4pm tomorrow?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Bengaluru",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 16,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Bengaluru",
+        "dayOffset": 1,
+        "hour": 16,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-bengaluru-morning-easy",
+      "lang": "en",
+      "category": "workload",
+      "input": "Bengaluru tomorrow morning 8am light work",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Bengaluru",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 8,
+        "workload": "easy",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Bengaluru",
+        "dayOffset": 1,
+        "hour": 8,
+        "workload": "easy",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-unknown-bhiwandi",
+      "lang": "en",
+      "category": "unknown-city",
+      "input": "What about at 4 in Bhiwandi tomorrow?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Bhiwandi",
+        "placeSource": "pattern",
+        "dayOffset": 1,
+        "hour": 16,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Bhiwandi",
+        "placeSource": "pattern",
+        "dayOffset": 1,
+        "hour": 16,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-now-stall",
+      "lang": "en",
+      "category": "now",
+      "input": "now in Mumbai — sitting at a stall",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Mumbai",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 11,
+        "workload": "easy",
+        "wantsNow": true
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Mumbai",
+        "dayOffset": 0,
+        "hour": 11,
+        "workload": "easy",
+        "wantsNow": true
+      }
+    },
+    {
+      "id": "en-midnight-delhi",
+      "lang": "en",
+      "category": "time-midnight",
+      "input": "midnight in Delhi tomorrow",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Delhi",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 0,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Delhi",
+        "dayOffset": 1,
+        "hour": 0,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-12pm-pune",
+      "lang": "en",
+      "category": "time-12pm",
+      "input": "Pune at 12 pm",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Pune",
+        "placeSource": "gazetteer",
+        "dayOffset": null,
+        "hour": 12,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Pune",
+        "hour": 12,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-12am-pune",
+      "lang": "en",
+      "category": "time-12am",
+      "input": "Pune at 12 am",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Pune",
+        "placeSource": "gazetteer",
+        "dayOffset": null,
+        "hour": 0,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Pune",
+        "hour": 0,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-emoji-punct",
+      "lang": "en",
+      "category": "noise",
+      "input": "Is it safe in Mumbai 🔥 at 2pm tomorrow???",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Mumbai",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Mumbai",
+        "dayOffset": 1,
+        "hour": 14,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-empty",
+      "lang": "en",
+      "category": "noise",
+      "input": "",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": null,
+        "placeSource": null,
+        "dayOffset": null,
+        "hour": null,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": null,
+        "dayOffset": null,
+        "hour": null,
+        "workload": null,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-noise-emoji",
+      "lang": "en",
+      "category": "noise",
+      "input": "??? !!! 🔥🔥🔥",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": null,
+        "placeSource": null,
+        "dayOffset": null,
+        "hour": null,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": null,
+        "dayOffset": null,
+        "hour": null,
+        "workload": null,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-now-no-place",
+      "lang": "en",
+      "category": "now",
+      "input": "Is it safe to work now?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": null,
+        "placeSource": null,
+        "dayOffset": 0,
+        "hour": 11,
+        "workload": null,
+        "wantsNow": true
+      },
+      "expected": {
+        "lang": "en",
+        "place": null,
+        "dayOffset": 0,
+        "hour": 11,
+        "wantsNow": true
+      }
+    },
+    {
+      "id": "hi-jaipur-kal",
+      "lang": "hi",
+      "category": "basic",
+      "input": "कल दोपहर जयपुर में काम करना सुरक्षित है?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Jaipur",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Jaipur",
+        "dayOffset": 1,
+        "hour": 14,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hi-parson-lucknow",
+      "lang": "hi",
+      "category": "day-parson",
+      "input": "परसों सुबह 7 बजे लखनऊ में खेत में काम?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Lucknow",
+        "placeSource": "gazetteer",
+        "dayOffset": 2,
+        "hour": 7,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Lucknow",
+        "dayOffset": 2,
+        "hour": 7,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hi-gonda-evening",
+      "lang": "hi",
+      "category": "dev-digits",
+      "input": "शाम ५ बजे गोंडा में मज़दूरी ठीक है?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "गोंडा",
+        "placeSource": "pattern",
+        "dayOffset": null,
+        "hour": 17,
+        "workload": "hard",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "गोंडा",
+        "placeSource": "pattern",
+        "hour": 17,
+        "workload": "hard",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hi-abhi-delhi",
+      "lang": "hi",
+      "category": "now",
+      "input": "अभी दिल्ली में बाहर काम?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Delhi",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 11,
+        "workload": null,
+        "wantsNow": true
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Delhi",
+        "dayOffset": 0,
+        "hour": 11,
+        "wantsNow": true
+      }
+    },
+    {
+      "id": "hi-kolkata-roof",
+      "lang": "hi",
+      "category": "alias",
+      "input": "आज दोपहर 2 बजे कोलकाता में छत पर काम?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Kolkata",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 14,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Kolkata",
+        "dayOffset": 0,
+        "hour": 14,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hi-mixed-bombay",
+      "lang": "hi",
+      "category": "mixed-script",
+      "input": "कल Bombay में roof work at 2pm",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Mumbai",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Mumbai",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hi-parson-short",
+      "lang": "hi",
+      "category": "day-parson",
+      "input": "परसों दिल्ली",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Delhi",
+        "placeSource": "gazetteer",
+        "dayOffset": 2,
+        "hour": null,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Delhi",
+        "dayOffset": 2,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hing-kal-patna",
+      "lang": "hinglish",
+      "category": "hinglish",
+      "input": "kal dopahar 3 baje Patna mein kaam safe hai?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Patna",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 15,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Patna",
+        "dayOffset": 1,
+        "hour": 15,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hing-aaj-shaam",
+      "lang": "hinglish",
+      "category": "hinglish",
+      "input": "aaj shaam 5 baje mumbai mein roof work?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Mumbai",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 17,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Mumbai",
+        "dayOffset": 0,
+        "hour": 17,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hing-parso-dig",
+      "lang": "hinglish",
+      "category": "day-parso",
+      "input": "parso subah 8 baje nagpur mein dig?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Nagpur",
+        "placeSource": "gazetteer",
+        "dayOffset": 2,
+        "hour": 8,
+        "workload": "hard",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Nagpur",
+        "dayOffset": 2,
+        "hour": 8,
+        "workload": "hard",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hing-abhi-delhi",
+      "lang": "hinglish",
+      "category": "now",
+      "input": "abhi delhi mein kaam?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Delhi",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 11,
+        "workload": null,
+        "wantsNow": true
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Delhi",
+        "dayOffset": 0,
+        "hour": 11,
+        "wantsNow": true
+      }
+    },
+    {
+      "id": "hing-kal-one-token",
+      "lang": "hinglish",
+      "category": "hinglish-edge",
+      "input": "gurgaon kal 2pm bricks",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Gurugram",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": "hard",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Gurugram",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": "hard",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "hing-parson-en",
+      "lang": "hinglish",
+      "category": "day-parson",
+      "input": "parson in Delhi",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Delhi",
+        "placeSource": "gazetteer",
+        "dayOffset": 2,
+        "hour": null,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Delhi",
+        "dayOffset": 2,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "mr-pune-locative",
+      "lang": "mr",
+      "category": "basic",
+      "input": "उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकतो का?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "mr",
+        "place": "Pune",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 15,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "mr",
+        "place": "Pune",
+        "dayOffset": 1,
+        "hour": 15,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "mr-mumbai-hard",
+      "lang": "mr",
+      "category": "workload",
+      "input": "आज मुंबईमध्ये जड काम सुरक्षित आहे का?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "mr",
+        "place": "Mumbai",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": null,
+        "workload": "hard",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "mr",
+        "place": "Mumbai",
+        "dayOffset": 0,
+        "workload": "hard",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "mr-nagpur-morning",
+      "lang": "mr",
+      "category": "basic",
+      "input": "नागपूर मध्ये उद्या सकाळी 10 वाजता हलके काम",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "mr",
+        "place": "Nagpur",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 10,
+        "workload": "easy",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "mr",
+        "place": "Nagpur",
+        "dayOffset": 1,
+        "hour": 10,
+        "workload": "easy",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "mr-parwa-pune",
+      "lang": "mr",
+      "category": "day-parwa",
+      "input": "परवा दुपारी पुणे मध्ये काम",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "mr",
+        "place": "Pune",
+        "placeSource": "gazetteer",
+        "dayOffset": 2,
+        "hour": 14,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "mr",
+        "place": "Pune",
+        "dayOffset": 2,
+        "hour": 14,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "mr-aata-now",
+      "lang": "mr",
+      "category": "now",
+      "input": "आता पुण्यात काम?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "mr",
+        "place": "Pune",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 11,
+        "workload": null,
+        "wantsNow": true
+      },
+      "expected": {
+        "lang": "mr",
+        "place": "Pune",
+        "dayOffset": 0,
+        "hour": 11,
+        "wantsNow": true
+      }
+    },
+    {
+      "id": "mr-aata-mumbai",
+      "lang": "mr",
+      "category": "now",
+      "input": "आता मुंबईमध्ये आहे का?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "mr",
+        "place": "Mumbai",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 11,
+        "workload": null,
+        "wantsNow": true
+      },
+      "expected": {
+        "lang": "mr",
+        "place": "Mumbai",
+        "dayOffset": 0,
+        "hour": 11,
+        "wantsNow": true
+      }
+    },
+    {
+      "id": "mr-pune-dev",
+      "lang": "mr",
+      "category": "alias",
+      "input": "पुणे मध्ये उद्या दुपारी काम आहे का?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "mr",
+        "place": "Pune",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "mr",
+        "place": "Pune",
+        "dayOffset": 1,
+        "hour": 14,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "mixed-pune-en-time",
+      "lang": "hi",
+      "category": "mixed-script",
+      "input": "पुणे at 2pm tomorrow roof",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "hi",
+        "place": "Pune",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "hi",
+        "place": "Pune",
+        "dayOffset": 1,
+        "hour": 14,
+        "workload": "moderate",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-wednesday-banda",
+      "lang": "en",
+      "category": "weekday",
+      "input": "Is it safe to carry bricks in Banda on Wednesday at 13:30",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Banda",
+        "placeSource": "gazetteer",
+        "dayOffset": 2,
+        "hour": 13,
+        "workload": "hard",
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Banda",
+        "dayOffset": 2,
+        "hour": 13,
+        "workload": "hard",
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-noon-jaipur",
+      "lang": "en",
+      "category": "time-noon",
+      "input": "Is it noon in Jaipur?",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Jaipur",
+        "placeSource": "gazetteer",
+        "dayOffset": null,
+        "hour": 12,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Jaipur",
+        "hour": 12,
+        "wantsNow": false
+      }
+    },
+    {
+      "id": "en-midnight-pune",
+      "lang": "en",
+      "category": "time-midnight",
+      "input": "at midnight in Pune",
+      "pass": true,
+      "misses": [],
+      "actual": {
+        "lang": "en",
+        "place": "Pune",
+        "placeSource": "gazetteer",
+        "dayOffset": null,
+        "hour": 0,
+        "workload": null,
+        "wantsNow": false
+      },
+      "expected": {
+        "lang": "en",
+        "place": "Pune",
+        "hour": 0,
+        "wantsNow": false
+      }
+    }
+  ]
+}

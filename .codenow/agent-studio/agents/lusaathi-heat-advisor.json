@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "slug": "lusaathi-heat-advisor",
   "createdAt": 1794258591388,
-  "updatedAt": 1794260400000,
+  "updatedAt": 1794262000000,
   "name": "LuSaathi Heat Advisor",
   "description": "Answers outdoor workers in India (EN/HI/Hinglish/Marathi) whether it is safe to work at a place and hour, using a forecast-based WBGT heat-stress estimate. Never overrides IMD/NDMA/State heat-action-plan alerts.",
   "function": "other",
@@ -15,7 +15,8 @@
     "lusaathi-heat-advisor-system"
   ],
   "evals": [
-    "lusaathi-heat-advisor-smoke"
+    "lusaathi-heat-advisor-smoke",
+    "lusaathi-parser"
   ],
   "tools": [
     "parse_intent",
@@ -27,5 +28,5 @@
   ],
   "origin": "built",
   "lifecycle": "draft",
-  "notes": "Agent Studio scaffold by AgentFoundry; tools wired by Tali Builder (AI agent). Kit field dropped by IDE save — stubs originally targeted claude-agent-sdk-ts; paid SDK scaffold removed. Tools are dependency-free .mjs wrappers over lib/*.js."
+  "notes": "Agent Studio scaffold by AgentFoundry; tools wired by Tali Builder (AI agent). Kit field dropped by IDE save \u2014 stubs originally targeted claude-agent-sdk-ts; paid SDK scaffold removed. Tools are dependency-free .mjs wrappers over lib/*.js."
 }
