@@ -1,0 +1,34 @@
+// Asserts the browser (JS) and backtest (Python) implementations agree on a grid of inputs.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import * as H from '../../lib/heat.js';
+import * as I from '../../lib/imd.js';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const cases = [];
+for (const tC of [24, 31, 38, 44, 47]) for (const rh of [8, 25, 55, 85]) for (const ghi of [0, 450, 950]) {
+  cases.push({ tC, rh, wind10kmh: 9, ghi, direct: ghi * 0.75, diffuse: ghi * 0.25, utcMs: 1716888600000, lat: 26.9, lon: 75.8 });
+}
+test('JS == Python for WBGT, heat index, category', () => {
+  const py = `
+import json,sys
+sys.path.insert(0, ${JSON.stringify(path.join(root, 'python'))})
+from lusaathi_core import heat, imd
+cases=json.loads(sys.stdin.read())
+out=[]
+for c in cases:
+    o=heat.wbgt_outdoor(c['tC'],c['rh'],c['wind10kmh'],c['ghi'],c['direct'],c['diffuse'],c['utcMs'],c['lat'],c['lon'])
+    out.append([o['wbgt'],heat.heat_index_c(c['tC'],c['rh']),heat.heat_category(o['wbgt']),imd.imd_heatwave(c['tC'],c['tC']-5,'plains')['level']])
+print(json.dumps(out))`;
+  const res = JSON.parse(execFileSync('python3', ['-c', py], { input: JSON.stringify(cases) }).toString());
+  cases.forEach((c, i) => {
+    const o = H.wbgtOutdoor(c);
+    assert.ok(Math.abs(o.wbgt - res[i][0]) < 1e-6, `wbgt ${JSON.stringify(c)}`);
+    assert.ok(Math.abs(H.heatIndexC(c.tC, c.rh) - res[i][1]) < 1e-6);
+    assert.equal(H.heatCategory(o.wbgt), res[i][2]);
+    assert.equal(I.imdHeatwave(c.tC, c.tC - 5, 'plains').level, res[i][3]);
+  });
+});

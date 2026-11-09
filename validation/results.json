@@ -1,0 +1,1622 @@
+{
+ "label": "BACKTEST against ERA5 reanalysis - NOT field/deployment data",
+ "generated_utc": "2026-11-09T11:30Z",
+ "period": [
+  "2024-04-01",
+  "2024-06-30"
+ ],
+ "timezone": "Asia/Kolkata",
+ "work_hours_local": [
+  6,
+  18
+ ],
+ "n_cities": 25,
+ "truth": {
+  "city_days": 2275,
+  "hw_days": 125,
+  "hw_days_2day": 92,
+  "severe_days": 20,
+  "work_hours": 29575,
+  "cat4plus_hours": 5249,
+  "cat5_hours": 2191,
+  "cat4plus_hours_bom": 19767,
+  "max_wbgt": 36.67
+ },
+ "summary": {
+  "ecmwf_ifs025_day1": {
+   "day_alert_single_day": {
+    "tp": 94,
+    "fp": 70,
+    "fn": 31,
+    "precision": 0.573170731707317,
+    "recall": 0.752,
+    "f1": 0.6505190311418685,
+    "tn": 2080
+   },
+   "day_alert_two_consecutive_days": {
+    "tp": 71,
+    "fp": 44,
+    "fn": 21,
+    "precision": 0.6173913043478261,
+    "recall": 0.7717391304347826,
+    "f1": 0.6859903381642511,
+    "tn": 2139
+   },
+   "dangerous_hour_flag_cat4plus": {
+    "tp": 2794,
+    "fp": 882,
+    "fn": 2455,
+    "precision": 0.7600652883569097,
+    "recall": 0.5322918651171652,
+    "f1": 0.6261064425770309
+   },
+   "tmax_mae_c": 1.122,
+   "tmax_bias_c": 0.129,
+   "n_city_days": 2275
+  },
+  "best_match_day1": {
+   "day_alert_single_day": {
+    "tp": 120,
+    "fp": 148,
+    "fn": 5,
+    "precision": 0.44776119402985076,
+    "recall": 0.96,
+    "f1": 0.6106870229007634,
+    "tn": 2002
+   },
+   "day_alert_two_consecutive_days": {
+    "tp": 89,
+    "fp": 112,
+    "fn": 3,
+    "precision": 0.4427860696517413,
+    "recall": 0.967391304347826,
+    "f1": 0.6075085324232081,
+    "tn": 2071
+   },
+   "dangerous_hour_flag_cat4plus": {
+    "tp": 3852,
+    "fp": 1422,
+    "fn": 1397,
+    "precision": 0.7303754266211604,
+    "recall": 0.7338540674414175,
+    "f1": 0.7321106148436757
+   },
+   "tmax_mae_c": 1.234,
+   "tmax_bias_c": 0.471,
+   "n_city_days": 2275
+  },
+  "historical_forecast_day0": {
+   "day_alert_single_day": {
+    "tp": 106,
+    "fp": 88,
+    "fn": 19,
+    "precision": 0.5463917525773195,
+    "recall": 0.848,
+    "f1": 0.6645768025078369,
+    "tn": 2062
+   },
+   "day_alert_two_consecutive_days": {
+    "tp": 81,
+    "fp": 48,
+    "fn": 11,
+    "precision": 0.627906976744186,
+    "recall": 0.8804347826086957,
+    "f1": 0.733031674208145,
+    "tn": 2135
+   },
+   "dangerous_hour_flag_cat4plus": {
+    "tp": 2796,
+    "fp": 729,
+    "fn": 2453,
+    "precision": 0.7931914893617021,
+    "recall": 0.5326728900742999,
+    "f1": 0.6373375883291544
+   },
+   "tmax_mae_c": 1.061,
+   "tmax_bias_c": 0.406,
+   "n_city_days": 2275
+  }
+ },
+ "cities": [
+  {
+   "city": "Delhi",
+   "state": "National Capital Territory of Delhi",
+   "lat": 28.65195,
+   "lon": 77.23149,
+   "elevation_m": 227.0,
+   "region": "plains",
+   "truth_hw_days": 12,
+   "truth_hw_days_2day": 10,
+   "truth_severe_days": 1,
+   "truth_max_tmax": 45.5,
+   "truth_cat4plus_work_hours": 237,
+   "truth_cat5_work_hours": 86,
+   "truth_cat4plus_work_hours_bom": 654,
+   "truth_max_wbgt": 34.64,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 11,
+      "fp": 3,
+      "fn": 1,
+      "precision": 0.7857142857142857,
+      "recall": 0.9166666666666666,
+      "f1": 0.8461538461538461
+     },
+     "tmax_mae": 0.76,
+     "tmax_bias": 0.051,
+     "forecast_hw_days": 14,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 12,
+      "fp": 13,
+      "fn": 0,
+      "precision": 0.48,
+      "recall": 1.0,
+      "f1": 0.6486486486486487
+     },
+     "tmax_mae": 1.147,
+     "tmax_bias": 0.701,
+     "forecast_hw_days": 25,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 11,
+      "fp": 6,
+      "fn": 1,
+      "precision": 0.6470588235294118,
+      "recall": 0.9166666666666666,
+      "f1": 0.7586206896551724
+     },
+     "tmax_mae": 0.912,
+     "tmax_bias": 0.604,
+     "forecast_hw_days": 17,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Mumbai",
+   "state": "Maharashtra",
+   "lat": 19.07283,
+   "lon": 72.88261,
+   "elevation_m": 8.0,
+   "region": "coastal",
+   "truth_hw_days": 2,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 37.4,
+   "truth_cat4plus_work_hours": 21,
+   "truth_cat5_work_hours": 0,
+   "truth_cat4plus_work_hours_bom": 1068,
+   "truth_max_wbgt": 31.6,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 2,
+      "fp": 11,
+      "fn": 0,
+      "precision": 0.15384615384615385,
+      "recall": 1.0,
+      "f1": 0.2666666666666667
+     },
+     "tmax_mae": 1.808,
+     "tmax_bias": 1.293,
+     "forecast_hw_days": 13,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666
+     },
+     "tmax_mae": 0.78,
+     "tmax_bias": 0.327,
+     "forecast_hw_days": 4,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 2,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.3333333333333333,
+      "recall": 1.0,
+      "f1": 0.5
+     },
+     "tmax_mae": 0.988,
+     "tmax_bias": 0.698,
+     "forecast_hw_days": 6,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Kolkata",
+   "state": "West Bengal",
+   "lat": 22.56263,
+   "lon": 88.36304,
+   "elevation_m": 11.0,
+   "region": "plains",
+   "truth_hw_days": 6,
+   "truth_hw_days_2day": 4,
+   "truth_severe_days": 1,
+   "truth_max_tmax": 42.9,
+   "truth_cat4plus_work_hours": 445,
+   "truth_cat5_work_hours": 167,
+   "truth_cat4plus_work_hours_bom": 1139,
+   "truth_max_wbgt": 34.35,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 6,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.6,
+      "recall": 1.0,
+      "f1": 0.7499999999999999
+     },
+     "tmax_mae": 1.048,
+     "tmax_bias": -0.29,
+     "forecast_hw_days": 10,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 6,
+      "fp": 13,
+      "fn": 0,
+      "precision": 0.3157894736842105,
+      "recall": 1.0,
+      "f1": 0.4799999999999999
+     },
+     "tmax_mae": 1.78,
+     "tmax_bias": 1.426,
+     "forecast_hw_days": 19,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 6,
+      "fp": 5,
+      "fn": 0,
+      "precision": 0.5454545454545454,
+      "recall": 1.0,
+      "f1": 0.7058823529411764
+     },
+     "tmax_mae": 0.863,
+     "tmax_bias": 0.065,
+     "forecast_hw_days": 11,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Chennai",
+   "state": "Tamil Nadu",
+   "lat": 13.08784,
+   "lon": 80.27847,
+   "elevation_m": 14.0,
+   "region": "coastal",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 36.5,
+   "truth_cat4plus_work_hours": 88,
+   "truth_cat5_work_hours": 6,
+   "truth_cat4plus_work_hours_bom": 1183,
+   "truth_max_wbgt": 33.28,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.936,
+     "tmax_bias": 0.519,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 28,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 2.847,
+     "tmax_bias": 2.803,
+     "forecast_hw_days": 28,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 7,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.674,
+     "tmax_bias": 1.465,
+     "forecast_hw_days": 7,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Bengaluru",
+   "state": "Karnataka",
+   "lat": 12.97194,
+   "lon": 77.59369,
+   "elevation_m": 920.0,
+   "region": "plains",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 37.3,
+   "truth_cat4plus_work_hours": 0,
+   "truth_cat5_work_hours": 0,
+   "truth_cat4plus_work_hours_bom": 68,
+   "truth_max_wbgt": 30.54,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.227,
+     "tmax_bias": 0.456,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.922,
+     "tmax_bias": 0.08,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.259,
+     "tmax_bias": 0.675,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Hyderabad",
+   "state": "Telangana",
+   "lat": 17.38405,
+   "lon": 78.45636,
+   "elevation_m": 515.0,
+   "region": "plains",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 42.1,
+   "truth_cat4plus_work_hours": 51,
+   "truth_cat5_work_hours": 3,
+   "truth_cat4plus_work_hours_bom": 833,
+   "truth_max_wbgt": 32.98,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.287,
+     "tmax_bias": -0.922,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.951,
+     "tmax_bias": 0.184,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.024,
+     "tmax_bias": -0.756,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Ahmedabad",
+   "state": "Gujarat",
+   "lat": 23.02579,
+   "lon": 72.58727,
+   "elevation_m": 56.0,
+   "region": "plains",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 44.1,
+   "truth_cat4plus_work_hours": 276,
+   "truth_cat5_work_hours": 76,
+   "truth_cat4plus_work_hours_bom": 861,
+   "truth_max_wbgt": 33.93,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.481,
+     "tmax_bias": 1.424,
+     "forecast_hw_days": 6,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.257,
+     "tmax_bias": 0.938,
+     "forecast_hw_days": 6,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 11,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.775,
+     "tmax_bias": 1.676,
+     "forecast_hw_days": 11,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Pune",
+   "state": "Maharashtra",
+   "lat": 18.51957,
+   "lon": 73.85535,
+   "elevation_m": 554.0,
+   "region": "plains",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 39.7,
+   "truth_cat4plus_work_hours": 6,
+   "truth_cat5_work_hours": 1,
+   "truth_cat4plus_work_hours_bom": 616,
+   "truth_max_wbgt": 32.49,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.381,
+     "tmax_bias": 1.008,
+     "forecast_hw_days": 4,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.107,
+     "tmax_bias": 0.427,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.579,
+     "tmax_bias": 1.26,
+     "forecast_hw_days": 4,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Jaipur",
+   "state": "Rajasthan",
+   "lat": 26.91962,
+   "lon": 75.78781,
+   "elevation_m": 435.0,
+   "region": "plains",
+   "truth_hw_days": 4,
+   "truth_hw_days_2day": 3,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 46.2,
+   "truth_cat4plus_work_hours": 86,
+   "truth_cat5_work_hours": 8,
+   "truth_cat4plus_work_hours_bom": 606,
+   "truth_max_wbgt": 33.03,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.6666666666666666
+     },
+     "tmax_mae": 0.747,
+     "tmax_bias": -0.127,
+     "forecast_hw_days": 2,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1": 0.8571428571428571
+     },
+     "tmax_mae": 0.896,
+     "tmax_bias": -0.269,
+     "forecast_hw_days": 3,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+     },
+     "tmax_mae": 0.626,
+     "tmax_bias": 0.24,
+     "forecast_hw_days": 4,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Lucknow",
+   "state": "Uttar Pradesh",
+   "lat": 26.83928,
+   "lon": 80.92313,
+   "elevation_m": 126.0,
+   "region": "plains",
+   "truth_hw_days": 17,
+   "truth_hw_days_2day": 14,
+   "truth_severe_days": 7,
+   "truth_max_tmax": 45.8,
+   "truth_cat4plus_work_hours": 303,
+   "truth_cat5_work_hours": 160,
+   "truth_cat4plus_work_hours_bom": 797,
+   "truth_max_wbgt": 35.36,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 11,
+      "fp": 2,
+      "fn": 6,
+      "precision": 0.8461538461538461,
+      "recall": 0.6470588235294118,
+      "f1": 0.7333333333333334
+     },
+     "tmax_mae": 1.079,
+     "tmax_bias": -0.549,
+     "forecast_hw_days": 13,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 17,
+      "fp": 8,
+      "fn": 0,
+      "precision": 0.68,
+      "recall": 1.0,
+      "f1": 0.8095238095238095
+     },
+     "tmax_mae": 1.223,
+     "tmax_bias": 0.438,
+     "forecast_hw_days": 25,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 15,
+      "fp": 3,
+      "fn": 2,
+      "precision": 0.8333333333333334,
+      "recall": 0.8823529411764706,
+      "f1": 0.8571428571428571
+     },
+     "tmax_mae": 0.763,
+     "tmax_bias": -0.024,
+     "forecast_hw_days": 18,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Kanpur",
+   "state": "Uttar Pradesh",
+   "lat": 26.46523,
+   "lon": 80.34975,
+   "elevation_m": 137.0,
+   "region": "plains",
+   "truth_hw_days": 16,
+   "truth_hw_days_2day": 13,
+   "truth_severe_days": 3,
+   "truth_max_tmax": 46.3,
+   "truth_cat4plus_work_hours": 300,
+   "truth_cat5_work_hours": 152,
+   "truth_cat4plus_work_hours_bom": 787,
+   "truth_max_wbgt": 36.36,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 13,
+      "fp": 4,
+      "fn": 3,
+      "precision": 0.7647058823529411,
+      "recall": 0.8125,
+      "f1": 0.787878787878788
+     },
+     "tmax_mae": 1.024,
+     "tmax_bias": -0.409,
+     "forecast_hw_days": 17,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 16,
+      "fp": 7,
+      "fn": 0,
+      "precision": 0.6956521739130435,
+      "recall": 1.0,
+      "f1": 0.8205128205128205
+     },
+     "tmax_mae": 1.205,
+     "tmax_bias": 0.265,
+     "forecast_hw_days": 23,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 14,
+      "fp": 6,
+      "fn": 2,
+      "precision": 0.7,
+      "recall": 0.875,
+      "f1": 0.7777777777777777
+     },
+     "tmax_mae": 0.734,
+     "tmax_bias": 0.132,
+     "forecast_hw_days": 20,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Nagpur",
+   "state": "Maharashtra",
+   "lat": 21.14631,
+   "lon": 79.08491,
+   "elevation_m": 319.0,
+   "region": "plains",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 44.0,
+   "truth_cat4plus_work_hours": 301,
+   "truth_cat5_work_hours": 121,
+   "truth_cat4plus_work_hours_bom": 952,
+   "truth_max_wbgt": 34.85,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.075,
+     "tmax_bias": 0.264,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.181,
+     "tmax_bias": 0.078,
+     "forecast_hw_days": 2,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.104,
+     "tmax_bias": 0.636,
+     "forecast_hw_days": 1,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Indore",
+   "state": "Madhya Pradesh",
+   "lat": 22.71792,
+   "lon": 75.8333,
+   "elevation_m": 550.0,
+   "region": "plains",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 43.4,
+   "truth_cat4plus_work_hours": 17,
+   "truth_cat5_work_hours": 0,
+   "truth_cat4plus_work_hours_bom": 538,
+   "truth_max_wbgt": 32.17,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.857,
+     "tmax_bias": 0.466,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.926,
+     "tmax_bias": 0.274,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.068,
+     "tmax_bias": 0.767,
+     "forecast_hw_days": 1,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Bhopal",
+   "state": "Madhya Pradesh",
+   "lat": 23.25469,
+   "lon": 77.40289,
+   "elevation_m": 523.0,
+   "region": "plains",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 43.8,
+   "truth_cat4plus_work_hours": 53,
+   "truth_cat5_work_hours": 2,
+   "truth_cat4plus_work_hours_bom": 613,
+   "truth_max_wbgt": 32.48,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.92,
+     "tmax_bias": 0.034,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.135,
+     "tmax_bias": 0.221,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.937,
+     "tmax_bias": 0.531,
+     "forecast_hw_days": 2,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Patna",
+   "state": "Bihar",
+   "lat": 25.59408,
+   "lon": 85.13563,
+   "elevation_m": 53.0,
+   "region": "plains",
+   "truth_hw_days": 9,
+   "truth_hw_days_2day": 6,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 44.3,
+   "truth_cat4plus_work_hours": 380,
+   "truth_cat5_work_hours": 224,
+   "truth_cat4plus_work_hours_bom": 887,
+   "truth_max_wbgt": 36.16,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 7,
+      "precision": 0.6666666666666666,
+      "recall": 0.2222222222222222,
+      "f1": 0.3333333333333333
+     },
+     "tmax_mae": 1.047,
+     "tmax_bias": -0.348,
+     "forecast_hw_days": 3,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 8,
+      "fp": 7,
+      "fn": 1,
+      "precision": 0.5333333333333333,
+      "recall": 0.8888888888888888,
+      "f1": 0.6666666666666667
+     },
+     "tmax_mae": 1.16,
+     "tmax_bias": 0.33,
+     "forecast_hw_days": 15,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 8,
+      "precision": 0.5,
+      "recall": 0.1111111111111111,
+      "f1": 0.1818181818181818
+     },
+     "tmax_mae": 1.003,
+     "tmax_bias": -0.416,
+     "forecast_hw_days": 2,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Varanasi",
+   "state": "Uttar Pradesh",
+   "lat": 25.31668,
+   "lon": 83.01041,
+   "elevation_m": 86.0,
+   "region": "plains",
+   "truth_hw_days": 9,
+   "truth_hw_days_2day": 7,
+   "truth_severe_days": 3,
+   "truth_max_tmax": 46.0,
+   "truth_cat4plus_work_hours": 392,
+   "truth_cat5_work_hours": 199,
+   "truth_cat4plus_work_hours_bom": 878,
+   "truth_max_wbgt": 36.49,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 9,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.6923076923076923,
+      "recall": 1.0,
+      "f1": 0.8181818181818181
+     },
+     "tmax_mae": 1.33,
+     "tmax_bias": -0.279,
+     "forecast_hw_days": 13,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 9,
+      "fp": 11,
+      "fn": 0,
+      "precision": 0.45,
+      "recall": 1.0,
+      "f1": 0.6206896551724138
+     },
+     "tmax_mae": 1.573,
+     "tmax_bias": 0.88,
+     "forecast_hw_days": 20,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 9,
+      "fp": 5,
+      "fn": 0,
+      "precision": 0.6428571428571429,
+      "recall": 1.0,
+      "f1": 0.782608695652174
+     },
+     "tmax_mae": 1.101,
+     "tmax_bias": 0.149,
+     "forecast_hw_days": 14,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Prayagraj",
+   "state": "Uttar Pradesh",
+   "lat": 25.44478,
+   "lon": 81.84322,
+   "elevation_m": 99.0,
+   "region": "plains",
+   "truth_hw_days": 12,
+   "truth_hw_days_2day": 10,
+   "truth_severe_days": 4,
+   "truth_max_tmax": 46.7,
+   "truth_cat4plus_work_hours": 387,
+   "truth_cat5_work_hours": 223,
+   "truth_cat4plus_work_hours_bom": 860,
+   "truth_max_wbgt": 36.67,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 12,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1": 0.8571428571428571
+     },
+     "tmax_mae": 1.029,
+     "tmax_bias": -0.198,
+     "forecast_hw_days": 16,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 12,
+      "fp": 11,
+      "fn": 0,
+      "precision": 0.5217391304347826,
+      "recall": 1.0,
+      "f1": 0.6857142857142856
+     },
+     "tmax_mae": 1.388,
+     "tmax_bias": 0.513,
+     "forecast_hw_days": 23,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 12,
+      "fp": 3,
+      "fn": 0,
+      "precision": 0.8,
+      "recall": 1.0,
+      "f1": 0.888888888888889
+     },
+     "tmax_mae": 0.842,
+     "tmax_bias": -0.013,
+     "forecast_hw_days": 15,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Agra",
+   "state": "Uttar Pradesh",
+   "lat": 27.18333,
+   "lon": 78.01667,
+   "elevation_m": 166.0,
+   "region": "plains",
+   "truth_hw_days": 9,
+   "truth_hw_days_2day": 5,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 45.8,
+   "truth_cat4plus_work_hours": 273,
+   "truth_cat5_work_hours": 120,
+   "truth_cat4plus_work_hours_bom": 714,
+   "truth_max_wbgt": 35.33,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 9,
+      "fp": 3,
+      "fn": 0,
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1": 0.8571428571428571
+     },
+     "tmax_mae": 0.804,
+     "tmax_bias": 0.321,
+     "forecast_hw_days": 12,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 9,
+      "fp": 14,
+      "fn": 0,
+      "precision": 0.391304347826087,
+      "recall": 1.0,
+      "f1": 0.5625
+     },
+     "tmax_mae": 1.698,
+     "tmax_bias": 1.157,
+     "forecast_hw_days": 23,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 9,
+      "fp": 7,
+      "fn": 0,
+      "precision": 0.5625,
+      "recall": 1.0,
+      "f1": 0.72
+     },
+     "tmax_mae": 1.007,
+     "tmax_bias": 0.743,
+     "forecast_hw_days": 16,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Ludhiana",
+   "state": "Punjab",
+   "lat": 30.91204,
+   "lon": 75.85379,
+   "elevation_m": 256.0,
+   "region": "plains",
+   "truth_hw_days": 17,
+   "truth_hw_days_2day": 14,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 45.4,
+   "truth_cat4plus_work_hours": 280,
+   "truth_cat5_work_hours": 129,
+   "truth_cat4plus_work_hours_bom": 625,
+   "truth_max_wbgt": 35.12,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 11,
+      "fp": 3,
+      "fn": 6,
+      "precision": 0.7857142857142857,
+      "recall": 0.6470588235294118,
+      "f1": 0.7096774193548386
+     },
+     "tmax_mae": 1.311,
+     "tmax_bias": -0.742,
+     "forecast_hw_days": 14,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 17,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.7391304347826086,
+      "recall": 1.0,
+      "f1": 0.85
+     },
+     "tmax_mae": 1.18,
+     "tmax_bias": 0.127,
+     "forecast_hw_days": 23,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 15,
+      "fp": 2,
+      "fn": 2,
+      "precision": 0.8823529411764706,
+      "recall": 0.8823529411764706,
+      "f1": 0.8823529411764706
+     },
+     "tmax_mae": 0.719,
+     "tmax_bias": -0.24,
+     "forecast_hw_days": 17,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Jodhpur",
+   "state": "Rajasthan",
+   "lat": 26.26841,
+   "lon": 73.00594,
+   "elevation_m": 237.0,
+   "region": "plains",
+   "truth_hw_days": 7,
+   "truth_hw_days_2day": 5,
+   "truth_severe_days": 1,
+   "truth_max_tmax": 48.0,
+   "truth_cat4plus_work_hours": 174,
+   "truth_cat5_work_hours": 43,
+   "truth_cat4plus_work_hours_bom": 663,
+   "truth_max_wbgt": 34.36,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 6,
+      "fp": 2,
+      "fn": 1,
+      "precision": 0.75,
+      "recall": 0.8571428571428571,
+      "f1": 0.7999999999999999
+     },
+     "tmax_mae": 0.645,
+     "tmax_bias": -0.054,
+     "forecast_hw_days": 8,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+     },
+     "tmax_mae": 0.656,
+     "tmax_bias": -0.12,
+     "forecast_hw_days": 7,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 6,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.8571428571428571,
+      "f1": 0.923076923076923
+     },
+     "tmax_mae": 0.644,
+     "tmax_bias": 0.193,
+     "forecast_hw_days": 6,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Raipur",
+   "state": "Chhattisgarh",
+   "lat": 21.23333,
+   "lon": 81.63333,
+   "elevation_m": 296.0,
+   "region": "plains",
+   "truth_hw_days": 4,
+   "truth_hw_days_2day": 1,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 45.8,
+   "truth_cat4plus_work_hours": 261,
+   "truth_cat5_work_hours": 109,
+   "truth_cat4plus_work_hours_bom": 962,
+   "truth_max_wbgt": 34.39,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 4,
+      "precision": null,
+      "recall": 0.0,
+      "f1": null
+     },
+     "tmax_mae": 1.365,
+     "tmax_bias": -0.8,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1.0,
+      "recall": 0.25,
+      "f1": 0.4
+     },
+     "tmax_mae": 1.292,
+     "tmax_bias": 0.075,
+     "forecast_hw_days": 1,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 1,
+      "fp": 2,
+      "fn": 3,
+      "precision": 0.3333333333333333,
+      "recall": 0.25,
+      "f1": 0.28571428571428575
+     },
+     "tmax_mae": 1.17,
+     "tmax_bias": -0.309,
+     "forecast_hw_days": 3,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Bhubaneswar",
+   "state": "Odisha",
+   "lat": 20.27241,
+   "lon": 85.83385,
+   "elevation_m": 62.0,
+   "region": "plains",
+   "truth_hw_days": 1,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 41.1,
+   "truth_cat4plus_work_hours": 410,
+   "truth_cat5_work_hours": 173,
+   "truth_cat4plus_work_hours_bom": 1127,
+   "truth_max_wbgt": 34.22,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 7,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     },
+     "tmax_mae": 1.302,
+     "tmax_bias": 0.447,
+     "forecast_hw_days": 7,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 1,
+      "fp": 16,
+      "fn": 0,
+      "precision": 0.058823529411764705,
+      "recall": 1.0,
+      "f1": 0.1111111111111111
+     },
+     "tmax_mae": 1.808,
+     "tmax_bias": 1.21,
+     "forecast_hw_days": 17,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 1,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.2,
+      "recall": 1.0,
+      "f1": 0.33333333333333337
+     },
+     "tmax_mae": 1.121,
+     "tmax_bias": 0.831,
+     "forecast_hw_days": 5,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Visakhapatnam",
+   "state": "Andhra Pradesh",
+   "lat": 17.68009,
+   "lon": 83.20161,
+   "elevation_m": 24.0,
+   "region": "coastal",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 37.7,
+   "truth_cat4plus_work_hours": 106,
+   "truth_cat5_work_hours": 6,
+   "truth_cat4plus_work_hours_bom": 1159,
+   "truth_max_wbgt": 32.66,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 10,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.729,
+     "tmax_bias": 1.511,
+     "forecast_hw_days": 10,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.869,
+     "tmax_bias": -0.579,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 6,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.487,
+     "tmax_bias": 1.289,
+     "forecast_hw_days": 6,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Vijayawada",
+   "state": "Andhra Pradesh",
+   "lat": 16.50745,
+   "lon": 80.6466,
+   "elevation_m": 47.0,
+   "region": "plains",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 43.0,
+   "truth_cat4plus_work_hours": 402,
+   "truth_cat5_work_hours": 183,
+   "truth_cat4plus_work_hours_bom": 1177,
+   "truth_max_wbgt": 35.36,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.089,
+     "tmax_bias": 0.025,
+     "forecast_hw_days": 2,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 3,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.971,
+     "tmax_bias": 0.354,
+     "forecast_hw_days": 3,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 7,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 1.301,
+     "tmax_bias": 0.224,
+     "forecast_hw_days": 7,
+     "n_days": 91
+    }
+   }
+  },
+  {
+   "city": "Shimla",
+   "state": "Himachal Pradesh",
+   "lat": 31.10442,
+   "lon": 77.16662,
+   "elevation_m": 2073.0,
+   "region": "hills",
+   "truth_hw_days": 0,
+   "truth_hw_days_2day": 0,
+   "truth_severe_days": 0,
+   "truth_max_tmax": 29.9,
+   "truth_cat4plus_work_hours": 0,
+   "truth_cat5_work_hours": 0,
+   "truth_cat4plus_work_hours_bom": 0,
+   "truth_max_wbgt": 23.97,
+   "sources": {
+    "ecmwf_ifs025_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.769,
+     "tmax_bias": 0.114,
+     "forecast_hw_days": 0,
+     "n_days": 91
+    },
+    "best_match_day1": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.9,
+     "tmax_bias": -0.071,
+     "forecast_hw_days": 1,
+     "n_days": 91
+    },
+    "historical_forecast_day0": {
+     "day_alert": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": null
+     },
+     "tmax_mae": 0.814,
+     "tmax_bias": -0.26,
+     "forecast_hw_days": 1,
+     "n_days": 91
+    }
+   }
+  }
+ ]
+}

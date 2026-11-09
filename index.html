@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LuSaathi (लू साथी) – heat-safety helper for outdoor workers</title>
+<meta name="description" content="Free heatwave and heat-stress (WBGT) work/rest advisor for India's outdoor workers. English / हिन्दी.">
+<meta name="theme-color" content="#b23c17">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><img src="icon.svg" alt="" width="32" height="32"><div><h1 id="t-title">LuSaathi</h1><p id="t-tagline">Heat-safety helper for outdoor workers</p></div></div>
+  <button id="lang" type="button" aria-label="Switch language">हिन्दी</button>
+</header>
+<main>
+  <p id="banner" class="banner" hidden></p>
+  <p class="replay"><a id="replay" href="?place=Delhi&amp;replay=2024-05-28">Demo: replay the May 2024 heatwave</a></p>
+  <form id="place-form" class="card" autocomplete="off">
+    <label for="place" id="t-placeLabel">Place</label>
+    <div class="row"><input id="place" name="place" list="place-list" required><button id="t-search" type="submit">Check</button></div>
+    <datalist id="place-list"></datalist>
+    <div class="row opts">
+      <label><span id="t-workload">Type of work</span>
+        <select id="workload"><option value="easy">light</option><option value="moderate" selected>moderate</option><option value="hard">heavy</option></select></label>
+      <label><span id="t-region">IMD region</span>
+        <select id="region"><option value="auto">auto</option><option value="plains">plains</option><option value="coastal">coastal</option><option value="hills">hills</option></select></label>
+    </div>
+  </form>
+
+  <section class="card" id="qa">
+    <label for="q" id="t-ask">Ask a question</label>
+    <div class="row"><input id="q" type="text"><button id="t-askBtn" type="button">Answer</button></div>
+    <pre id="answer" aria-live="polite"></pre>
+  </section>
+
+  <div id="status" role="status"></div>
+  <section id="result" hidden>
+    <h2 id="place-title"></h2>
+    <p id="place-meta" class="muted"></p>
+    <div class="row share"><a id="wa" class="btn wa" target="_blank" rel="noopener">WhatsApp</a><button id="copy" type="button">Copy</button></div>
+    <h3 id="t-days">Daily outlook</h3>
+    <div id="days" class="days"></div>
+    <h3 id="t-next72">Next 72 hours</h3>
+    <div class="tablewrap"><table id="hours"><thead></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="card small">
+    <p id="t-disclaimer"></p>
+    <p id="t-forecastBy" class="muted"></p>
+    <p><a href="https://github.com/talibot-agent/lusaathi#methods" id="t-sources">Methods, sources &amp; limitations</a> · <a href="https://github.com/talibot-agent/lusaathi/blob/main/VALIDATION.md">Backtest (VALIDATION.md)</a> · MIT</p>
+  </section>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
