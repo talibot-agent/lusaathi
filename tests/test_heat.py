@@ -135,3 +135,29 @@ def test_jaipur_2024_05_29_14h_is_category_5():
     assert cat == 5
     assert heat.work_rest(cat, "moderate")["workMin"] == 20
     assert heat.heat_category(w["wbgt_globe"]) == 2
+
+
+def _ist(h, m=0):
+    from datetime import datetime, timezone
+    return datetime(2024, 5, 29, h, m, tzinfo=timezone.utc).timestamp() * 1000 - 19800000
+
+
+JAIPUR = (26.91962, 75.78781)
+
+
+def test_daylight_wbgt_rule():
+    assert heat.daylight_wbgt(29.0, 32.7, True) == (32.7, "bom")
+    assert heat.daylight_wbgt(31.5, 30.2, True) == (31.5, "globe")
+    assert heat.daylight_wbgt(29.0, 32.7, False) == (29.0, "globe")
+
+
+def test_jaipur_daylight_boundary_and_night():
+    lat, lon = JAIPUR
+    assert heat.solar_elevation_deg(_ist(5, 30), lat, lon) < 0 < heat.solar_elevation_deg(_ist(6), lat, lon)
+    six = heat.wbgt_cautious(33.7, 40, 24.9, 31, 4, 27, _ist(6), lat, lon, 949.2)
+    assert six["sun_up"] and six["source"] == "bom" and heat.heat_category(six["wbgt"]) == 4
+    five = heat.wbgt_cautious(32.1, 40, 19.4, 0, 0, 0, _ist(5), lat, lon, 948.7)
+    assert not five["sun_up"] and five["source"] == "globe" and five["wbgt"] == five["wbgt_globe"]
+    assert five["wbgt_strict"] == five["wbgt_bom"] > five["wbgt_globe"]
+    noon = heat.wbgt_cautious(45.9, 7, 17.1, 786, 506, 280, _ist(14), lat, lon, 948.6)
+    assert noon["source"] == "bom" and heat.heat_category(noon["wbgt"]) == 5

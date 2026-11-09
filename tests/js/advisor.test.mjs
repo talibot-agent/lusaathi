@@ -66,3 +66,14 @@ test('hour answers name the WBGT estimate that drove the verdict (EN + HI)', () 
   const fc2 = { ...fc, hours: fc.hours.map((x) => (x === h ? g : x)) };
   assert.match(answer(parseQuestion('Can I work at 2pm tomorrow in Delhi?', NOW), fc2, NOW), /from the sun\/globe model; BoM formula/);
 });
+
+test('night answers say the BoM formula is not used (EN + HI)', () => {
+  const fc = buildForecast(raw, place, 'moderate', null);
+  const h = fc.hours.find((x) => x.date === '2024-05-29' && x.hour === 22);
+  assert.equal(h.sunUp, false);
+  assert.equal(h.wbgtSource, 'globe');
+  const en = answer(parseQuestion('Can I work at 10pm tomorrow in Delhi?', NOW), fc, NOW);
+  assert.match(en, /the sun is down, so the BoM formula is not used/);
+  const hi = answer(parseQuestion('कल रात 10 बजे दिल्ली में काम करना सुरक्षित है?', NOW), fc, NOW);
+  assert.ok(hi.includes('सूरज डूबा है, इसलिए BoM सूत्र लागू नहीं'));
+});

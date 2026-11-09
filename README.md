@@ -32,8 +32,9 @@ LuSaathi fills exactly that gap.
 
 1. **Any Indian place** — city, town or village, typed in English or Devanagari (Open-Meteo geocoder, `countryCode=IN`).
 2. **72-hour hourly heat stress** — wet-bulb (Stull), heat index (NWS) and two **WBGT** estimates: a sun/globe model
-   (Dimiceli–Piltz black-globe + Stull wet-bulb, OSHA outdoor weighting) and the BoM approximation. **Cautious rule:**
-   the app always uses the higher of the two, and shows which one it used (G / B).
+   (Dimiceli–Piltz black-globe + Stull wet-bulb, OSHA outdoor weighting) and the BoM approximation. **Daylight-only
+   cautious rule:** while the sun is up (solar elevation > 0°) the app uses the higher of the two; when the sun is down
+   it uses the sun/globe model, because the BoM formula assumes daytime sun. It shows which one it used (G / B).
 3. **Risk bands and work/rest** — TB MED 507 heat categories 1–5 → minutes of work/rest per hour and litres of
    water per hour for light / moderate / heavy work; NDMA noon-hour (12–3 pm) guidance on heat-wave days.
 4. **IMD heat-wave criteria** — plains / coastal / hills thresholds and departure from an ERA5 1991–2020 normal
@@ -52,14 +53,18 @@ ERA5 reanalysis — full tables, caveats and code in [VALIDATION.md](VALIDATION.
 
 * **Day-ahead heat-wave alerts** (Open-Meteo best_match, the model mix the app uses): caught **120 of 125** ERA5
   heat-wave city-days — recall **0.96**, precision 0.45, F1 0.61. ECMWF IFS alone: precision 0.57, recall 0.75, F1 0.65.
-* **Day-ahead dangerous-hour flag (Cat 4–5), cautious rule:** 18,685 city work-hours flagged; P 0.96 / R 0.91 / F1 0.94
-  against a reference computed the same way. Against the old (permissive, sun/globe-only) definition of a dangerous
-  hour it catches **5,244 of 5,249** (recall 1.00) but precision falls to **0.28** — we accept more false alarms to avoid
-  missing a dangerous hour. The old permissive flag scored P = R = 0.73.
-* **ERA5 reference:** under the cautious rule **19,767 of 29,575 city work-hours (66.8 %)** were at WBGT Category 4–5
-  and 17,151 (58.0 %) at Category 5 (permissive baseline: 5,249 / 17.7 % and 2,191).
+* **Day-ahead dangerous-hour flag (Cat 4–5), daylight-only rule (default):** 18,557 city work-hours flagged;
+  P 0.96 / R 0.91 / F1 0.94 against a reference computed the same way. Against the old (permissive, sun/globe-only)
+  definition of a dangerous hour it catches **5,234 of 5,249** (recall 1.00) but precision falls to **0.28** — we
+  accept more false alarms to avoid missing a dangerous hour. The old permissive flag scored P = R = 0.73.
+* **ERA5 reference:** under the daylight-only rule **19,625 of 29,575 city work-hours (66.4 %)** were at WBGT
+  Category 4–5 and 17,039 (57.6 %) at Category 5; over all 24 hours, 36.9 % (strict rule at all hours: 57.2 %;
+  permissive baseline: 5,249 work-hours / 17.7 %).
 * **Day+1 Tmax MAE:** 1.23 °C (best_match), 1.12 °C (ECMWF IFS).
-* Old vs new, side by side: [docs/METHODS.md §3b](docs/METHODS.md#3b-why-the-cautious-rule--and-what-it-costs-permissive-baseline-kept-for-comparison).
+* All three rules side by side: [docs/METHODS.md §3b](docs/METHODS.md#3b-three-wbgt-rules-side-by-side-2024-backtest).
+* **Mumbai:** all 1,049 of its Category 4–5 hours were in daylight. Humid coastal heat scores as dangerous because high
+  humidity keeps sweat from evaporating: those hours averaged only 31.3 °C air but 70 % humidity and a 26.7 °C
+  wet-bulb (BoM 34.1 °C; the sun/globe model alone, 29.0 °C).
 
 These are retrospective model-vs-reanalysis numbers. **No field deployment, user or health-outcome data exists yet.**
 
@@ -67,10 +72,11 @@ These are retrospective model-vs-reanalysis numbers. **No field deployment, user
 
 On 29 May 2024 at 14:00 the archived forecast for Jaipur was 45.9 °C with only 7 % humidity, so the Stull (2011)
 wet-bulb is just 20.1 °C and the sun/globe WBGT model gives 0.7·20.1 + 0.2·51.7 + 0.1·45.9 = 29.0 °C (Category 2).
-The BoM approximation gives **32.7 °C**. Under the cautious rule the app uses the higher value, so the answer is
+The BoM approximation gives **32.7 °C**. The sun is up (elevation 67.5°), so the app uses the higher value: the answer is
 **"High risk": Category 5, 20 min work / 40 min rest for moderate work**, and it says the BoM formula drove it. The NWS
 heat index (41.7 °C) is outside the range that formula is defined for at this humidity; the app marks it `*` and does
-not use it. Full table: [docs/METHODS.md §3a](docs/METHODS.md#3a-worked-example-the-2024-jaipur-replay-at-46-c--now-category-5).
+not use it. At 06:00 the sun was already 4.6° up, so B still applies (Category 4, 30/30); at 05:00 and at night the
+app uses the sun/globe model. Full table: [docs/METHODS.md §3a](docs/METHODS.md#3a-worked-example-the-2024-jaipur-replay--1400-and-0600).
 
 ## Screenshots
 
@@ -134,7 +140,7 @@ Stull 2011, BoM, TB MED 507, NIOSH 2016, IMD, NDMA 2017, FAO-56, NOAA).
 ## Limitations
 
 * Forecast-model estimates for a ~10–25 km grid cell — not on-site measurements; roofs, kilns, asphalt and shade change exposure.
-* WBGT is modelled two ways and the app uses the higher (cautious) estimate — in practice the BoM formula, which ignores the actual sun and wind, so it can overstate heat stress in shade, at dawn and at dusk; expect more restricted hours than a WBGT meter would show.
+* WBGT is modelled two ways; while the sun is up the app uses the higher estimate — in practice the BoM formula, which ignores the actual sun and wind, so it can overstate heat stress in shade and when the sun is low; expect more restricted daytime hours than a WBGT meter would show.
 * IMD criteria are applied at a single point; region type is auto-classified (elevation / distance to coast) and can be overridden.
 * Work/rest comes from TB MED 507 (acclimatised adults); new, older, pregnant or unwell workers need more protection.
 * Day-ahead heat-wave alerts trade precision for recall (see VALIDATION.md); coastal Chennai shows a warm forecast bias.

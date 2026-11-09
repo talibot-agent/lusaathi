@@ -1,6 +1,6 @@
 {
  "label": "BACKTEST against ERA5 reanalysis - NOT field/deployment data",
- "generated_utc": "2026-11-09T16:07Z",
+ "generated_utc": "2026-11-09T16:18Z",
  "period": [
   "2024-04-01",
   "2024-06-30"
@@ -17,14 +17,30 @@
   "hw_days_2day": 92,
   "severe_days": 20,
   "work_hours": 29575,
-  "cat4plus_hours": 19767,
-  "cat5_hours": 17151,
+  "cat4plus_hours": 19625,
+  "cat5_hours": 17039,
   "cat4plus_hours_bom": 19767,
   "max_wbgt": 42.79,
-  "bom_driven_hours": 29575,
+  "bom_driven_hours": 29032,
   "permissive_cat4plus_hours": 5249,
   "permissive_cat5_hours": 2191,
-  "permissive_max_wbgt": 36.67
+  "permissive_max_wbgt": 36.67,
+  "strict_cat4plus_hours": 19767,
+  "strict_cat5_hours": 17151,
+  "sun_down_work_hours": 543,
+  "bom_higher_work_hours": 29575,
+  "all_hours": 54600,
+  "all_sun_up_hours": 29632,
+  "all_cat4plus": {
+   "daylight": 20155,
+   "strict": 31225,
+   "permissive": 5332
+  },
+  "all_cat5": {
+   "daylight": 17423,
+   "strict": 26194,
+   "permissive": 2195
+  }
  },
  "summary": {
   "ecmwf_ifs025_day1": {
@@ -47,12 +63,12 @@
     "tn": 2139
    },
    "dangerous_hour_flag_cat4plus": {
-    "tp": 16370,
+    "tp": 16261,
     "fp": 248,
-    "fn": 3397,
-    "precision": 0.9850764231556144,
-    "recall": 0.828147923306521,
-    "f1": 0.8998213549539645
+    "fn": 3364,
+    "precision": 0.9849778908474166,
+    "recall": 0.8285859872611465,
+    "f1": 0.9000387446726076
    },
    "permissive_dangerous_hour_flag_cat4plus": {
     "tp": 2794,
@@ -63,6 +79,22 @@
     "f1": 0.6261064425770309
    },
    "cautious_flag_vs_permissive_reference": {
+    "tp": 5191,
+    "fp": 11318,
+    "fn": 58,
+    "precision": 0.31443455085105093,
+    "recall": 0.988950276243094,
+    "f1": 0.47715782700615866
+   },
+   "strict_dangerous_hour_flag_cat4plus": {
+    "tp": 16370,
+    "fp": 248,
+    "fn": 3397,
+    "precision": 0.9850764231556144,
+    "recall": 0.828147923306521,
+    "f1": 0.8998213549539645
+   },
+   "strict_flag_vs_permissive_reference": {
     "tp": 5201,
     "fp": 11417,
     "fn": 48,
@@ -94,12 +126,12 @@
     "tn": 2071
    },
    "dangerous_hour_flag_cat4plus": {
-    "tp": 18018,
-    "fp": 667,
-    "fn": 1749,
-    "precision": 0.9643029167781643,
-    "recall": 0.9115191986644408,
-    "f1": 0.9371684177676064
+    "tp": 17892,
+    "fp": 665,
+    "fn": 1733,
+    "precision": 0.9641644662391551,
+    "recall": 0.9116942675159235,
+    "f1": 0.9371955371641087
    },
    "permissive_dangerous_hour_flag_cat4plus": {
     "tp": 3852,
@@ -110,6 +142,22 @@
     "f1": 0.7321106148436757
    },
    "cautious_flag_vs_permissive_reference": {
+    "tp": 5234,
+    "fp": 13323,
+    "fn": 15,
+    "precision": 0.2820499003071617,
+    "recall": 0.9971423128214898,
+    "f1": 0.4397210787196505
+   },
+   "strict_dangerous_hour_flag_cat4plus": {
+    "tp": 18018,
+    "fp": 667,
+    "fn": 1749,
+    "precision": 0.9643029167781643,
+    "recall": 0.9115191986644408,
+    "f1": 0.9371684177676064
+   },
+   "strict_flag_vs_permissive_reference": {
     "tp": 5244,
     "fp": 13441,
     "fn": 5,
@@ -141,12 +189,12 @@
     "tn": 2135
    },
    "dangerous_hour_flag_cat4plus": {
-    "tp": 16684,
-    "fp": 323,
-    "fn": 3083,
-    "precision": 0.9810078203092845,
-    "recall": 0.8440329842667071,
-    "f1": 0.9073802142818296
+    "tp": 16571,
+    "fp": 321,
+    "fn": 3054,
+    "precision": 0.9809969216197016,
+    "recall": 0.8443821656050955,
+    "f1": 0.907577292767752
    },
    "permissive_dangerous_hour_flag_cat4plus": {
     "tp": 2796,
@@ -157,6 +205,22 @@
     "f1": 0.6373375883291544
    },
    "cautious_flag_vs_permissive_reference": {
+    "tp": 5204,
+    "fp": 11688,
+    "fn": 45,
+    "precision": 0.3080748283210987,
+    "recall": 0.9914269384644694,
+    "f1": 0.47007813558556516
+   },
+   "strict_dangerous_hour_flag_cat4plus": {
+    "tp": 16684,
+    "fp": 323,
+    "fn": 3083,
+    "precision": 0.9810078203092845,
+    "recall": 0.8440329842667071,
+    "f1": 0.9073802142818296
+   },
+   "strict_flag_vs_permissive_reference": {
     "tp": 5214,
     "fp": 11793,
     "fn": 35,
@@ -229,7 +293,20 @@
      "forecast_hw_days": 17,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 699,
+    "night": 0,
+    "bom_driven": 699,
+    "work_hours_day": 654,
+    "work_hours_night": 0,
+    "mean_t": 37.96,
+    "mean_rh": 38.0,
+    "mean_tw": 25.6,
+    "mean_wbgt": 34.6,
+    "mean_wbgt_globe": 30.33
+   },
+   "truth_strict_cat4plus_work_hours": 654
   },
   {
    "city": "Mumbai",
@@ -242,8 +319,8 @@
    "truth_hw_days_2day": 0,
    "truth_severe_days": 0,
    "truth_max_tmax": 37.4,
-   "truth_cat4plus_work_hours": 1068,
-   "truth_cat5_work_hours": 958,
+   "truth_cat4plus_work_hours": 998,
+   "truth_cat5_work_hours": 903,
    "truth_cat4plus_work_hours_bom": 1068,
    "truth_permissive_cat4plus_work_hours": 21,
    "truth_max_wbgt": 37.99,
@@ -290,7 +367,20 @@
      "forecast_hw_days": 6,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 1049,
+    "night": 0,
+    "bom_driven": 1049,
+    "work_hours_day": 998,
+    "work_hours_night": 0,
+    "mean_t": 31.29,
+    "mean_rh": 70.4,
+    "mean_tw": 26.74,
+    "mean_wbgt": 34.13,
+    "mean_wbgt_globe": 28.95
+   },
+   "truth_strict_cat4plus_work_hours": 1068
   },
   {
    "city": "Kolkata",
@@ -303,8 +393,8 @@
    "truth_hw_days_2day": 4,
    "truth_severe_days": 1,
    "truth_max_tmax": 42.9,
-   "truth_cat4plus_work_hours": 1139,
-   "truth_cat5_work_hours": 1075,
+   "truth_cat4plus_work_hours": 1119,
+   "truth_cat5_work_hours": 1048,
    "truth_cat4plus_work_hours_bom": 1139,
    "truth_permissive_cat4plus_work_hours": 445,
    "truth_max_wbgt": 41.46,
@@ -351,7 +441,20 @@
      "forecast_hw_days": 11,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 1155,
+    "night": 13,
+    "bom_driven": 1155,
+    "work_hours_day": 1109,
+    "work_hours_night": 10,
+    "mean_t": 33.03,
+    "mean_rh": 68.8,
+    "mean_tw": 27.94,
+    "mean_wbgt": 35.86,
+    "mean_wbgt_globe": 30.48
+   },
+   "truth_strict_cat4plus_work_hours": 1139
   },
   {
    "city": "Chennai",
@@ -364,8 +467,8 @@
    "truth_hw_days_2day": 0,
    "truth_severe_days": 0,
    "truth_max_tmax": 36.5,
-   "truth_cat4plus_work_hours": 1183,
-   "truth_cat5_work_hours": 1158,
+   "truth_cat4plus_work_hours": 1169,
+   "truth_cat5_work_hours": 1145,
    "truth_cat4plus_work_hours_bom": 1183,
    "truth_permissive_cat4plus_work_hours": 88,
    "truth_max_wbgt": 38.56,
@@ -412,7 +515,20 @@
      "forecast_hw_days": 7,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 1169,
+    "night": 0,
+    "bom_driven": 1169,
+    "work_hours_day": 1169,
+    "work_hours_night": 0,
+    "mean_t": 31.78,
+    "mean_rh": 70.3,
+    "mean_tw": 27.24,
+    "mean_wbgt": 34.82,
+    "mean_wbgt_globe": 29.44
+   },
+   "truth_strict_cat4plus_work_hours": 1183
   },
   {
    "city": "Bengaluru",
@@ -473,7 +589,20 @@
      "forecast_hw_days": 0,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 68,
+    "night": 0,
+    "bom_driven": 68,
+    "work_hours_day": 68,
+    "work_hours_night": 0,
+    "mean_t": 33.33,
+    "mean_rh": 44.7,
+    "mean_tw": 23.91,
+    "mean_wbgt": 31.63,
+    "mean_wbgt_globe": 28.36
+   },
+   "truth_strict_cat4plus_work_hours": 68
   },
   {
    "city": "Hyderabad",
@@ -534,7 +663,20 @@
      "forecast_hw_days": 0,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 833,
+    "night": 0,
+    "bom_driven": 833,
+    "work_hours_day": 833,
+    "work_hours_night": 0,
+    "mean_t": 34.25,
+    "mean_rh": 47.9,
+    "mean_tw": 24.94,
+    "mean_wbgt": 32.93,
+    "mean_wbgt_globe": 28.89
+   },
+   "truth_strict_cat4plus_work_hours": 833
   },
   {
    "city": "Ahmedabad",
@@ -547,8 +689,8 @@
    "truth_hw_days_2day": 0,
    "truth_severe_days": 0,
    "truth_max_tmax": 44.1,
-   "truth_cat4plus_work_hours": 861,
-   "truth_cat5_work_hours": 757,
+   "truth_cat4plus_work_hours": 852,
+   "truth_cat5_work_hours": 753,
    "truth_cat4plus_work_hours_bom": 861,
    "truth_permissive_cat4plus_work_hours": 276,
    "truth_max_wbgt": 39.47,
@@ -595,7 +737,20 @@
      "forecast_hw_days": 11,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 912,
+    "night": 0,
+    "bom_driven": 912,
+    "work_hours_day": 852,
+    "work_hours_night": 0,
+    "mean_t": 36.36,
+    "mean_rh": 44.3,
+    "mean_tw": 25.98,
+    "mean_wbgt": 34.54,
+    "mean_wbgt_globe": 30.09
+   },
+   "truth_strict_cat4plus_work_hours": 861
   },
   {
    "city": "Pune",
@@ -608,8 +763,8 @@
    "truth_hw_days_2day": 0,
    "truth_severe_days": 0,
    "truth_max_tmax": 39.7,
-   "truth_cat4plus_work_hours": 616,
-   "truth_cat5_work_hours": 304,
+   "truth_cat4plus_work_hours": 604,
+   "truth_cat5_work_hours": 302,
    "truth_cat4plus_work_hours_bom": 616,
    "truth_permissive_cat4plus_work_hours": 6,
    "truth_max_wbgt": 37.37,
@@ -656,7 +811,20 @@
      "forecast_hw_days": 4,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 625,
+    "night": 0,
+    "bom_driven": 625,
+    "work_hours_day": 604,
+    "work_hours_night": 0,
+    "mean_t": 32.29,
+    "mean_rh": 56.1,
+    "mean_tw": 24.88,
+    "mean_wbgt": 32.38,
+    "mean_wbgt_globe": 28.12
+   },
+   "truth_strict_cat4plus_work_hours": 616
   },
   {
    "city": "Jaipur",
@@ -717,7 +885,20 @@
      "forecast_hw_days": 4,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 642,
+    "night": 0,
+    "bom_driven": 642,
+    "work_hours_day": 606,
+    "work_hours_night": 0,
+    "mean_t": 38.02,
+    "mean_rh": 34.0,
+    "mean_tw": 24.5,
+    "mean_wbgt": 33.58,
+    "mean_wbgt_globe": 29.55
+   },
+   "truth_strict_cat4plus_work_hours": 606
   },
   {
    "city": "Lucknow",
@@ -778,7 +959,20 @@
      "forecast_hw_days": 18,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 797,
+    "night": 6,
+    "bom_driven": 797,
+    "work_hours_day": 797,
+    "work_hours_night": 0,
+    "mean_t": 37.64,
+    "mean_rh": 40.3,
+    "mean_tw": 25.88,
+    "mean_wbgt": 34.78,
+    "mean_wbgt_globe": 30.48
+   },
+   "truth_strict_cat4plus_work_hours": 797
   },
   {
    "city": "Kanpur",
@@ -839,7 +1033,20 @@
      "forecast_hw_days": 20,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 797,
+    "night": 4,
+    "bom_driven": 797,
+    "work_hours_day": 787,
+    "work_hours_night": 0,
+    "mean_t": 38.09,
+    "mean_rh": 37.9,
+    "mean_tw": 25.68,
+    "mean_wbgt": 34.69,
+    "mean_wbgt_globe": 30.48
+   },
+   "truth_strict_cat4plus_work_hours": 787
   },
   {
    "city": "Nagpur",
@@ -900,7 +1107,20 @@
      "forecast_hw_days": 1,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 952,
+    "night": 1,
+    "bom_driven": 952,
+    "work_hours_day": 952,
+    "work_hours_night": 0,
+    "mean_t": 35.53,
+    "mean_rh": 47.5,
+    "mean_tw": 25.97,
+    "mean_wbgt": 34.31,
+    "mean_wbgt_globe": 30.07
+   },
+   "truth_strict_cat4plus_work_hours": 952
   },
   {
    "city": "Indore",
@@ -961,7 +1181,20 @@
      "forecast_hw_days": 1,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 571,
+    "night": 0,
+    "bom_driven": 571,
+    "work_hours_day": 538,
+    "work_hours_night": 0,
+    "mean_t": 34.7,
+    "mean_rh": 46.3,
+    "mean_tw": 24.86,
+    "mean_wbgt": 32.96,
+    "mean_wbgt_globe": 28.79
+   },
+   "truth_strict_cat4plus_work_hours": 538
   },
   {
    "city": "Bhopal",
@@ -1022,7 +1255,20 @@
      "forecast_hw_days": 2,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 638,
+    "night": 0,
+    "bom_driven": 638,
+    "work_hours_day": 613,
+    "work_hours_night": 0,
+    "mean_t": 35.53,
+    "mean_rh": 43.3,
+    "mean_tw": 24.94,
+    "mean_wbgt": 33.27,
+    "mean_wbgt_globe": 29.15
+   },
+   "truth_strict_cat4plus_work_hours": 613
   },
   {
    "city": "Patna",
@@ -1083,7 +1329,20 @@
      "forecast_hw_days": 2,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 887,
+    "night": 36,
+    "bom_driven": 887,
+    "work_hours_day": 887,
+    "work_hours_night": 0,
+    "mean_t": 36.14,
+    "mean_rh": 49.6,
+    "mean_tw": 26.95,
+    "mean_wbgt": 35.32,
+    "mean_wbgt_globe": 30.72
+   },
+   "truth_strict_cat4plus_work_hours": 887
   },
   {
    "city": "Varanasi",
@@ -1144,7 +1403,20 @@
      "forecast_hw_days": 14,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 878,
+    "night": 8,
+    "bom_driven": 878,
+    "work_hours_day": 878,
+    "work_hours_night": 0,
+    "mean_t": 37.65,
+    "mean_rh": 40.5,
+    "mean_tw": 26.17,
+    "mean_wbgt": 35.06,
+    "mean_wbgt_globe": 30.72
+   },
+   "truth_strict_cat4plus_work_hours": 878
   },
   {
    "city": "Prayagraj",
@@ -1205,7 +1477,20 @@
      "forecast_hw_days": 15,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 860,
+    "night": 6,
+    "bom_driven": 860,
+    "work_hours_day": 860,
+    "work_hours_night": 0,
+    "mean_t": 38.13,
+    "mean_rh": 38.5,
+    "mean_tw": 25.98,
+    "mean_wbgt": 35.0,
+    "mean_wbgt_globe": 30.77
+   },
+   "truth_strict_cat4plus_work_hours": 860
   },
   {
    "city": "Agra",
@@ -1266,7 +1551,20 @@
      "forecast_hw_days": 16,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 751,
+    "night": 0,
+    "bom_driven": 751,
+    "work_hours_day": 714,
+    "work_hours_night": 0,
+    "mean_t": 37.97,
+    "mean_rh": 38.4,
+    "mean_tw": 25.76,
+    "mean_wbgt": 34.75,
+    "mean_wbgt_globe": 30.46
+   },
+   "truth_strict_cat4plus_work_hours": 714
   },
   {
    "city": "Ludhiana",
@@ -1327,7 +1625,20 @@
      "forecast_hw_days": 17,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 666,
+    "night": 1,
+    "bom_driven": 666,
+    "work_hours_day": 625,
+    "work_hours_night": 0,
+    "mean_t": 38.29,
+    "mean_rh": 36.3,
+    "mean_tw": 25.64,
+    "mean_wbgt": 34.71,
+    "mean_wbgt_globe": 30.63
+   },
+   "truth_strict_cat4plus_work_hours": 625
   },
   {
    "city": "Jodhpur",
@@ -1388,7 +1699,20 @@
      "forecast_hw_days": 6,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 715,
+    "night": 0,
+    "bom_driven": 715,
+    "work_hours_day": 663,
+    "work_hours_night": 0,
+    "mean_t": 38.13,
+    "mean_rh": 36.4,
+    "mean_tw": 25.2,
+    "mean_wbgt": 34.29,
+    "mean_wbgt_globe": 30.03
+   },
+   "truth_strict_cat4plus_work_hours": 663
   },
   {
    "city": "Raipur",
@@ -1449,7 +1773,20 @@
      "forecast_hw_days": 3,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 962,
+    "night": 3,
+    "bom_driven": 962,
+    "work_hours_day": 962,
+    "work_hours_night": 0,
+    "mean_t": 35.96,
+    "mean_rh": 45.2,
+    "mean_tw": 25.87,
+    "mean_wbgt": 34.28,
+    "mean_wbgt_globe": 30.05
+   },
+   "truth_strict_cat4plus_work_hours": 962
   },
   {
    "city": "Bhubaneswar",
@@ -1462,8 +1799,8 @@
    "truth_hw_days_2day": 0,
    "truth_severe_days": 0,
    "truth_max_tmax": 41.1,
-   "truth_cat4plus_work_hours": 1127,
-   "truth_cat5_work_hours": 1091,
+   "truth_cat4plus_work_hours": 1119,
+   "truth_cat5_work_hours": 1084,
    "truth_cat4plus_work_hours_bom": 1127,
    "truth_permissive_cat4plus_work_hours": 410,
    "truth_max_wbgt": 40.8,
@@ -1510,7 +1847,20 @@
      "forecast_hw_days": 5,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 1119,
+    "night": 0,
+    "bom_driven": 1119,
+    "work_hours_day": 1119,
+    "work_hours_night": 0,
+    "mean_t": 33.44,
+    "mean_rh": 65.6,
+    "mean_tw": 27.83,
+    "mean_wbgt": 35.89,
+    "mean_wbgt_globe": 30.56
+   },
+   "truth_strict_cat4plus_work_hours": 1127
   },
   {
    "city": "Visakhapatnam",
@@ -1571,7 +1921,20 @@
      "forecast_hw_days": 6,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 1159,
+    "night": 0,
+    "bom_driven": 1159,
+    "work_hours_day": 1159,
+    "work_hours_night": 0,
+    "mean_t": 32.16,
+    "mean_rh": 68.5,
+    "mean_tw": 27.26,
+    "mean_wbgt": 34.94,
+    "mean_wbgt_globe": 29.52
+   },
+   "truth_strict_cat4plus_work_hours": 1159
   },
   {
    "city": "Vijayawada",
@@ -1584,8 +1947,8 @@
    "truth_hw_days_2day": 0,
    "truth_severe_days": 0,
    "truth_max_tmax": 43.0,
-   "truth_cat4plus_work_hours": 1177,
-   "truth_cat5_work_hours": 1138,
+   "truth_cat4plus_work_hours": 1168,
+   "truth_cat5_work_hours": 1134,
    "truth_cat4plus_work_hours_bom": 1177,
    "truth_permissive_cat4plus_work_hours": 402,
    "truth_max_wbgt": 40.28,
@@ -1632,7 +1995,20 @@
      "forecast_hw_days": 7,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 1168,
+    "night": 5,
+    "bom_driven": 1168,
+    "work_hours_day": 1168,
+    "work_hours_night": 0,
+    "mean_t": 34.33,
+    "mean_rh": 58.6,
+    "mean_tw": 27.25,
+    "mean_wbgt": 35.37,
+    "mean_wbgt_globe": 30.34
+   },
+   "truth_strict_cat4plus_work_hours": 1177
   },
   {
    "city": "Shimla",
@@ -1693,7 +2069,20 @@
      "forecast_hw_days": 1,
      "n_days": 91
     }
-   }
+   },
+   "daylight_cat4plus_all_hours": {
+    "day": 0,
+    "night": 0,
+    "bom_driven": 0,
+    "work_hours_day": 0,
+    "work_hours_night": 0,
+    "mean_t": null,
+    "mean_rh": null,
+    "mean_tw": null,
+    "mean_wbgt": null,
+    "mean_wbgt_globe": null
+   },
+   "truth_strict_cat4plus_work_hours": 0
   }
  ]
 }

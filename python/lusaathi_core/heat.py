@@ -133,12 +133,25 @@ def cautious_wbgt(wbgt_globe, wbgt_bom):
     return (wbgt_bom, "bom") if wbgt_bom > wbgt_globe else (wbgt_globe, "globe")
 
 
+def solar_elevation_deg(utc_ms, lat_deg, lon_deg):
+    """Solar elevation angle (degrees) at the instant utc_ms, from the same NOAA equations as cos_zenith."""
+    return math.degrees(math.asin(max(-1.0, min(1.0, cos_zenith(utc_ms, lat_deg, lon_deg)))))
+
+
+def daylight_wbgt(wbgt_globe, wbgt_bom, sun_up):
+    """Daylight-only cautious rule: max of both estimates while the sun is up, sun/globe model when it is down."""
+    return cautious_wbgt(wbgt_globe, wbgt_bom) if sun_up else (wbgt_globe, "globe")
+
+
 def wbgt_cautious(t_c, rh, wind10kmh, ghi, direct, diffuse, utc_ms, lat, lon, p_hpa=1013.25):
-    """Same as the browser's assessHour WBGT: max(sun/globe model, BoM approximation)."""
+    """Same as the browser's assessHour WBGT (daylight-only cautious rule), plus the strict and permissive variants."""
     o = wbgt_outdoor(t_c, rh, wind10kmh, ghi, direct, diffuse, utc_ms, lat, lon, p_hpa)
     bom = wbgt_bom_c(t_c, rh)
-    w, src = cautious_wbgt(o["wbgt"], bom)
-    return dict(o, wbgt=w, wbgt_globe=o["wbgt"], wbgt_bom=bom, source=src)
+    elev = solar_elevation_deg(utc_ms, lat, lon)
+    sun_up = elev > 0
+    w, src = daylight_wbgt(o["wbgt"], bom, sun_up)
+    return dict(o, wbgt=w, wbgt_globe=o["wbgt"], wbgt_bom=bom, wbgt_strict=max(o["wbgt"], bom), source=src,
+                sun_up=sun_up, solar_elevation=elev)
 
 
 def heat_category(wbgt_c):

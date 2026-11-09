@@ -81,25 +81,33 @@ def hourly_rows(d, suffix=""):
 
 
 def assess(rows, lat, lon):
-    """Return {date: {'tmax':..,'hours':{hour:(cat, cat_bom, wbgt, cat_globe, wbgt_globe, source)}}}
+    """Return {date: {'tmax':.., 'hours': {hour: tuple}, 'all': {hour: tuple}}}
 
-    cat/wbgt use the app's cautious rule (higher of sun/globe model and BoM); *_globe is the old permissive baseline.
+    tuple = (cat, cat_bom, wbgt, cat_globe, wbgt_globe, source, cat_strict, sun_up, t, rh, tw, wbgt_bom)
+    cat/wbgt use the app's default daylight-only cautious rule (max of sun/globe model and BoM while the sun is up,
+    sun/globe model when it is down); *_globe = permissive baseline (always the sun/globe model);
+    cat_strict = strict rule (max of both at all hours). 'hours' = work hours only, 'all' = all 24 hours.
     """
     out = {}
     for t, off, v in rows:
         date, hh = t[:10], int(t[11:13])
-        day = out.setdefault(date, {"tmax": None, "hours": {}})
+        day = out.setdefault(date, {"tmax": None, "hours": {}, "all": {}})
         if v["temperature_2m"] is None:
             continue
         day["tmax"] = v["temperature_2m"] if day["tmax"] is None else max(day["tmax"], v["temperature_2m"])
-        if hh in WORK_HOURS and v["relative_humidity_2m"] is not None:
+        if v["relative_humidity_2m"] is not None:
             local = datetime.strptime(t, "%Y-%m-%dT%H:%M").replace(tzinfo=timezone.utc)
             utc_ms = (local - timedelta(seconds=off)).timestamp() * 1000
             w = heat.wbgt_cautious(v["temperature_2m"], v["relative_humidity_2m"], v["wind_speed_10m"],
                                    v["shortwave_radiation"], v["direct_radiation"], v["diffuse_radiation"],
                                    utc_ms, lat, lon, v["surface_pressure"] or 1013.25)
-            day["hours"][hh] = (heat.heat_category(w["wbgt"]), heat.heat_category(w["wbgt_bom"]), w["wbgt"],
-                                heat.heat_category(w["wbgt_globe"]), w["wbgt_globe"], w["source"])
+            tup = (heat.heat_category(w["wbgt"]), heat.heat_category(w["wbgt_bom"]), w["wbgt"],
+                   heat.heat_category(w["wbgt_globe"]), w["wbgt_globe"], w["source"],
+                   heat.heat_category(w["wbgt_strict"]), w["sun_up"],
+                   v["temperature_2m"], v["relative_humidity_2m"], w["tw"], w["wbgt_bom"])
+            day["all"][hh] = tup
+            if hh in WORK_HOURS:
+                day["hours"][hh] = tup
     return out
 
 
@@ -122,11 +130,16 @@ def main():
     per_city = []
     agg = {s: {"days": {"tp": 0, "fp": 0, "fn": 0, "tn": 0}, "days2": {"tp": 0, "fp": 0, "fn": 0, "tn": 0},
                "hours": {"tp": 0, "fp": 0, "fn": 0}, "hours_permissive": {"tp": 0, "fp": 0, "fn": 0},
-               "hours_cautious_vs_permissive_ref": {"tp": 0, "fp": 0, "fn": 0}, "abs_err": [], "err": []} for s in sources}
+               "hours_cautious_vs_permissive_ref": {"tp": 0, "fp": 0, "fn": 0}, "hours_strict": {"tp": 0, "fp": 0, "fn": 0},
+               "hours_strict_vs_permissive_ref": {"tp": 0, "fp": 0, "fn": 0}, "abs_err": [], "err": []} for s in sources}
     truth_tot = {"city_days": 0, "hw_days": 0, "hw_days_2day": 0, "severe_days": 0, "work_hours": 0,
                  "cat4plus_hours": 0, "cat5_hours": 0, "cat4plus_hours_bom": 0, "max_wbgt": None,
                  "bom_driven_hours": 0, "permissive_cat4plus_hours": 0, "permissive_cat5_hours": 0,
-                 "permissive_max_wbgt": None}
+                 "permissive_max_wbgt": None, "strict_cat4plus_hours": 0, "strict_cat5_hours": 0,
+                 "sun_down_work_hours": 0, "bom_higher_work_hours": 0,
+                 "all_hours": 0, "all_sun_up_hours": 0,
+                 "all_cat4plus": {"daylight": 0, "strict": 0, "permissive": 0},
+                 "all_cat5": {"daylight": 0, "strict": 0, "permissive": 0}}
     for c in cities:
         lat, lon = c["lat"], c["lon"]
         p = dict(base, latitude=lat, longitude=lon)
@@ -167,6 +180,28 @@ def main():
         truth_tot["permissive_cat4plus_hours"] += sum(1 for _, _, v in wh if v[3] >= 4)
         truth_tot["permissive_cat5_hours"] += sum(1 for _, _, v in wh if v[3] >= 5)
         truth_tot["permissive_max_wbgt"] = round(max(truth_tot["permissive_max_wbgt"] or -99, max(v[4] for _, _, v in wh)), 2)
+        truth_tot["strict_cat4plus_hours"] += sum(1 for _, _, v in wh if v[6] >= 4)
+        truth_tot["strict_cat5_hours"] += sum(1 for _, _, v in wh if v[6] >= 5)
+        truth_tot["sun_down_work_hours"] += sum(1 for _, _, v in wh if not v[7])
+        truth_tot["bom_higher_work_hours"] += sum(1 for _, _, v in wh if v[11] > v[4])
+        ah = [(d, hh, v) for d in dates for hh, v in truth[d]["all"].items()]
+        truth_tot["all_hours"] += len(ah)
+        truth_tot["all_sun_up_hours"] += sum(1 for _, _, v in ah if v[7])
+        for name, ix in (("daylight", 0), ("strict", 6), ("permissive", 3)):
+            truth_tot["all_cat4plus"][name] += sum(1 for _, _, v in ah if v[ix] >= 4)
+            truth_tot["all_cat5"][name] += sum(1 for _, _, v in ah if v[ix] >= 5)
+        hr = [v for _, _, v in ah if v[0] >= 4]
+        row["daylight_cat4plus_all_hours"] = {
+            "day": sum(1 for v in hr if v[7]), "night": sum(1 for v in hr if not v[7]),
+            "bom_driven": sum(1 for v in hr if v[5] == "bom"),
+            "work_hours_day": sum(1 for _, _, v in wh if v[0] >= 4 and v[7]),
+            "work_hours_night": sum(1 for _, _, v in wh if v[0] >= 4 and not v[7]),
+            "mean_t": round(sum(v[8] for v in hr) / len(hr), 2) if hr else None,
+            "mean_rh": round(sum(v[9] for v in hr) / len(hr), 1) if hr else None,
+            "mean_tw": round(sum(v[10] for v in hr) / len(hr), 2) if hr else None,
+            "mean_wbgt": round(sum(v[2] for v in hr) / len(hr), 2) if hr else None,
+            "mean_wbgt_globe": round(sum(v[4] for v in hr) / len(hr), 2) if hr else None}
+        row["truth_strict_cat4plus_work_hours"] = sum(1 for _, _, v in wh if v[6] >= 4)
         for s, (url, extra, suf) in sources.items():
             hv = ",".join(v + suf for v in VARS)
             d = get(url, dict(p, start_date=START, end_date=END, hourly=hv, **extra), f"{s}_{tag}")
@@ -186,8 +221,10 @@ def main():
             errs = [fc[x]["tmax"] - truth[x]["tmax"] for x in dates if fc.get(x, {}).get("tmax") is not None]
             A["abs_err"] += [abs(e) for e in errs]
             A["err"] += errs
-            # (forecast tuple index, reference tuple index): 0 = cautious category, 3 = permissive (sun/globe only)
-            for key, fi, ti in (("hours", 0, 0), ("hours_permissive", 3, 3), ("hours_cautious_vs_permissive_ref", 0, 3)):
+            # (forecast tuple index, reference tuple index): 0 = daylight-only (default), 3 = permissive (always G),
+            # 6 = strict (max at all hours)
+            for key, fi, ti in (("hours", 0, 0), ("hours_permissive", 3, 3), ("hours_cautious_vs_permissive_ref", 0, 3),
+                                ("hours_strict", 6, 6), ("hours_strict_vs_permissive_ref", 6, 3)):
                 for x, hh, v in wh:
                     fv = fc.get(x, {}).get("hours", {}).get(hh)
                     if fv is None:
@@ -214,6 +251,8 @@ def main():
             "dangerous_hour_flag_cat4plus": prf(A["hours"]["tp"], A["hours"]["fp"], A["hours"]["fn"]),
             "permissive_dangerous_hour_flag_cat4plus": prf(A["hours_permissive"]["tp"], A["hours_permissive"]["fp"], A["hours_permissive"]["fn"]),
             "cautious_flag_vs_permissive_reference": prf(A["hours_cautious_vs_permissive_ref"]["tp"], A["hours_cautious_vs_permissive_ref"]["fp"], A["hours_cautious_vs_permissive_ref"]["fn"]),
+            "strict_dangerous_hour_flag_cat4plus": prf(A["hours_strict"]["tp"], A["hours_strict"]["fp"], A["hours_strict"]["fn"]),
+            "strict_flag_vs_permissive_reference": prf(A["hours_strict_vs_permissive_ref"]["tp"], A["hours_strict_vs_permissive_ref"]["fp"], A["hours_strict_vs_permissive_ref"]["fn"]),
             "tmax_mae_c": round(sum(A["abs_err"]) / n, 3), "tmax_bias_c": round(sum(A["err"]) / n, 3), "n_city_days": n,
         }
     out = {"label": "BACKTEST against ERA5 reanalysis - NOT field/deployment data",
