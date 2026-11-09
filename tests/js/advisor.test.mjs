@@ -36,6 +36,9 @@ test('WhatsApp advisory', () => {
   const fc = buildForecast(raw, place, 'moderate', null);
   const t = advisoryText(fc, 'hi', 'moderate', 'https://example.org');
   assert.match(t, /लू साथी/);
+  assert.match(t, /ORS \(नमक-चीनी का घोल\)/);
+  assert.match(t, /लू लगने के लक्षण.*तुरंत 108\/112 पर कॉल करें/);
+  assert.match(t, /IMD\/राज्य चेतावनी को प्राथमिकता/);
   assert.ok(waLink(t).startsWith('https://wa.me/?text='));
   assert.equal(hourRanges([6, 7, 8, 12, 13]), '06:00–09:00, 12:00–14:00');
 });
