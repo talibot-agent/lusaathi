@@ -3,6 +3,8 @@
 **Live app:** https://talibot-agent.github.io/lusaathi/  ·  **2024 heat-wave replay demo:** https://talibot-agent.github.io/lusaathi/?place=Delhi&replay=2024-05-28
 · **Backtest:** [VALIDATION.md](VALIDATION.md) · **Methods & sources:** [docs/METHODS.md](docs/METHODS.md) · Licence: MIT
 
+Entry for **Code for a Billion 2026** (Code for India), Climate track — requirements: [docs/CFAB_CHECKLIST.md](docs/CFAB_CHECKLIST.md).
+
 LuSaathi turns a free weather forecast into **hour-by-hour work/rest and water schedules** for construction
 workers, street vendors, farm labourers and gig riders — and into a **WhatsApp advisory** that a site supervisor,
 contractor, ASHA worker or panchayat can forward in one tap. English and हिन्दी. Runs entirely in the browser
@@ -56,6 +58,22 @@ ERA5 reanalysis — full tables, caveats and code in [VALIDATION.md](VALIDATION.
 
 These are retrospective model-vs-reanalysis numbers. **No field deployment, user or health-outcome data exists yet.**
 
+## Screenshots
+
+Phone-width captures of the live app (replay mode, archived forecasts for the May 2024 heat wave):
+
+| Delhi, 28 May 2024 | Daily outlook + hourly table | Hindi question, Jaipur |
+|---|---|---|
+| <img src="docs/img/replay-delhi-en.png" width="240" alt="LuSaathi replay of Delhi on 28 May 2024"> | <img src="docs/img/outlook-hourly-delhi.png" width="240" alt="Daily outlook with IMD heat-wave criterion met and the hourly WBGT table"> | <img src="docs/img/ask-hindi-jaipur.png" width="240" alt="Hindi question about working on a roof in Jaipur and the Hindi answer"> |
+
+## How to use it (60 seconds)
+
+1. Open https://talibot-agent.github.io/lusaathi/ on any phone and type a place (English or हिन्दी).
+2. Pick the type of work (light / moderate / heavy). Read the **Daily outlook**: IMD heat-wave status, peak WBGT and the
+   work/rest rule at the hottest hour; the **Next 72 hours** table shows every hour.
+3. Or ask a question — "Can I work on the roof at 2pm tomorrow in Nagpur?" / "कल दोपहर जयपुर में काम करना सुरक्षित है?".
+4. Tap **Share advisory on WhatsApp** to send the 3-day advisory to a crew, a contractor group or an ASHA worker.
+
 ## Architecture
 
 ```
@@ -108,11 +126,14 @@ Stull 2011, BoM, TB MED 507, NIOSH 2016, IMD, NDMA 2017, FAO-56, NOAA).
 * Day-ahead heat-wave alerts trade precision for recall (see VALIDATION.md); coastal Chennai shows a warm forecast bias.
 * No field validation yet. Official IMD / NDMA / State Heat Action Plan alerts always take priority.
 
-## Team & credits
+## Team, credits & AI authorship
 
-Mykel Nelson ([@talibot-agent](https://github.com/talibot-agent)). Built with **AI agent assistance** (code, docs and
-backtest written with an AI coding agent under the author's direction; all numbers come from the scripts in this repo or
-the cited sources).
+Mykel Nelson ([@talibot-agent](https://github.com/talibot-agent)), solo.
+
+**AI authorship disclosure:** the code, docs, backtest, screenshots and submission text were written by an AI coding
+agent working under the author's direction; the author reviewed them. All numbers come from the scripts in this repo or
+the cited sources — none were typed in by hand. The app itself uses no LLM at run time: its question-answering agent is
+deterministic and rule-based.
 
 Weather data: [Open-Meteo](https://open-meteo.com/) (CC BY 4.0), incl. ECMWF, NOAA GFS, DWD ICON and Copernicus ERA5.
 Coastline: Natural Earth (public domain).
