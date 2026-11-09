@@ -128,6 +128,19 @@ def wbgt_outdoor(t_c, rh, wind10kmh, ghi, direct, diffuse, utc_ms, lat, lon, p_h
     return {"wbgt": 0.7 * tw + 0.2 * tg + 0.1 * t_c, "tw": tw, "tg": tg, "cosz": cz}
 
 
+def cautious_wbgt(wbgt_globe, wbgt_bom):
+    """Use the higher (more cautious) of the two WBGT estimates. Returns (wbgt, source)."""
+    return (wbgt_bom, "bom") if wbgt_bom > wbgt_globe else (wbgt_globe, "globe")
+
+
+def wbgt_cautious(t_c, rh, wind10kmh, ghi, direct, diffuse, utc_ms, lat, lon, p_hpa=1013.25):
+    """Same as the browser's assessHour WBGT: max(sun/globe model, BoM approximation)."""
+    o = wbgt_outdoor(t_c, rh, wind10kmh, ghi, direct, diffuse, utc_ms, lat, lon, p_hpa)
+    bom = wbgt_bom_c(t_c, rh)
+    w, src = cautious_wbgt(o["wbgt"], bom)
+    return dict(o, wbgt=w, wbgt_globe=o["wbgt"], wbgt_bom=bom, source=src)
+
+
 def heat_category(wbgt_c):
     f = c_to_f(wbgt_c)
     for thr, cat in ((90, 5), (88, 4), (85, 3), (82, 2), (78, 1)):

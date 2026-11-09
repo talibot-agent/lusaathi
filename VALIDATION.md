@@ -27,64 +27,78 @@ would its **day-ahead** alerts have caught the heat-wave days and the dangerous 
 * **Normals:** ERA5 daily Tmax 1991–2020, mean over a ±7-day window around each calendar day (same code as the app).
 * **Heat-wave rule:** IMD criteria as implemented in `lib/imd.js` / `python/lusaathi_core/imd.py`, applied to the
   same grid point for forecast and reference (single-point simplification; also scored with IMD's 2-consecutive-day rule).
-* **Work-hour heat stress:** sun-exposed WBGT estimate (Dimiceli–Piltz globe + Stull wet-bulb, OSHA outdoor weights)
-  for every hour 06:00–18:00 IST; "dangerous" = TB MED 507 Category 4–5.
+* **Work-hour heat stress:** for every hour 06:00–18:00 IST, the app's **cautious rule**: the higher of the sun/globe
+  WBGT (Dimiceli–Piltz globe + Stull wet-bulb, OSHA outdoor weights) and the BoM WBGT approximation; "dangerous" =
+  TB MED 507 Category 4–5. The old **permissive baseline** (sun/globe model only) is reported alongside, computed in
+  the same run from the same cached data.
 * **Daily Tmax** = maximum of the 24 hourly values (local day) for both forecast and reference.
 
 ## Results
 
 <!-- AUTO:BEGIN -->
-Period **2024-04-01 → 2024-06-30**, **25 cities**, 2275 city-days, 29575 city work-hours (06:00–18:00 IST). Generated 2026-11-09T11:30Z by `validation/backtest.py`.
+Period **2024-04-01 → 2024-06-30**, **25 cities**, 2275 city-days, 29575 city work-hours (06:00–18:00 IST). Generated 2026-11-09T16:07Z by `validation/backtest.py`.
 
 ### A. Reference (ERA5) — what happened in 2024
 
-| Metric | Value |
-|---|---|
-| City-days meeting the IMD heat-wave criterion (single point) | 125 |
-| …of which severe | 20 |
-| City-days meeting it on 2 consecutive days | 92 |
-| Work-hours at WBGT Category 4–5 (moderate work needs ≥30 min rest/hour) | 5249 (17.7% of work-hours) |
-| Work-hours at Category 5 (moderate work: 20 min work / 40 min rest) | 2191 |
-| Same Cat 4–5 count with the simpler BoM WBGT approximation | 19767 |
-| Highest hourly sun-exposed WBGT estimate | 36.7 °C |
+Work-hour rows use the app's **cautious rule** (the higher of the sun/globe-model WBGT and the BoM WBGT); the *permissive baseline* column is the sun/globe model alone, which the app used before 9 Nov 2026.
+
+| Metric | Cautious rule (current) | Permissive baseline (old) |
+|---|---|---|
+| City-days meeting the IMD heat-wave criterion (single point) | 125 | same |
+| …of which severe | 20 | same |
+| City-days meeting it on 2 consecutive days | 92 | same |
+| Work-hours at WBGT Category 4–5 (moderate work needs ≥30 min rest/hour) | 19767 (66.8%) | 5249 (17.7%) |
+| Work-hours at Category 5 (moderate work: 20 min work / 40 min rest) | 17151 (58.0%) | 2191 (7.4%) |
+| Work-hours where the BoM estimate was the higher one (drove the answer) | 29575 of 29575 | – |
+| Highest hourly WBGT estimate | 42.8 °C | 36.7 °C |
 
 ### B. Forecast skill (day+1 unless noted)
 
-| Forecast source | Heat-wave alert P / R / F1 (single day) | P / R / F1 (2-day rule) | Cat 4–5 hour flag P / R / F1 | Hours flagged Cat 4–5 | Tmax MAE °C | Tmax bias °C |
-|---|---|---|---|---|---|---|
-| Open-Meteo best_match, day+1 (Previous Runs API) — **the model mix the live app uses** | 0.45 / 0.96 / 0.61 (TP 120, FP 148, FN 5) | 0.44 / 0.97 / 0.61 | 0.73 / 0.73 / 0.73 | 5274 | 1.23 | 0.47 |
-| ECMWF IFS 0.25°, day+1 (Previous Runs API) | 0.57 / 0.75 / 0.65 (TP 94, FP 70, FN 31) | 0.62 / 0.77 / 0.69 | 0.76 / 0.53 / 0.63 | 3676 | 1.12 | 0.13 |
-| Historical Forecast API (stitched short-lead, ~day 0 reference) | 0.55 / 0.85 / 0.66 (TP 106, FP 88, FN 19) | 0.63 / 0.88 / 0.73 | 0.79 / 0.53 / 0.64 | 3525 | 1.06 | 0.41 |
+Heat-wave alerts and Tmax do not depend on WBGT, so they are identical under both rules.
+
+| Forecast source | Heat-wave alert P / R / F1 (single day) | P / R / F1 (2-day rule) | Tmax MAE °C | Tmax bias °C |
+|---|---|---|---|---|
+| Open-Meteo best_match, day+1 (Previous Runs API) — **the model mix the live app uses** | 0.45 / 0.96 / 0.61 (TP 120, FP 148, FN 5) | 0.44 / 0.97 / 0.61 | 1.23 | 0.47 |
+| ECMWF IFS 0.25°, day+1 (Previous Runs API) | 0.57 / 0.75 / 0.65 (TP 94, FP 70, FN 31) | 0.62 / 0.77 / 0.69 | 1.12 | 0.13 |
+| Historical Forecast API (stitched short-lead, ~day 0 reference) | 0.55 / 0.85 / 0.66 (TP 106, FP 88, FN 19) | 0.63 / 0.88 / 0.73 | 1.06 | 0.41 |
+
+**Dangerous work-hour flag (Category 4–5), P / R / F1 and hours flagged:**
+
+| Forecast source | Cautious forecast vs cautious reference (current) | Permissive baseline vs permissive reference (old) | Cautious forecast vs permissive reference |
+|---|---|---|---|
+| Open-Meteo best_match, day+1 (Previous Runs API) — **the model mix the live app uses** | 0.96 / 0.91 / 0.94 (18685 h; FP 667, FN 1749) | 0.73 / 0.73 / 0.73 (5274 h; FP 1422, FN 1397) | 0.28 / 1.00 / 0.44 (18685 h; FP 13441, FN 5) |
+| ECMWF IFS 0.25°, day+1 (Previous Runs API) | 0.99 / 0.83 / 0.90 (16618 h; FP 248, FN 3397) | 0.76 / 0.53 / 0.63 (3676 h; FP 882, FN 2455) | 0.31 / 0.99 / 0.48 (16618 h; FP 11417, FN 48) |
+| Historical Forecast API (stitched short-lead, ~day 0 reference) | 0.98 / 0.84 / 0.91 (17007 h; FP 323, FN 3083) | 0.79 / 0.53 / 0.64 (3525 h; FP 729, FN 2453) | 0.31 / 0.99 / 0.47 (17007 h; FP 11793, FN 35) |
 
 ### C. Per city (reference ERA5 + best_match day+1)
 
-| City | Region (auto) | ERA5 max Tmax °C | HW days (ERA5) | HW days forecast | Cat 4–5 work-h | Cat 5 work-h | Max WBGT °C | Tmax MAE °C |
-|---|---|---|---|---|---|---|---|---|
-| Delhi | plains | 45.5 | 12 | 25 | 237 | 86 | 34.6 | 1.15 |
-| Mumbai | coastal | 37.4 | 2 | 4 | 21 | 0 | 31.6 | 0.78 |
-| Kolkata | plains | 42.9 | 6 | 19 | 445 | 167 | 34.4 | 1.78 |
-| Chennai | coastal | 36.5 | 0 | 28 | 88 | 6 | 33.3 | 2.85 |
-| Bengaluru | plains | 37.3 | 0 | 0 | 0 | 0 | 30.5 | 0.92 |
-| Hyderabad | plains | 42.1 | 0 | 0 | 51 | 3 | 33.0 | 0.95 |
-| Ahmedabad | plains | 44.1 | 0 | 6 | 276 | 76 | 33.9 | 1.26 |
-| Pune | plains | 39.7 | 0 | 0 | 6 | 1 | 32.5 | 1.11 |
-| Jaipur | plains | 46.2 | 4 | 3 | 86 | 8 | 33.0 | 0.90 |
-| Lucknow | plains | 45.8 | 17 | 25 | 303 | 160 | 35.4 | 1.22 |
-| Kanpur | plains | 46.3 | 16 | 23 | 300 | 152 | 36.4 | 1.21 |
-| Nagpur | plains | 44.0 | 0 | 2 | 301 | 121 | 34.9 | 1.18 |
-| Indore | plains | 43.4 | 0 | 0 | 17 | 0 | 32.2 | 0.93 |
-| Bhopal | plains | 43.8 | 0 | 0 | 53 | 2 | 32.5 | 1.14 |
-| Patna | plains | 44.3 | 9 | 15 | 380 | 224 | 36.2 | 1.16 |
-| Varanasi | plains | 46.0 | 9 | 20 | 392 | 199 | 36.5 | 1.57 |
-| Prayagraj | plains | 46.7 | 12 | 23 | 387 | 223 | 36.7 | 1.39 |
-| Agra | plains | 45.8 | 9 | 23 | 273 | 120 | 35.3 | 1.70 |
-| Ludhiana | plains | 45.4 | 17 | 23 | 280 | 129 | 35.1 | 1.18 |
-| Jodhpur | plains | 48.0 | 7 | 7 | 174 | 43 | 34.4 | 0.66 |
-| Raipur | plains | 45.8 | 4 | 1 | 261 | 109 | 34.4 | 1.29 |
-| Bhubaneswar | plains | 41.1 | 1 | 17 | 410 | 173 | 34.2 | 1.81 |
-| Visakhapatnam | coastal | 37.7 | 0 | 0 | 106 | 6 | 32.7 | 0.87 |
-| Vijayawada | plains | 43.0 | 0 | 3 | 402 | 183 | 35.4 | 0.97 |
-| Shimla | hills | 29.9 | 0 | 1 | 0 | 0 | 24.0 | 0.90 |
+| City | Region (auto) | ERA5 max Tmax °C | HW days (ERA5) | HW days forecast | Cat 4–5 work-h | Cat 5 work-h | Cat 4–5 work-h (permissive) | Max WBGT °C | Tmax MAE °C |
+|---|---|---|---|---|---|---|---|---|---|
+| Delhi | plains | 45.5 | 12 | 25 | 654 | 585 | 237 | 39.6 | 1.15 |
+| Mumbai | coastal | 37.4 | 2 | 4 | 1068 | 958 | 21 | 38.0 | 0.78 |
+| Kolkata | plains | 42.9 | 6 | 19 | 1139 | 1075 | 445 | 41.5 | 1.78 |
+| Chennai | coastal | 36.5 | 0 | 28 | 1183 | 1158 | 88 | 38.6 | 2.85 |
+| Bengaluru | plains | 37.3 | 0 | 0 | 68 | 4 | 0 | 32.5 | 0.92 |
+| Hyderabad | plains | 42.1 | 0 | 0 | 833 | 569 | 51 | 36.0 | 0.95 |
+| Ahmedabad | plains | 44.1 | 0 | 6 | 861 | 757 | 276 | 39.5 | 1.26 |
+| Pune | plains | 39.7 | 0 | 0 | 616 | 304 | 6 | 37.4 | 1.11 |
+| Jaipur | plains | 46.2 | 4 | 3 | 606 | 488 | 86 | 37.7 | 0.90 |
+| Lucknow | plains | 45.8 | 17 | 25 | 797 | 679 | 303 | 39.6 | 1.22 |
+| Kanpur | plains | 46.3 | 16 | 23 | 787 | 689 | 300 | 39.4 | 1.21 |
+| Nagpur | plains | 44.0 | 0 | 2 | 952 | 816 | 301 | 39.4 | 1.18 |
+| Indore | plains | 43.4 | 0 | 0 | 538 | 368 | 17 | 36.3 | 0.93 |
+| Bhopal | plains | 43.8 | 0 | 0 | 613 | 442 | 53 | 37.3 | 1.14 |
+| Patna | plains | 44.3 | 9 | 15 | 887 | 771 | 380 | 42.8 | 1.16 |
+| Varanasi | plains | 46.0 | 9 | 20 | 878 | 772 | 392 | 41.7 | 1.57 |
+| Prayagraj | plains | 46.7 | 12 | 23 | 860 | 754 | 387 | 40.4 | 1.39 |
+| Agra | plains | 45.8 | 9 | 23 | 714 | 623 | 273 | 40.3 | 1.70 |
+| Ludhiana | plains | 45.4 | 17 | 23 | 625 | 542 | 280 | 40.0 | 1.18 |
+| Jodhpur | plains | 48.0 | 7 | 7 | 663 | 609 | 174 | 38.3 | 0.66 |
+| Raipur | plains | 45.8 | 4 | 1 | 962 | 845 | 261 | 38.6 | 1.29 |
+| Bhubaneswar | plains | 41.1 | 1 | 17 | 1127 | 1091 | 410 | 40.8 | 1.81 |
+| Visakhapatnam | coastal | 37.7 | 0 | 0 | 1159 | 1114 | 106 | 38.8 | 0.87 |
+| Vijayawada | plains | 43.0 | 0 | 3 | 1177 | 1138 | 402 | 40.3 | 0.97 |
+| Shimla | hills | 29.9 | 0 | 1 | 0 | 0 | 0 | 26.9 | 0.90 |
 <!-- AUTO:END -->
 
 ## How to read this
@@ -92,8 +106,12 @@ Period **2024-04-01 → 2024-06-30**, **25 cities**, 2275 city-days, 29575 city 
 * **Heat-wave alerts:** with the model mix the app uses, day-ahead alerts caught almost all ERA5 heat-wave
   city-days (high recall) at the cost of false alarms (lower precision) — in a safety tool, a missed heat-wave day is
   worse than an extra advisory, but the false-alarm rate is a real limitation. ECMWF alone is more precise but misses more.
-* **Dangerous work-hours:** the hour-level Cat 4–5 flag is the number that drives work/rest schedules; its precision,
-  recall and the total hours flagged are in table B.
+* **Dangerous work-hours:** the hour-level Cat 4–5 flag drives work/rest schedules. Since 9 Nov 2026 the app uses the
+  cautious rule. Judged against the old (permissive) definition of a dangerous hour, **precision falls from 0.73 to
+  0.28** while recall rises from 0.73 to 1.00: we accept more false alarms to avoid missing a dangerous hour.
+  Judged against its own definition it scores P 0.96 / R 0.91, partly because BoM uses only temperature and humidity
+  (easier to forecast than sun and wind) and because two thirds of work-hours are Category 4–5 under it.
+  See docs/METHODS.md §3b.
 * **Tmax MAE** (~1 °C) is the forecast's day+1 daily-maximum error against ERA5.
 
 ## Limitations (read before quoting)
@@ -108,9 +126,10 @@ Period **2024-04-01 → 2024-06-30**, **25 cities**, 2275 city-days, 29575 city 
    sub-division on 2 consecutive days; we evaluate one grid point.
 3. **Region type** (plains / coastal / hills) is auto-classified from elevation (≥1000 m → hills) and distance to the
    Natural Earth coastline (≤40 km → coastal). IMD uses designated stations. Bengaluru (920 m) is therefore "plains".
-4. **WBGT is modelled, not measured.** Natural wet-bulb is approximated by the psychrometric (Stull) wet-bulb, which
-   tends to *under*-estimate WBGT in strong sun and low wind; the simpler BoM formula gives far more Cat 4–5 hours
-   (table A), so the true number likely lies in between. No on-site WBGT meter data was used.
+4. **WBGT is modelled, not measured.** The sun/globe model's psychrometric (Stull) wet-bulb tends to *under*-estimate
+   WBGT in strong sun and low wind; the BoM formula ignores actual sun and wind and gives far more Cat 4–5 hours
+   (table A). The app now uses the higher of the two (BoM in every backtest work-hour), so its counts are an upper-end
+   estimate; the true number likely lies in between. No on-site WBGT meter data was used.
 5. **No health outcomes.** We did not (and cannot, from public data) link flagged hours to heat-illness cases.
 6. Work-hours are **city-hours**, not person-hours: one flagged hour in Delhi counts once regardless of how many
    people were working outdoors.

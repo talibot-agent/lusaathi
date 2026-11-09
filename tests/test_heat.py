@@ -117,3 +117,21 @@ def test_wet_bulb_validity_and_jaipur_value():
     assert not heat.wet_bulb_in_range(45, 3)
     assert not heat.wet_bulb_in_range(51, 30)
     assert abs(heat.wet_bulb_stull_c(45.9, 7) - 20.12) < 0.01
+
+
+def test_cautious_wbgt_picks_higher_estimate():
+    assert heat.cautious_wbgt(29.0, 32.7) == (32.7, "bom")
+    assert heat.cautious_wbgt(31.5, 30.2) == (31.5, "globe")
+    assert heat.cautious_wbgt(30.0, 30.0) == (30.0, "globe")
+
+
+def test_jaipur_2024_05_29_14h_is_category_5():
+    from datetime import datetime, timezone
+    utc_ms = datetime(2024, 5, 29, 8, 30, tzinfo=timezone.utc).timestamp() * 1000
+    w = heat.wbgt_cautious(45.9, 7, 17.1, 786, 506, 280, utc_ms, 26.91962, 75.78781, 948.6)
+    assert abs(w["wbgt_globe"] - 29.02) < 0.01 and abs(w["wbgt_bom"] - 32.71) < 0.01
+    assert w["source"] == "bom" and w["wbgt"] == w["wbgt_bom"]
+    cat = heat.heat_category(w["wbgt"])
+    assert cat == 5
+    assert heat.work_rest(cat, "moderate")["workMin"] == 20
+    assert heat.heat_category(w["wbgt_globe"]) == 2

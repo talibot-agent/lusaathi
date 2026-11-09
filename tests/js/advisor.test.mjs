@@ -51,3 +51,18 @@ test('hour answers show wet-bulb and flag an out-of-range heat index', () => {
   assert.match(answer(parseQuestion('Can I work at 2pm tomorrow in Delhi?', NOW), fc2, NOW), /rough: formula not valid/);
   assert.equal(h.hiOutOfRange, h.rh < 13 && h.tC * 9 / 5 + 32 > 112);
 });
+
+test('hour answers name the WBGT estimate that drove the verdict (EN + HI)', () => {
+  const fc = buildForecast(raw, place, 'moderate', null);
+  const h = fc.hours.find((x) => x.date === '2024-05-29' && x.hour === 14);
+  const src = { bom: ['BoM formula', 'BoM सूत्र'], globe: ['sun/globe model', 'धूप/ग्लोब मॉडल'] }[h.wbgtSource];
+  assert.equal(h.wbgt, Math.max(h.wbgtGlobe, h.wbgtBom));
+  const en = answer(parseQuestion('Can I work at 2pm tomorrow in Delhi?', NOW), fc, NOW);
+  assert.match(en, new RegExp(`the higher of two estimates, from the ${src[0]}`));
+  const hi = answer(parseQuestion('कल दोपहर 2 बजे दिल्ली में काम करना सुरक्षित है?', NOW), fc, NOW);
+  assert.ok(hi.includes(`दो अनुमानों में ज़्यादा वाला: ${src[1]}`));
+  // a globe-driven hour is reported as such
+  const g = { ...h, wbgtSource: 'globe', wbgtGlobe: h.wbgtBom + 1, wbgt: h.wbgtBom + 1 };
+  const fc2 = { ...fc, hours: fc.hours.map((x) => (x === h ? g : x)) };
+  assert.match(answer(parseQuestion('Can I work at 2pm tomorrow in Delhi?', NOW), fc2, NOW), /from the sun\/globe model; BoM formula/);
+});

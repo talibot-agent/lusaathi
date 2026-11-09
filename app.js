@@ -1,4 +1,4 @@
-import { UI, CAT, IMD, WORKLOAD, REGION, fmtDate, fmtHour, r0, r1, workRestText } from './lib/i18n.js';
+import { UI, CAT, IMD, WORKLOAD, REGION, SRC, fmtDate, fmtHour, r0, r1, workRestText } from './lib/i18n.js';
 import { classifyRegion } from './lib/imd.js';
 import { parseQuestion, isDevanagari } from './lib/intent.js';
 import { buildForecast, forecastUrl, replayUrl, normalsUrl, geocodeUrl, needsNormal, hourRanges, WORK_START, WORK_END } from './lib/model.js';
@@ -105,7 +105,7 @@ function render() {
     div.innerHTML = `<h4>${fmtDate(d.date, L)}</h4>
       <p>${T.tmax}: <b>${r1(d.tmax)}°C</b>${d.normal != null ? ` · ${T.normal} ${r1(d.normal)}°C` : ''} · ${T.dep}: ${dep}</p>
       <p class="${d.imd.level ? 'hw' : ''}">${IMD[L][d.imd.level]}</p>
-      <p>${T.peak}: <span class="pill c${d.peakCat}">${r1(d.peakWbgt)}°C · ${CAT[L][d.peakCat]}</span> @ ${fmtHour(d.peakHour)}</p>
+      <p>${T.peak}: <span class="pill c${d.peakCat}">${r1(d.peakWbgt)}°C · ${CAT[L][d.peakCat]}</span> @ ${fmtHour(d.peakHour)} <span class="muted">(${SRC[L][d.peakSource]})</span></p>
       <p>${T.wr}: ${wr ? workRestText(wr, L) : '–'}</p>
       <p>${T.dangerous}: ${d.dangerousHours.length ? hourRanges(d.dangerousHours) : T.none}</p>`;
     days.appendChild(div);
@@ -121,10 +121,11 @@ function render() {
     if (h.date !== lastDate) { rows.push(`<tr class="daysep"><td colspan="9">${fmtDate(h.date, L)}</td></tr>`); lastDate = h.date; }
     const off = h.hour < WORK_START || h.hour > WORK_END;
     rows.push(`<tr class="${off ? 'off' : ''}"><td>${fmtHour(h.hour)}</td><td>${r0(h.tC)}</td><td>${r0(h.rh)}</td><td>${r1(h.tw)}</td><td>${r0(h.hi)}${h.hiOutOfRange ? '*' : ''}</td>`
-      + `<td>${r1(h.wbgt)}</td><td><span class="pill c${h.category}">${h.category || '–'}</span></td>`
+      + `<td>${r1(h.wbgt)}<sup>${h.wbgtSource === 'bom' ? 'B' : 'G'}</sup></td><td><span class="pill c${h.category}">${h.category || '–'}</span></td>`
       + `<td>${h.workRest.noLimit ? T.noLimit : `${h.workRest.workMin}/${h.workRest.restMin}`}</td><td>${h.workRest.waterLph} L</td></tr>`);
   }
   tb.innerHTML = rows.join('');
+  $('wbgtNote').textContent = T.wbgtNote;
   $('hiNote').textContent = T.hiNote;
   $('hiNote').hidden = !hrs.some((h) => h.hiOutOfRange);
   const share = location.origin + location.pathname + '?place=' + encodeURIComponent(fc.place.name) + '&lang=' + L + (REPLAY ? '&replay=' + REPLAY : '');

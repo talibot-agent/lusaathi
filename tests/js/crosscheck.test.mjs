@@ -12,7 +12,7 @@ const cases = [];
 for (const tC of [24, 31, 38, 44, 47]) for (const rh of [8, 25, 55, 85]) for (const ghi of [0, 450, 950]) {
   cases.push({ tC, rh, wind10kmh: 9, ghi, direct: ghi * 0.75, diffuse: ghi * 0.25, utcMs: 1716888600000, lat: 26.9, lon: 75.8 });
 }
-test('JS == Python for WBGT, heat index, category', () => {
+test('JS == Python for WBGT (both estimates + cautious rule), heat index, category', () => {
   const py = `
 import json,sys
 sys.path.insert(0, ${JSON.stringify(path.join(root, 'python'))})
@@ -21,7 +21,8 @@ cases=json.loads(sys.stdin.read())
 out=[]
 for c in cases:
     o=heat.wbgt_outdoor(c['tC'],c['rh'],c['wind10kmh'],c['ghi'],c['direct'],c['diffuse'],c['utcMs'],c['lat'],c['lon'])
-    out.append([o['wbgt'],heat.heat_index_c(c['tC'],c['rh']),heat.heat_category(o['wbgt']),imd.imd_heatwave(c['tC'],c['tC']-5,'plains')['level'],heat.heat_index_out_of_range(c['tC'],c['rh']),heat.wet_bulb_in_range(c['tC'],c['rh'])])
+    wc=heat.wbgt_cautious(c['tC'],c['rh'],c['wind10kmh'],c['ghi'],c['direct'],c['diffuse'],c['utcMs'],c['lat'],c['lon'])
+    out.append([o['wbgt'],heat.heat_index_c(c['tC'],c['rh']),heat.heat_category(o['wbgt']),imd.imd_heatwave(c['tC'],c['tC']-5,'plains')['level'],heat.heat_index_out_of_range(c['tC'],c['rh']),heat.wet_bulb_in_range(c['tC'],c['rh']),wc['wbgt'],wc['source']])
 print(json.dumps(out))`;
   const res = JSON.parse(execFileSync('python3', ['-c', py], { input: JSON.stringify(cases) }).toString());
   cases.forEach((c, i) => {
@@ -32,5 +33,8 @@ print(json.dumps(out))`;
     assert.equal(I.imdHeatwave(c.tC, c.tC - 5, 'plains').level, res[i][3]);
     assert.equal(H.heatIndexOutOfRange(c.tC, c.rh), res[i][4]);
     assert.equal(H.wetBulbInRange(c.tC, c.rh), res[i][5]);
+    const a = H.assessHour(c);
+    assert.ok(Math.abs(a.wbgt - res[i][6]) < 1e-6, `cautious wbgt ${JSON.stringify(c)}`);
+    assert.equal(a.wbgtSource, res[i][7]);
   });
 });
