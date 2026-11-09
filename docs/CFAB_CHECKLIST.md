@@ -50,7 +50,7 @@ Paste-ready text for every field is in [`docs/SUBMISSION.md`](SUBMISSION.md).
 |---|---|---|
 | Size of the problem | `problem_scale`: ~380 M heat-exposed workers (World Bank 2022) | strong, sourced |
 | Severity | `problem_scale`: 181 bn labour hours / US$141 bn (Lancet Countdown 2024), 110 deaths + 40,272 cases (MoHFW via Indian Express) | strong, sourced |
-| Quality of the solution | `solution`, README, METHODS.md (incl. the Jaipur dry-heat worked example), 58 tests, CI | strong; deterministic + explainable |
+| Quality of the solution | `solution`, README, METHODS.md (incl. the Jaipur dry-heat worked example), 82 tests, CI | strong; deterministic + explainable |
 | Proven impact | `impact`: 2024 backtest (recall 0.96 heat-wave days; radiation-gated dangerous-hour flag P 0.87 / R 0.84, or recall 0.84 at precision 0.44 vs the old definition; 27.7 % of work-hours Category 5, stated with its cause) — **no field data** | **weakest** — any real usage before filing helps most |
 
 ## 4. Deadline

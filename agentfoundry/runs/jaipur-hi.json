@@ -1,0 +1,313 @@
+{
+  "id": "jaipur-hi",
+  "prompt": "कल दोपहर 3 बजे जयपुर में छत पर काम कर सकते हैं?",
+  "nowIso": "2024-05-28T06:00:00.000Z",
+  "fixture": "tests/fixtures/jaipur_2024-05-28.json",
+  "toolOrder": [
+    "parse_intent",
+    "geocode",
+    "forecast",
+    "heat_stress",
+    "imd_status",
+    "advise"
+  ],
+  "parsed": {
+    "lang": "hi",
+    "place": "Jaipur",
+    "placeSource": "gazetteer",
+    "dayOffset": 1,
+    "hour": 15,
+    "workload": "moderate",
+    "wantsNow": false
+  },
+  "place": {
+    "name": "Jaipur",
+    "lat": 26.91962,
+    "lon": 75.78781,
+    "region": "plains",
+    "elevation": 431
+  },
+  "target": {
+    "date": "2024-05-29",
+    "hour": 15,
+    "workload": "moderate"
+  },
+  "hour": {
+    "date": "2024-05-29",
+    "hour": 15,
+    "tC": 45.6,
+    "rh": 8,
+    "tw": 20.57261866041113,
+    "wbgt": 32.88842719897488,
+    "wbgtGlobe": 29.058353883548023,
+    "wbgtBom": 32.88842719897488,
+    "wbgtSource": "bom",
+    "category": 5,
+    "shortwave": 662,
+    "strongSun": true,
+    "workRest": {
+      "workMin": 20,
+      "restMin": 40,
+      "noLimit": false,
+      "waterLph": 0.95,
+      "inTable": true
+    }
+  },
+  "day": {
+    "date": "2024-05-29",
+    "tmax": 45.9,
+    "imd": {
+      "level": 1,
+      "basis": "absolute",
+      "departure": null
+    },
+    "peakCat": 5,
+    "peakWbgt": 34.39753803968982
+  },
+  "heat_stress": {
+    "ok": true,
+    "bomMinSwWm2": 600,
+    "wbgt": 32.88842719897488,
+    "wbgtGlobe": 29.271728989401517,
+    "wbgtBom": 32.88842719897488,
+    "wbgtSource": "bom",
+    "category": 5,
+    "strongSun": true,
+    "workRest": {
+      "workMin": 20,
+      "restMin": 40,
+      "noLimit": false,
+      "waterLph": 0.95,
+      "inTable": true
+    },
+    "tw": 20.57261866041113,
+    "hi": 41.88837476881783,
+    "hiOutOfRange": true
+  },
+  "imd_status": {
+    "ok": true,
+    "region": "plains",
+    "imd": {
+      "level": 1,
+      "basis": "absolute",
+      "departure": null
+    },
+    "imd2day": 1,
+    "note": "Never override IMD/NDMA/State heat-action-plan alerts. NDMA advises avoiding outdoor work 12:00–15:00 during heat waves."
+  },
+  "answer": "जवाब: जोखिम अधिक – इस घंटे में सिर्फ़ 20 मिनट काम की सीमा है; काम ठंडे समय पर करें।\nJaipur, बुध 29 मई 15:00: हवा 46°C, नमी 8%, वेट-बल्ब 20.6°C, हीट इंडेक्स 42°C (इतनी सूखी हवा में मोटा अनुमान), अनुमानित WBGT 32.9°C (दो अनुमानों में ज़्यादा वाला: BoM सूत्र; धूप/ग्लोब मॉडल 29.1°C) → श्रेणी 5 – अत्यधिक.\nमध्यम काम के लिए: 20 मिनट काम / 40 मिनट छाँव में आराम; हर घंटे लगभग 0.95 लीटर पानी (दिन में 11 लीटर से ज़्यादा नहीं)।\nउसी दिन बेहतर समय: 06:00–08:00, 17:00–19:00 (श्रेणी 1 – सावधानी)।\nIMD लू (हीट वेव) मानदंड पूरा (सामान्य तापमान उपलब्ध नहीं – केवल निरपेक्ष जाँच) [मैदानी]\nलू लगने के लक्षण दिखें तो तुरंत 108/112 पर कॉल करें।",
+  "advisory": "🌡️ लू साथी – गर्मी सलाह: Jaipur\n\n📅 मंगल 28 मई: अधिकतम 45°C, अधिकतम WBGT 33.4°C (श्रेणी 5 – अत्यधिक; BoM सूत्र)\n⚠️ IMD लू (हीट वेव) मानदंड पूरा\n⏱️ समय-सीमा वाले घंटे (मध्यम काम): 09:00–18:00\n➡️ सबसे गर्म घंटे में: 20 मिनट काम / 40 मिनट छाँव में आराम, ~0.95 ली. पानी/घंटा\n\n📅 बुध 29 मई: अधिकतम 46°C, अधिकतम WBGT 34.4°C (श्रेणी 5 – अत्यधिक; BoM सूत्र)\n⚠️ IMD लू (हीट वेव) मानदंड पूरा\n⏱️ समय-सीमा वाले घंटे (मध्यम काम): 08:00–17:00\n➡️ सबसे गर्म घंटे में: 20 मिनट काम / 40 मिनट छाँव में आराम, ~0.95 ली. पानी/घंटा\n\n📅 गुरु 30 मई: अधिकतम 45°C, अधिकतम WBGT 34.6°C (श्रेणी 5 – अत्यधिक; BoM सूत्र)\n⏱️ समय-सीमा वाले घंटे (मध्यम काम): 08:00–17:00\n➡️ सबसे गर्म घंटे में: 20 मिनट काम / 40 मिनट छाँव में आराम, ~0.95 ली. पानी/घंटा\n\n✅ ठंडा पानी, छाँव, ORS (नमक-चीनी का घोल) रखें; भारी काम सुबह/शाम करें; नए मज़दूरों को 7–14 दिन में धीरे-धीरे आदत डालें। लू लगने के लक्षण (भ्रम, गर्म सूखी त्वचा, बेहोशी) दिखें तो तुरंत 108/112 पर कॉल करें।\n(मॉडल अनुमान; IMD/राज्य चेतावनी को प्राथमिकता दें)",
+  "steps": [
+    {
+      "name": "parse_intent",
+      "input": {
+        "text": "कल दोपहर 3 बजे जयपुर में छत पर काम कर सकते हैं?",
+        "nowIso": "2024-05-28T06:00:00.000Z"
+      },
+      "output": {
+        "lang": "hi",
+        "place": "Jaipur",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 15,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "ms": 1
+    },
+    {
+      "name": "geocode",
+      "input": {
+        "place": "Jaipur",
+        "lang": "hi"
+      },
+      "output": {
+        "ok": true,
+        "name": "Jaipur",
+        "lat": 26.91962,
+        "lon": 75.78781,
+        "elevation": 431,
+        "region": "plains",
+        "source": "gazetteer"
+      },
+      "ms": 1
+    },
+    {
+      "name": "forecast",
+      "input": {
+        "lat": 26.91962,
+        "lon": 75.78781,
+        "name": "Jaipur",
+        "region": "plains",
+        "elevation": 431,
+        "workload": "moderate",
+        "raw": "[fixture]"
+      },
+      "output": {
+        "ok": true,
+        "place": {
+          "name": "Jaipur",
+          "lat": 26.91962,
+          "lon": 75.78781,
+          "elevation": 431,
+          "region": "plains"
+        },
+        "workload": "moderate",
+        "dayCount": 4,
+        "hourCount": 96,
+        "days": [
+          {
+            "date": "2024-05-28",
+            "tmax": 45.2,
+            "imdLevel": 1,
+            "peakCat": 5,
+            "peakHour": 11,
+            "peakWbgt": 33.380592894660296,
+            "dangerousHours": [
+              10,
+              11,
+              12,
+              13,
+              14
+            ]
+          },
+          {
+            "date": "2024-05-29",
+            "tmax": 45.9,
+            "imdLevel": 1,
+            "peakCat": 5,
+            "peakHour": 10,
+            "peakWbgt": 34.39753803968982,
+            "dangerousHours": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ]
+          },
+          {
+            "date": "2024-05-30",
+            "tmax": 44.7,
+            "imdLevel": 0,
+            "peakCat": 5,
+            "peakHour": 10,
+            "peakWbgt": 34.5659914483515,
+            "dangerousHours": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ]
+          },
+          {
+            "date": "2024-05-31",
+            "tmax": 44.4,
+            "imdLevel": 0,
+            "peakCat": 5,
+            "peakHour": 10,
+            "peakWbgt": 34.319396468982845,
+            "dangerousHours": [
+              10,
+              11,
+              12,
+              13,
+              14
+            ]
+          }
+        ],
+        "_fc": "[omitted; see forecast._fc retained in-process]"
+      },
+      "ms": 1
+    },
+    {
+      "name": "heat_stress",
+      "input": {
+        "tC": 45.6,
+        "rh": 8,
+        "wind10kmh": 19.5,
+        "ghi": 662,
+        "utcMs": 1716975000000,
+        "lat": 26.91962,
+        "lon": 75.78781,
+        "workload": "moderate"
+      },
+      "output": {
+        "ok": true,
+        "bomMinSwWm2": 600,
+        "wbgt": 32.88842719897488,
+        "wbgtGlobe": 29.271728989401517,
+        "wbgtBom": 32.88842719897488,
+        "wbgtSource": "bom",
+        "category": 5,
+        "strongSun": true,
+        "workRest": {
+          "workMin": 20,
+          "restMin": 40,
+          "noLimit": false,
+          "waterLph": 0.95,
+          "inTable": true
+        },
+        "tw": 20.57261866041113,
+        "hi": 41.88837476881783,
+        "hiOutOfRange": true
+      },
+      "ms": 0
+    },
+    {
+      "name": "imd_status",
+      "input": {
+        "tmax": 45.9,
+        "region": "plains",
+        "priorLevels": [
+          1
+        ]
+      },
+      "output": {
+        "ok": true,
+        "region": "plains",
+        "imd": {
+          "level": 1,
+          "basis": "absolute",
+          "departure": null
+        },
+        "imd2day": 1,
+        "note": "Never override IMD/NDMA/State heat-action-plan alerts. NDMA advises avoiding outdoor work 12:00–15:00 during heat waves."
+      },
+      "ms": 0
+    },
+    {
+      "name": "advise",
+      "input": {
+        "text": "कल दोपहर 3 बजे जयपुर में छत पर काम कर सकते हैं?",
+        "nowIso": "2024-05-28T06:00:00.000Z",
+        "workload": "moderate",
+        "mode": "answer"
+      },
+      "output": {
+        "ok": true,
+        "lang": "hi",
+        "text": "जवाब: जोखिम अधिक – इस घंटे में सिर्फ़ 20 मिनट काम की सीमा है; काम ठंडे समय पर करें।\nJaipur, बुध 29 मई 15:00: हवा 46°C, नमी 8%, वेट-बल्ब 20.6°C, हीट इंडेक्स 42°C (इतनी सूखी हवा में मोटा अनुमान), अनुमानित WBGT 32.9°C (दो अनुमानों में ज़्यादा वाला: BoM सूत्र; धूप/ग्लोब मॉडल 29.1°C) → श्रेणी 5 – अत्यधिक.\nमध्यम काम के लिए: 20 मिनट काम / 40 मिनट छाँव में आराम; हर घंटे लगभग 0.95 लीटर पानी (दिन में 11 लीटर से ज़्यादा नहीं)।\nउसी दिन बेहतर समय: 06:00–08:00, 17:00–19:00 (श्रेणी 1 – सावधानी)।\nIMD लू (हीट वेव) मानदंड पूरा (सामान्य तापमान उपलब्ध नहीं – केवल निरपेक्ष जाँच) [मैदानी]\nलू लगने के लक्षण दिखें तो तुरंत 108/112 पर कॉल करें।"
+      },
+      "ms": 1
+    }
+  ],
+  "checks": {
+    "lang": true,
+    "place": true,
+    "hour": true,
+    "dayOffset": true,
+    "date": true,
+    "workload": true,
+    "has108": true,
+    "hasImd": true,
+    "imdNotOverridden": true,
+    "concreteVerdict": true,
+    "usesForecastNumbers": true,
+    "ok": true
+  },
+  "totalMs": 4
+}

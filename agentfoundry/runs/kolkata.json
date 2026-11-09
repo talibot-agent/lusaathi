@@ -1,0 +1,322 @@
+{
+  "id": "kolkata",
+  "prompt": "Kolkata tomorrow 1 pm, moderate work, humid — safe?",
+  "nowIso": "2024-05-28T06:00:00.000Z",
+  "fixture": "tests/fixtures/kolkata_2024-05-28.json",
+  "toolOrder": [
+    "parse_intent",
+    "geocode",
+    "forecast",
+    "heat_stress",
+    "imd_status",
+    "advise"
+  ],
+  "parsed": {
+    "lang": "en",
+    "place": "Kolkata",
+    "placeSource": "gazetteer",
+    "dayOffset": 1,
+    "hour": 13,
+    "workload": "moderate",
+    "wantsNow": false
+  },
+  "place": {
+    "name": "Kolkata",
+    "lat": 22.57264,
+    "lon": 88.36389,
+    "region": "plains",
+    "elevation": 9
+  },
+  "target": {
+    "date": "2024-05-29",
+    "hour": 13,
+    "workload": "moderate"
+  },
+  "hour": {
+    "date": "2024-05-29",
+    "hour": 13,
+    "tC": 34.7,
+    "rh": 74,
+    "tw": 30.649843657975556,
+    "wbgt": 39.6377682249647,
+    "wbgtGlobe": 32.705487601573715,
+    "wbgtBom": 39.6377682249647,
+    "wbgtSource": "bom",
+    "category": 5,
+    "shortwave": 730,
+    "strongSun": true,
+    "workRest": {
+      "workMin": 20,
+      "restMin": 40,
+      "noLimit": false,
+      "waterLph": 0.95,
+      "inTable": true
+    }
+  },
+  "day": {
+    "date": "2024-05-29",
+    "tmax": 34.9,
+    "imd": {
+      "level": 0,
+      "basis": null,
+      "departure": null
+    },
+    "peakCat": 5,
+    "peakWbgt": 40.001050819454946
+  },
+  "heat_stress": {
+    "ok": true,
+    "bomMinSwWm2": 600,
+    "wbgt": 39.6377682249647,
+    "wbgtGlobe": 32.90301206835426,
+    "wbgtBom": 39.6377682249647,
+    "wbgtSource": "bom",
+    "category": 5,
+    "strongSun": true,
+    "workRest": {
+      "workMin": 20,
+      "restMin": 40,
+      "noLimit": false,
+      "waterLph": 0.95,
+      "inTable": true
+    },
+    "tw": 30.649843657975556,
+    "hi": 51.526910371891034,
+    "hiOutOfRange": false
+  },
+  "imd_status": {
+    "ok": true,
+    "region": "plains",
+    "imd": {
+      "level": 0,
+      "basis": null,
+      "departure": null
+    },
+    "imd2day": 0,
+    "note": "Never override IMD/NDMA/State heat-action-plan alerts. NDMA advises avoiding outdoor work 12:00–15:00 during heat waves."
+  },
+  "answer": "Answer: High risk – the guideline allows only 20 min of work in this hour; move the work to a cooler time.\nKolkata, Wed 29 May 13:00: air 35°C, humidity 74%, wet-bulb 30.6°C, heat index 52°C, estimated WBGT 39.6°C (the higher of two estimates, from the BoM formula; sun/globe model 32.7°C) → Cat 5 – Extreme.\nFor moderate work: 20 min work / 40 min rest in shade; drink about 0.95 L water per hour (not more than ~1.4 L/hour or ~11 L/day).\nBetter time that day: 06:00–07:00, 17:00–19:00 (Cat 3 – High).\nNDMA heat-wave guidance: avoid going out in the sun 12:00–15:00 and schedule strenuous jobs to cooler times of the day.\nNo IMD heat-wave criterion met [plains]\nHeat-stroke signs → call 108/112 immediately.",
+  "advisory": "🌡️ LuSaathi heat advisory: Kolkata\n\n📅 Tue 28 May: max 36°C, peak WBGT 39.4°C (Cat 5 – Extreme; BoM formula)\n⏱️ Hours needing work/rest limits (moderate work): 07:00–19:00\n➡️ At the hottest hour: 20 min work / 40 min rest in shade, ~0.95 L water/hour\n\n📅 Wed 29 May: max 35°C, peak WBGT 40.0°C (Cat 5 – Extreme; BoM formula)\n⏱️ Hours needing work/rest limits (moderate work): 06:00–19:00\n➡️ At the hottest hour: 20 min work / 40 min rest in shade, ~0.95 L water/hour\n\n📅 Thu 30 May: max 35°C, peak WBGT 38.7°C (Cat 5 – Extreme; BoM formula)\n⏱️ Hours needing work/rest limits (moderate work): 06:00–19:00\n➡️ At the hottest hour: 20 min work / 40 min rest in shade, ~0.95 L water/hour\n\n✅ Provide cool water, shade and ORS; schedule heavy jobs early/late; acclimatise new workers over 7–14 days. Heat-stroke signs → call 108/112.\n(Model estimate; official IMD/State alerts take priority)",
+  "steps": [
+    {
+      "name": "parse_intent",
+      "input": {
+        "text": "Kolkata tomorrow 1 pm, moderate work, humid — safe?",
+        "nowIso": "2024-05-28T06:00:00.000Z"
+      },
+      "output": {
+        "lang": "en",
+        "place": "Kolkata",
+        "placeSource": "gazetteer",
+        "dayOffset": 1,
+        "hour": 13,
+        "workload": "moderate",
+        "wantsNow": false
+      },
+      "ms": 0
+    },
+    {
+      "name": "geocode",
+      "input": {
+        "place": "Kolkata",
+        "lang": "en"
+      },
+      "output": {
+        "ok": true,
+        "name": "Kolkata",
+        "lat": 22.57264,
+        "lon": 88.36389,
+        "elevation": 9,
+        "region": "plains",
+        "source": "gazetteer"
+      },
+      "ms": 1
+    },
+    {
+      "name": "forecast",
+      "input": {
+        "lat": 22.57264,
+        "lon": 88.36389,
+        "name": "Kolkata",
+        "region": "plains",
+        "elevation": 9,
+        "workload": "moderate",
+        "raw": "[fixture]"
+      },
+      "output": {
+        "ok": true,
+        "place": {
+          "name": "Kolkata",
+          "lat": 22.57264,
+          "lon": 88.36389,
+          "elevation": 9,
+          "region": "plains"
+        },
+        "workload": "moderate",
+        "dayCount": 4,
+        "hourCount": 96,
+        "days": [
+          {
+            "date": "2024-05-28",
+            "tmax": 35.9,
+            "imdLevel": 0,
+            "peakCat": 5,
+            "peakHour": 14,
+            "peakWbgt": 39.41528614991262,
+            "dangerousHours": [
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16
+            ]
+          },
+          {
+            "date": "2024-05-29",
+            "tmax": 34.9,
+            "imdLevel": 0,
+            "peakCat": 5,
+            "peakHour": 11,
+            "peakWbgt": 40.001050819454946,
+            "dangerousHours": [
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16
+            ]
+          },
+          {
+            "date": "2024-05-30",
+            "tmax": 34.5,
+            "imdLevel": 0,
+            "peakCat": 5,
+            "peakHour": 11,
+            "peakWbgt": 38.70550651160039,
+            "dangerousHours": [
+              9,
+              10,
+              11,
+              12,
+              13,
+              14
+            ]
+          },
+          {
+            "date": "2024-05-31",
+            "tmax": 34,
+            "imdLevel": 0,
+            "peakCat": 5,
+            "peakHour": 10,
+            "peakWbgt": 38.21412713427189,
+            "dangerousHours": [
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ]
+          }
+        ],
+        "_fc": "[omitted; see forecast._fc retained in-process]"
+      },
+      "ms": 1
+    },
+    {
+      "name": "heat_stress",
+      "input": {
+        "tC": 34.7,
+        "rh": 74,
+        "wind10kmh": 29.2,
+        "ghi": 730,
+        "utcMs": 1716967800000,
+        "lat": 22.57264,
+        "lon": 88.36389,
+        "workload": "moderate"
+      },
+      "output": {
+        "ok": true,
+        "bomMinSwWm2": 600,
+        "wbgt": 39.6377682249647,
+        "wbgtGlobe": 32.90301206835426,
+        "wbgtBom": 39.6377682249647,
+        "wbgtSource": "bom",
+        "category": 5,
+        "strongSun": true,
+        "workRest": {
+          "workMin": 20,
+          "restMin": 40,
+          "noLimit": false,
+          "waterLph": 0.95,
+          "inTable": true
+        },
+        "tw": 30.649843657975556,
+        "hi": 51.526910371891034,
+        "hiOutOfRange": false
+      },
+      "ms": 0
+    },
+    {
+      "name": "imd_status",
+      "input": {
+        "tmax": 34.9,
+        "region": "plains",
+        "priorLevels": [
+          0
+        ]
+      },
+      "output": {
+        "ok": true,
+        "region": "plains",
+        "imd": {
+          "level": 0,
+          "basis": null,
+          "departure": null
+        },
+        "imd2day": 0,
+        "note": "Never override IMD/NDMA/State heat-action-plan alerts. NDMA advises avoiding outdoor work 12:00–15:00 during heat waves."
+      },
+      "ms": 0
+    },
+    {
+      "name": "advise",
+      "input": {
+        "text": "Kolkata tomorrow 1 pm, moderate work, humid — safe?",
+        "nowIso": "2024-05-28T06:00:00.000Z",
+        "workload": "moderate",
+        "mode": "answer"
+      },
+      "output": {
+        "ok": true,
+        "lang": "en",
+        "text": "Answer: High risk – the guideline allows only 20 min of work in this hour; move the work to a cooler time.\nKolkata, Wed 29 May 13:00: air 35°C, humidity 74%, wet-bulb 30.6°C, heat index 52°C, estimated WBGT 39.6°C (the higher of two estimates, from the BoM formula; sun/globe model 32.7°C) → Cat 5 – Extreme.\nFor moderate work: 20 min work / 40 min rest in shade; drink about 0.95 L water per hour (not more than ~1.4 L/hour or ~11 L/day).\nBetter time that day: 06:00–07:00, 17:00–19:00 (Cat 3 – High).\nNDMA heat-wave guidance: avoid going out in the sun 12:00–15:00 and schedule strenuous jobs to cooler times of the day.\nNo IMD heat-wave criterion met [plains]\nHeat-stroke signs → call 108/112 immediately."
+      },
+      "ms": 0
+    }
+  ],
+  "checks": {
+    "lang": true,
+    "place": true,
+    "hour": true,
+    "dayOffset": true,
+    "date": true,
+    "workload": true,
+    "has108": true,
+    "hasImd": true,
+    "imdNotOverridden": true,
+    "concreteVerdict": true,
+    "usesForecastNumbers": true,
+    "ok": true
+  },
+  "totalMs": 2
+}

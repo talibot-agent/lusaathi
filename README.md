@@ -5,9 +5,11 @@
 
 Entry for **Code for a Billion 2026** (Code for India), Climate track — requirements: [docs/CFAB_CHECKLIST.md](docs/CFAB_CHECKLIST.md).
 
+**Built with AgentFoundry** — how AF was used (honest scope, IDE limits, commits): [docs/AGENTFOUNDRY.md](docs/AGENTFOUNDRY.md).
+
 LuSaathi turns a free weather forecast into **hour-by-hour work/rest and water schedules** for construction
 workers, street vendors, farm labourers and gig riders — and into a **WhatsApp advisory** that a site supervisor,
-contractor, ASHA worker or panchayat can forward in one tap. English and हिन्दी. Runs entirely in the browser
+contractor, ASHA worker or panchayat can forward in one tap. English, हिन्दी and मराठी. Runs entirely in the browser
 (static site, ~30 kB gzipped, no login, no API key, no server).
 
 > "Can I work on the roof at 2pm tomorrow in Nagpur?" · "कल दोपहर जयपुर में काम करना सुरक्षित है?"
@@ -41,7 +43,7 @@ LuSaathi fills exactly that gap.
 4. **IMD heat-wave criteria** — plains / coastal / hills thresholds and departure from an ERA5 1991–2020 normal
    (auto-classified region, user can override).
 5. **Ask in your language** — a deterministic, rule-based agent extracts *place, day, hour and type of work* from
-   English, Hindi or Hinglish questions and answers with the forecast numbers in the same language. No paid LLM; nothing
+   English, Hindi, Hinglish or Marathi questions and answers with the forecast numbers in the same language. No paid LLM; nothing
    leaves the phone except the weather API calls.
 6. **WhatsApp advisory** — a 3-day advisory (peak WBGT, hours needing breaks, work/rest at the hottest hour, water,
    IMD status, 108/112 reminder) shared via `wa.me`.

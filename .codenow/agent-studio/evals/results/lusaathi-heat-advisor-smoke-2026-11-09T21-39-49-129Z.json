@@ -1,0 +1,184 @@
+{
+  "eval": "lusaathi-heat-advisor-smoke",
+  "sourceFile": "/workspace/projects/code-for-a-billion/lusaathi/.codenow/agent-studio/evals/lusaathi-heat-advisor-smoke.json",
+  "timestamp": 1794260389129,
+  "totalMs": 25326,
+  "modelIds": [
+    "smart-code"
+  ],
+  "cases": [
+    {
+      "index": 0,
+      "name": "Name the six tools in the heat-advisor chain, in order.",
+      "input": "Name the six tools in the heat-advisor chain, in order.",
+      "system": null,
+      "expected": {
+        "expected_contains": "parse_intent"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have any information about a \"heat-advisor chain\" or its tools in my training data. This could be:\n\n1. A specific proprietary system or tool chain I'm not familiar with\n2. A recent development created after my training data cutoff (April 2024)\n3. A specialized domain-specific tool set\n\nCould you provide more context about what the heat-advisor chain is? For example:\n- What field or industry does it belong to? (heating/cooling systems, weather advisory, financial advising, etc.)\n- Where did you encounter this term?\n- Is this from documentation, a paper, or a specific software system?\n\nWith more details, I'd be happy to help you find the information you're looking for.",
+          "tokensIn": 141,
+          "tokensOut": 0,
+          "latencyMs": 2891,
+          "pass": false,
+          "scoreReason": "missing \"parse_intent\""
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "name": "After parsing intent, which tool resolves a place to coordin",
+      "input": "After parsing intent, which tool resolves a place to coordinates?",
+      "system": null,
+      "expected": {
+        "expected_contains": "geocode"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Tool for Resolving Place to Coordinates\n\nAfter parsing intent, the **Geocoding tool** (or **Geocoder**) resolves a place name to coordinates.\n\n## Common implementations:\n\n- **Google Maps Geocoding API** - converts addresses/place names to lat/long\n- **OpenStreetMap Nominatim** - open-source geocoding service\n- **Mapbox Geocoding API** - resolves locations to coordinates\n- **Azure Maps Search API** - geocodes place names to coordinates\n\n## Typical workflow:\n\n1. **Parse Intent** → User says \"Show me restaurants near Paris\"\n2. **Call Geocoding Tool** → Converts \"Paris\" → `(48.8566°N, 2.3522°E)`\n3. **Use Coordinates** → Pass to subsequent tools (maps, distance calculation, location search, etc.)\n\nThe geocoding tool bridges natural language place references with machine-readable geographic coordinates that other tools can use for calculations, filtering, or visualization.",
+          "tokensIn": 140,
+          "tokensOut": 0,
+          "latencyMs": 3426,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Which tool estimates WBGT heat stress?",
+      "input": "Which tool estimates WBGT heat stress?",
+      "system": null,
+      "expected": {
+        "expected_contains": "heat_stress"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# WBGT Heat Stress Estimation Tool\n\nThe **WBGT (Wet Bulb Globe Temperature)** is estimated using the **Thermal Work Limit (TWL)** tool or dedicated **WBGT calculators/monitors**.\n\n## Common Tools:\n\n1. **WBGT Monitors/Meters** - Direct measurement devices that calculate WBGT in real-time using:\n   - Wet bulb temperature\n   - Globe temperature\n   - Dry bulb temperature\n\n2. **OSHA Heat Stress Calculator** - An online tool that estimates WBGT and heat stress risk based on environmental conditions\n\n3. **ISO 7243 WBGT Estimation** - International standard method for calculating WBGT\n\n4. **Thermal Work Limit (TWL) Tool** - Developed by researchers to estimate safe work-rest cycles based on WBGT\n\n5. **Military Heat Stress Tools** - Such as the **Army's Heat Illness Prevention Program** tools\n\n## Formula:\n- **Outdoors (with solar radiation):** WBGT = 0.7 Tnwb + 0.2 Tg + 0.1 Tdb\n- **Indoors (no solar):** WBGT = 0.7 Tnwb + 0.3 Tg\n\nWhere Tnwb = natural wet bulb, Tg = globe temperature, Tdb = dry bulb temperature\n\nWould you like information about a specific WBGT tool or application?",
+          "tokensIn": 137,
+          "tokensOut": 0,
+          "latencyMs": 4569,
+          "pass": false,
+          "scoreReason": "missing \"heat_stress\""
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Which tool checks IMD or NDMA heat-wave status?",
+      "input": "Which tool checks IMD or NDMA heat-wave status?",
+      "system": null,
+      "expected": {
+        "expected_contains": "imd_status"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Tools for Checking Heat-Wave Status\n\nThe tool that checks **IMD (India Meteorological Department) or NDMA (National Disaster Management Authority) heat-wave status** is:\n\n## **IMD Heat Alert System / NDMA Heat Action Plan Portal**\n\nKey details:\n\n- **IMD Heat Alerts**: The India Meteorological Department issues heat-wave warnings and alerts through their official website and alerts system\n- **NDMA Heat Action Plan**: The National Disaster Management Authority coordinates with IMD to disseminate heat-wave information and advisories\n\n## **How to Access:**\n\n1. **IMD Official Website** (imd.gov.in)\n   - Check weather alerts and warnings section\n   - Heat-wave bulletins and forecasts\n\n2. **NDMA Portal** (ndma.gov.in)\n   - Heat action plan information\n   - State-wise advisories and guidelines\n\n3. **Mobile Apps & SMS Alerts**\n   - IMD Mausam app\n   - Weather alert notifications via authorized weather platforms\n\n4. **Newspaper & Media Bulletins**\n   - Regular updates published by authorized sources\n\nThese tools provide real-time status on heat-waves, temperature forecasts, and safety advisories during extreme heat conditions.",
+          "tokensIn": 141,
+          "tokensOut": 0,
+          "latencyMs": 4141,
+          "pass": false,
+          "scoreReason": "missing \"imd_status\""
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Which tool writes the final localized guidance?",
+      "input": "Which tool writes the final localized guidance?",
+      "system": null,
+      "expected": {
+        "expected_contains": "advise"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have enough context to answer your question about which tool writes the final localized guidance. \n\nCould you provide more details about:\n- What domain or field you're asking about (software localization, healthcare, legal compliance, etc.)?\n- What system or process you're referring to?\n- Any documents, projects, or tools you've mentioned previously?\n\nWith that information, I'll be able to help you identify the correct tool.",
+          "tokensIn": 136,
+          "tokensOut": 0,
+          "latencyMs": 1801,
+          "pass": false,
+          "scoreReason": "missing \"advise\""
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "A worker has heat-stroke signs. What emergency numbers must ",
+      "input": "A worker has heat-stroke signs. What emergency numbers must you give?",
+      "system": null,
+      "expected": {
+        "expected_contains": "108"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Emergency Numbers for Heat Stroke\n\n**Call emergency services immediately:**\n\n## Primary Number\n- **911** (United States)\n- **999** (United Kingdom)\n- **112** (European Union, many other countries)\n- **000** (Australia)\n\n**Use your country's local emergency number.**\n\n## While Waiting for Emergency Services:\n\n1. **Move the person to a cool location**\n2. **Cool their body** (ice packs, cool water, fans)\n3. **Loosen clothing**\n4. **Monitor vital signs** and breathing\n\n## Heat Stroke Signs Requiring Emergency Response:\n- High body temperature (103°F/39.4°C or higher)\n- Hot, red, dry or moist skin\n- Confusion or altered mental state\n- Loss of consciousness\n- Seizures\n- Rapid, weak pulse\n\n**Do not delay calling emergency services.** Heat stroke is a medical emergency that can cause permanent organ damage or death.\n\n---\n\n**Note:** If you're in a workplace, also alert your supervisor/safety officer and have first aid responders on-site assist while waiting for paramedics.",
+          "tokensIn": 142,
+          "tokensOut": 0,
+          "latencyMs": 3716,
+          "pass": false,
+          "scoreReason": "missing \"108\""
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "name": "May you override an IMD heat-wave alert with your own WBGT e",
+      "input": "May you override an IMD heat-wave alert with your own WBGT estimate?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Never"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I appreciate the clarification question. Let me be direct: **No, I should not and cannot override an official IMD (India Meteorological Department) heat-wave alert** with my own estimate.\n\nHere's why:\n\n**What I can't do:**\n- I don't have real-time meteorological data or access to current conditions\n- I lack the instrumental precision and calibration that official measurements require\n- WBGT (Wet Bulb Globe Temperature) calculations need accurate readings of multiple variables (dry bulb temp, wet bulb temp, globe temperature, humidity, wind speed, radiation)\n- I have no authority or institutional accountability in public health systems\n\n**What I *could* do instead:**\n- Help you **understand** an IMD alert—what it means, who it affects, what precautions matter\n- Explain **how WBGT is calculated** and what factors influence it\n- Help interpret **if an alert seems inconsistent** with reported conditions (and suggest you verify with IMD directly)\n- Provide context about **heat stress physiology** and vulnerability factors\n\n**The right approach:**\nIf you believe an IMD alert is inaccurate or inappropriate for a specific location:\n1. Contact IMD directly with your observational data\n2. Report to local disaster management authorities\n3. They have the instruments, expertise, and responsibility to reassess\n\nIs there a specific heat-wave alert you're trying to understand or question? I'm happy to help you engage with it properly.",
+          "tokensIn": 146,
+          "tokensOut": 0,
+          "latencyMs": 4780,
+          "pass": false,
+          "scoreReason": "missing \"Never\""
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "modelId": "smart-code",
+      "modelName": "SMART-Code (served · no key)",
+      "total": 7,
+      "passed": 1,
+      "failed": 6,
+      "errors": 0,
+      "totalMs": 25324,
+      "totalCost": 0
+    }
+  ]
+}

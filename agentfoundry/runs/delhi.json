@@ -1,0 +1,311 @@
+{
+  "id": "delhi",
+  "prompt": "Delhi, today 3 pm, heavy construction work — is it safe?",
+  "nowIso": "2024-05-28T06:00:00.000Z",
+  "fixture": "tests/fixtures/delhi_2024-05-28.json",
+  "toolOrder": [
+    "parse_intent",
+    "geocode",
+    "forecast",
+    "heat_stress",
+    "imd_status",
+    "advise"
+  ],
+  "parsed": {
+    "lang": "en",
+    "place": "Delhi",
+    "placeSource": "gazetteer",
+    "dayOffset": 0,
+    "hour": 15,
+    "workload": "hard",
+    "wantsNow": false
+  },
+  "place": {
+    "name": "Delhi",
+    "lat": 28.65195,
+    "lon": 77.23149,
+    "region": "plains",
+    "elevation": 227
+  },
+  "target": {
+    "date": "2024-05-28",
+    "hour": 15,
+    "workload": "hard"
+  },
+  "hour": {
+    "date": "2024-05-28",
+    "hour": 15,
+    "tC": 45.4,
+    "rh": 8,
+    "tw": 20.462442370344515,
+    "wbgt": 32.74352391047248,
+    "wbgtGlobe": 28.96430503276919,
+    "wbgtBom": 32.74352391047248,
+    "wbgtSource": "bom",
+    "category": 5,
+    "shortwave": 670,
+    "strongSun": true,
+    "workRest": {
+      "workMin": 10,
+      "restMin": 50,
+      "noLimit": false,
+      "waterLph": 0.95,
+      "inTable": true
+    }
+  },
+  "day": {
+    "date": "2024-05-28",
+    "tmax": 45.8,
+    "imd": {
+      "level": 1,
+      "basis": "absolute",
+      "departure": null
+    },
+    "peakCat": 5,
+    "peakWbgt": 32.96098334600653
+  },
+  "heat_stress": {
+    "ok": true,
+    "bomMinSwWm2": 600,
+    "wbgt": 32.74352391047248,
+    "wbgtGlobe": 29.17503616387693,
+    "wbgtBom": 32.74352391047248,
+    "wbgtSource": "bom",
+    "category": 5,
+    "strongSun": true,
+    "workRest": {
+      "workMin": 10,
+      "restMin": 50,
+      "noLimit": false,
+      "waterLph": 0.95,
+      "inTable": true
+    },
+    "tw": 20.462442370344515,
+    "hi": 41.69674718401779,
+    "hiOutOfRange": true
+  },
+  "imd_status": {
+    "ok": true,
+    "region": "plains",
+    "imd": {
+      "level": 1,
+      "basis": "absolute",
+      "departure": null
+    },
+    "imd2day": 0,
+    "note": "Never override IMD/NDMA/State heat-action-plan alerts. NDMA advises avoiding outdoor work 12:00–15:00 during heat waves."
+  },
+  "answer": "Answer: High risk – the guideline allows only 10 min of work in this hour; move the work to a cooler time.\nDelhi, Tue 28 May 15:00: air 45°C, humidity 8%, wet-bulb 20.5°C, heat index 42°C (rough: formula not valid in air this dry), estimated WBGT 32.7°C (the higher of two estimates, from the BoM formula; sun/globe model 29.0°C) → Cat 5 – Extreme.\nFor heavy work: 10 min work / 50 min rest in shade; drink about 0.95 L water per hour (not more than ~1.4 L/hour or ~11 L/day).\nBetter time that day: 06:00–09:00 (Low – below Cat 1).\nIMD heat-wave criterion met (normal unavailable – absolute test only) [plains]\nHeat-stroke signs → call 108/112 immediately.",
+  "advisory": "🌡️ LuSaathi heat advisory: Delhi\n\n📅 Tue 28 May: max 46°C, peak WBGT 33.0°C (Cat 5 – Extreme; BoM formula)\n⚠️ IMD heat-wave criterion met\n⏱️ Hours needing work/rest limits (heavy work): 09:00–19:00\n➡️ At the hottest hour: 10 min work / 50 min rest in shade, ~0.95 L water/hour\n\n📅 Wed 29 May: max 46°C, peak WBGT 35.6°C (Cat 5 – Extreme; BoM formula)\n⚠️ IMD heat-wave criterion met\n⏱️ Hours needing work/rest limits (heavy work): 06:00–19:00\n➡️ At the hottest hour: 10 min work / 50 min rest in shade, ~0.95 L water/hour\n\n📅 Thu 30 May: max 46°C, peak WBGT 34.3°C (Cat 5 – Extreme; BoM formula)\n⚠️ IMD heat-wave criterion met\n⏱️ Hours needing work/rest limits (heavy work): 07:00–19:00\n➡️ At the hottest hour: 10 min work / 50 min rest in shade, ~0.95 L water/hour\n\n✅ Provide cool water, shade and ORS; schedule heavy jobs early/late; acclimatise new workers over 7–14 days. Heat-stroke signs → call 108/112.\n(Model estimate; official IMD/State alerts take priority)",
+  "steps": [
+    {
+      "name": "parse_intent",
+      "input": {
+        "text": "Delhi, today 3 pm, heavy construction work — is it safe?",
+        "nowIso": "2024-05-28T06:00:00.000Z"
+      },
+      "output": {
+        "lang": "en",
+        "place": "Delhi",
+        "placeSource": "gazetteer",
+        "dayOffset": 0,
+        "hour": 15,
+        "workload": "hard",
+        "wantsNow": false
+      },
+      "ms": 8
+    },
+    {
+      "name": "geocode",
+      "input": {
+        "place": "Delhi",
+        "lang": "en"
+      },
+      "output": {
+        "ok": true,
+        "name": "Delhi",
+        "lat": 28.65195,
+        "lon": 77.23149,
+        "elevation": 227,
+        "region": "plains",
+        "source": "gazetteer"
+      },
+      "ms": 2
+    },
+    {
+      "name": "forecast",
+      "input": {
+        "lat": 28.65195,
+        "lon": 77.23149,
+        "name": "Delhi",
+        "region": "plains",
+        "elevation": 227,
+        "workload": "hard",
+        "raw": "[fixture]"
+      },
+      "output": {
+        "ok": true,
+        "place": {
+          "name": "Delhi",
+          "lat": 28.65195,
+          "lon": 77.23149,
+          "elevation": 227,
+          "region": "plains"
+        },
+        "workload": "hard",
+        "dayCount": 4,
+        "hourCount": 96,
+        "days": [
+          {
+            "date": "2024-05-28",
+            "tmax": 45.8,
+            "imdLevel": 1,
+            "peakCat": 5,
+            "peakHour": 14,
+            "peakWbgt": 32.96098334600653,
+            "dangerousHours": [
+              11,
+              12,
+              13,
+              14,
+              15
+            ]
+          },
+          {
+            "date": "2024-05-29",
+            "tmax": 45.6,
+            "imdLevel": 1,
+            "peakCat": 5,
+            "peakHour": 12,
+            "peakWbgt": 35.56814443507412,
+            "dangerousHours": [
+              10,
+              11,
+              12,
+              13,
+              14
+            ]
+          },
+          {
+            "date": "2024-05-30",
+            "tmax": 46.1,
+            "imdLevel": 1,
+            "peakCat": 5,
+            "peakHour": 10,
+            "peakWbgt": 34.3464491588567,
+            "dangerousHours": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ]
+          },
+          {
+            "date": "2024-05-31",
+            "tmax": 45.9,
+            "imdLevel": 1,
+            "peakCat": 5,
+            "peakHour": 12,
+            "peakWbgt": 33.59807344262812,
+            "dangerousHours": [
+              10,
+              11,
+              12,
+              13,
+              14,
+              15
+            ]
+          }
+        ],
+        "_fc": "[omitted; see forecast._fc retained in-process]"
+      },
+      "ms": 2
+    },
+    {
+      "name": "heat_stress",
+      "input": {
+        "tC": 45.4,
+        "rh": 8,
+        "wind10kmh": 17.6,
+        "ghi": 670,
+        "utcMs": 1716888600000,
+        "lat": 28.65195,
+        "lon": 77.23149,
+        "workload": "hard"
+      },
+      "output": {
+        "ok": true,
+        "bomMinSwWm2": 600,
+        "wbgt": 32.74352391047248,
+        "wbgtGlobe": 29.17503616387693,
+        "wbgtBom": 32.74352391047248,
+        "wbgtSource": "bom",
+        "category": 5,
+        "strongSun": true,
+        "workRest": {
+          "workMin": 10,
+          "restMin": 50,
+          "noLimit": false,
+          "waterLph": 0.95,
+          "inTable": true
+        },
+        "tw": 20.462442370344515,
+        "hi": 41.69674718401779,
+        "hiOutOfRange": true
+      },
+      "ms": 0
+    },
+    {
+      "name": "imd_status",
+      "input": {
+        "tmax": 45.8,
+        "region": "plains",
+        "priorLevels": []
+      },
+      "output": {
+        "ok": true,
+        "region": "plains",
+        "imd": {
+          "level": 1,
+          "basis": "absolute",
+          "departure": null
+        },
+        "imd2day": 0,
+        "note": "Never override IMD/NDMA/State heat-action-plan alerts. NDMA advises avoiding outdoor work 12:00–15:00 during heat waves."
+      },
+      "ms": 0
+    },
+    {
+      "name": "advise",
+      "input": {
+        "text": "Delhi, today 3 pm, heavy construction work — is it safe?",
+        "nowIso": "2024-05-28T06:00:00.000Z",
+        "workload": "hard",
+        "mode": "answer"
+      },
+      "output": {
+        "ok": true,
+        "lang": "en",
+        "text": "Answer: High risk – the guideline allows only 10 min of work in this hour; move the work to a cooler time.\nDelhi, Tue 28 May 15:00: air 45°C, humidity 8%, wet-bulb 20.5°C, heat index 42°C (rough: formula not valid in air this dry), estimated WBGT 32.7°C (the higher of two estimates, from the BoM formula; sun/globe model 29.0°C) → Cat 5 – Extreme.\nFor heavy work: 10 min work / 50 min rest in shade; drink about 0.95 L water per hour (not more than ~1.4 L/hour or ~11 L/day).\nBetter time that day: 06:00–09:00 (Low – below Cat 1).\nIMD heat-wave criterion met (normal unavailable – absolute test only) [plains]\nHeat-stroke signs → call 108/112 immediately."
+      },
+      "ms": 3
+    }
+  ],
+  "checks": {
+    "lang": true,
+    "place": true,
+    "hour": true,
+    "dayOffset": true,
+    "date": true,
+    "workload": true,
+    "has108": true,
+    "hasImd": true,
+    "imdNotOverridden": true,
+    "concreteVerdict": true,
+    "usesForecastNumbers": true,
+    "ok": true
+  },
+  "totalMs": 15
+}

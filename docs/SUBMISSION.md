@@ -1,7 +1,6 @@
 # Code for a Billion 2026 — submission fields (paste-ready)
 
-**Status: DRAFT — do not file** until the AgentFoundry paragraph in *What you built* is real and filled in and the
-AF checkbox can be ticked honestly. Requirements and sources: [`CFAB_CHECKLIST.md`](CFAB_CHECKLIST.md).
+**Status: READY for Tali to file** — AgentFoundry paragraph filled; AF checkbox can be ticked honestly (see docs/AGENTFOUNDRY.md). Do not file until Tali reviews. Requirements and sources: [`CFAB_CHECKLIST.md`](CFAB_CHECKLIST.md).
 
 Form: https://github.com/karlmehta/code-for-a-billion/issues/new?template=submission.yml
 (file through the **web form**, signed in as `talibot-agent`, so the `submission` label is applied).
@@ -27,12 +26,12 @@ Mykel Nelson (@talibot-agent) — solo; built with AI agent assistance (disclose
 
 ### Problem statement
 ```
-Up to 380 million Indians, about 75% of the workforce, do heat-exposed work: construction, street vending, farm labour, delivery. In the 2024 season the Health Ministry confirmed 110 heat-stroke deaths and 40,272 heat-stroke cases, and heat cost India 181 billion potential labour hours in 2023. IMD warns on air temperature, but what injures a worker is heat stress (temperature + humidity + sun + wind + workload), and NDMA guidance ("increase rest breaks", "schedule strenuous jobs to cooler times") never says which hours or how long. Workers, small contractors, site supervisors and ASHA workers have no WBGT meter and no practical work/rest rule in their own language. LuSaathi gives them an hour-by-hour, place-specific work/rest and water schedule, free, on any phone, in English or Hindi.
+Up to 380 million Indians, about 75% of the workforce, do heat-exposed work: construction, street vending, farm labour, delivery. In the 2024 season the Health Ministry confirmed 110 heat-stroke deaths and 40,272 heat-stroke cases, and heat cost India 181 billion potential labour hours in 2023. IMD warns on air temperature, but what injures a worker is heat stress (temperature + humidity + sun + wind + workload), and NDMA guidance ("increase rest breaks", "schedule strenuous jobs to cooler times") never says which hours or how long. Workers, small contractors, site supervisors and ASHA workers have no WBGT meter and no practical work/rest rule in their own language. LuSaathi gives them an hour-by-hour, place-specific work/rest and water schedule, free, on any phone, in English, Hindi or Marathi.
 ```
 
 ### What you built
 ```
-**Summary.** LuSaathi is a free, open-source (MIT) heat-safety agent that turns a free weather forecast into hour-by-hour work/rest and water schedules for any place in India, answers questions in English, Hindi or Hinglish, and produces a WhatsApp advisory a supervisor, contractor, ASHA worker or panchayat can forward in one tap. Live: https://talibot-agent.github.io/lusaathi/
+**Summary.** LuSaathi is a free, open-source (MIT) heat-safety agent that turns a free weather forecast into hour-by-hour work/rest and water schedules for any place in India, answers questions in English, Hindi, Hinglish or Marathi, and produces a WhatsApp advisory a supervisor, contractor, ASHA worker or panchayat can forward in one tap. Live: https://talibot-agent.github.io/lusaathi/
 
 **Key features**
 - Any Indian place, typed in English or Devanagari (e.g. "जयपुर").
@@ -46,9 +45,9 @@ Up to 380 million Indians, about 75% of the workforce, do heat-exposed work: con
 
 **The 2024 Jaipur replay at 46 °C comes out as Category 5.** On 29 May 2024 at 14:00 the archived forecast was 45.9 °C with only 7 % humidity, so the Stull (2011) wet-bulb is just 20.1 °C and the sun/globe WBGT model gives 29.0 °C (Category 2), while the BoM approximation gives 32.7 °C. The forecast shows strong sun (786 W/m²), so LuSaathi uses the higher of the two: the answer is "High risk": Category 5, 20 min work / 40 min rest for moderate work, with the BoM formula named as the source. At 06:00 the sun is up but gives only 31 W/m², so the app uses the sun/globe model: Category 1, no work limit. The NWS heat index (41.7 °C) is outside the range that formula is defined for at this humidity, so the app marks it with * and does not use it. Details: docs/METHODS.md §3a–3b.
 
-**Tech.** Static HTML/CSS + vanilla ES modules on GitHub Pages; Open-Meteo geocoding, forecast, ERA5 archive and historical-forecast APIs (CC BY 4.0, called from the browser). The agent is deterministic and rule-based (no paid LLM; nothing leaves the phone except the weather API calls), so every answer is explainable and traceable to a cited formula in docs/METHODS.md. The same math is implemented in Python (python/lusaathi_core) and a cross-check test asserts JS == Python. 58 automated tests (28 pytest + 30 node:test); GitHub Actions runs both suites before every Pages deploy. Reproducible 2024 backtest in validation/ → VALIDATION.md.
+**Tech.** Static HTML/CSS + vanilla ES modules on GitHub Pages; Open-Meteo geocoding, forecast, ERA5 archive and historical-forecast APIs (CC BY 4.0, called from the browser). The agent is deterministic and rule-based (no paid LLM; nothing leaves the phone except the weather API calls), so every answer is explainable and traceable to a cited formula in docs/METHODS.md. The same math is implemented in Python (python/lusaathi_core) and a cross-check test asserts JS == Python. 82 automated tests (28 pytest + 54 node:test); GitHub Actions runs both suites before every Pages deploy. Reproducible 2024 backtest in validation/ → VALIDATION.md.
 
-**How we used AgentFoundry (AF).** <<FILL IN ONLY AFTER IT HAPPENS — dated, specific, checkable; see docs/AGENTFOUNDRY.md. Must state plainly that the first version (9 Nov 2026) was built outside AF with an AI coding agent, and what was then built in AF.>>
+**How we used AgentFoundry (AF).** LuSaathi v1 (through 9 Nov 2026, method freeze commit `328ed36`) was built *outside* AgentFoundry by an AI coding agent under the author's direction. We then opened the repo in the AF desktop IDE (codenow 0.1.80, free plan, account talibot@mail.grokbot.com) and did real build work inside it: (1) SMART-Code drafted Marathi (`mr`) i18n — hand-finished after the IDE's 10-round tool cap (commit `1162059`); (2) SMART-Code reviewed every Hindi string — 4 accepted, 3 modified, 8 rejected after line-by-line verification (`3a5c011`); (3) Agent Studio built a heat-advisor agent with the six-tool chain parse_intent → geocode → forecast → heat_stress → imd_status → advise and four safety guardrails; paid Anthropic SDK kit removed; tools wired as `.mjs` wrappers (`ab1de4b`); (4) a 40-case parser Evals suite (EN/HI/Hinglish/Marathi) — CLI 40/40 via the real tool (`6e7b45a`); in-IDE Evals routed to the LLM and scored 22/40; (5) IDE Runs/Trace could not exercise tools (empty Runs list; Trace = SMART-Code with no tool calls), so we committed an offline replay harness (`npm run replay`) with step traces and a comparison to that LLM baseline. Full dated evidence: docs/AGENTFOUNDRY.md.
 
 **AI authorship.** LuSaathi's code, docs and backtest were written by an AI coding agent working under the author's direction; the author reviewed it, and every number comes from the scripts in the repo or the cited sources. This submission text was also drafted with AI assistance.
 
@@ -105,6 +104,6 @@ talibot@mail.grokbot.com
 ```
 
 ### Confirmations
-- [ ] Built using AgentFoundry (AF), the official IDE — **tick only when docs/AGENTFOUNDRY.md documents real AF work**
+- [x] Built using AgentFoundry (AF), the official IDE — documented in docs/AGENTFOUNDRY.md (v1 outside AF; Marathi/Hindi review/Studio/Evals/Replay inside AF)
 - [x] Our repository is public and includes a README with setup steps
 - [x] The demo link works and is accessible to judges

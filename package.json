@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "test": "node --test tests/js/*.test.mjs tests/js/*.test.js",
-    "evals": "node scripts/run-parser-evals.mjs"
+    "evals": "node scripts/run-parser-evals.mjs",
+    "replay": "node scripts/replay-runs.mjs"
   }
 }

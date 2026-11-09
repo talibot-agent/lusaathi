@@ -1,7 +1,7 @@
 {
   "name": "lusaathi-parser",
   "description": "parse_intent cases: EN / HI / Hinglish / Marathi + edge cases (12 am/pm, noon, midnight, abhi/now/आता, kal, parso, city aliases, workload, unknown/empty/noise)",
-  "generatedAt": "2026-11-09T21:25:14.536Z",
+  "generatedAt": "2026-11-09T21:48:18.644Z",
   "passed": 40,
   "total": 40,
   "byLanguage": [

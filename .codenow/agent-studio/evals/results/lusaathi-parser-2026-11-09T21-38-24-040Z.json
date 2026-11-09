@@ -1,0 +1,926 @@
+{
+  "eval": "lusaathi-parser",
+  "sourceFile": "/workspace/projects/code-for-a-billion/lusaathi/.codenow/agent-studio/evals/lusaathi-parser.json",
+  "timestamp": 1794260304040,
+  "totalMs": 185748,
+  "modelIds": [
+    "smart-code"
+  ],
+  "cases": [
+    {
+      "index": 0,
+      "name": "Can I work on the roof at 2pm tomorrow in Nagpur?",
+      "input": "Can I work on the roof at 2pm tomorrow in Nagpur?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Nagpur"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have access to real-time information like tomorrow's weather forecast for Nagpur or current safety conditions. To determine if it's safe to work on the roof at 2pm tomorrow, you should check:\n\n1. **Weather forecast** - Check for:\n   - Rain or thunderstorms\n   - High winds\n   - Extreme heat\n   - Poor visibility\n\n2. **Local conditions** - Consider:\n   - Time of day (2pm is typically hot in Nagpur)\n   - Season (affects weather patterns)\n   - Air quality\n\n3. **Safety factors** - Review:\n   - Your organization's safety guidelines\n   - Necessary equipment and precautions\n   - Whether you need a safety harness, helmet, etc.\n\n**I'd recommend:**\n- Checking a weather service like IMD (India Meteorological Department), weather.com, or your local app for Nagpur's forecast\n- Confirming with your supervisor or safety officer\n- Ensuring proper safety equipment and protocols are in place\n\nWould you like guidance on roof safety precautions instead?",
+          "tokensIn": 143,
+          "tokensOut": 0,
+          "latencyMs": 4088,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "name": "Is it safe to dig in Delhi at noon today?",
+      "input": "Is it safe to dig in Delhi at noon today?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Delhi"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have access to real-time information about current conditions in Delhi, so I can't tell you what today's specific weather is like.\n\nHowever, I can offer general guidance about digging in Delhi at noon:\n\n**Safety considerations:**\n- **Heat**: Delhi experiences very high temperatures, especially at noon. This can lead to heat exhaustion or heatstroke\n- **Best timing**: Early morning (6-9 AM) or late afternoon/evening (4-7 PM) is generally safer\n- **Season matters**: Summer months (May-June) are particularly dangerous; winter is much safer\n\n**If you need to dig at noon:**\n- Use sun protection (hat, sunscreen)\n- Take frequent breaks in shade\n- Drink plenty of water\n- Work in shifts with others\n- Watch for signs of heat illness\n\n**What to check today specifically:**\n- Current temperature and humidity (weather app)\n- Air quality index (AQI)\n- Any heat advisories from local authorities\n\nIf this is essential work, I'd recommend postponing to early morning if possible, or at minimum taking extensive heat precautions. What type of digging project are you planning?",
+          "tokensIn": 138,
+          "tokensOut": 0,
+          "latencyMs": 4487,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Bombay at 12 am tomorrow — can I carry bricks?",
+      "input": "Bombay at 12 am tomorrow — can I carry bricks?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Mumbai"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Carrying Bricks in Mumbai at Midnight\n\nI'd need a bit more context to give you a complete answer, but here are the key considerations:\n\n## Legal/Regulatory\n- **Construction materials transport**: Generally allowed, but may require permits depending on:\n  - Quantity and weight\n  - Vehicle type and route\n  - Local municipal regulations (BMC rules for Mumbai)\n  - Time-of-day restrictions (some areas restrict heavy vehicle movement during peak hours, which midnight actually *avoids*)\n\n## Practical Concerns\n- **Midnight timing**: Most restrictive for finding transport, but fewer traffic issues\n- **Documentation**: Keep invoices/bills of lading if transporting commercially\n- **Local restrictions**: Check with Mumbai traffic police or your specific area's rules\n\n## Next Steps\n1. **If personal use**: Typically fine in reasonable quantities\n2. **If commercial**: You may need:\n   - Permit from BMC\n   - Proper vehicle registration\n   - GST documentation\n3. **Contact**: Reach out to your local traffic police station or BMC for specific route/quantity approval\n\n**Is this for construction work, or do you need help with something specific about the transportation?** That would help me give more targeted advice.",
+          "tokensIn": 143,
+          "tokensOut": 0,
+          "latencyMs": 4382,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Calcutta 12 pm construction work",
+      "input": "Calcutta 12 pm construction work",
+      "system": null,
+      "expected": {
+        "expected_contains": "Kolkata"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Calcutta (Kolkata) - 12 PM Construction Work\n\nI'd be happy to help, but I need more specific information. Here are some clarifications:\n\n## What are you looking for?\n\n1. **Current construction projects** in Kolkata at noon?\n2. **Construction regulations** for midday work?\n3. **Noise restrictions** during 12 PM?\n4. **Specific location** or area in Kolkata?\n5. **Legal/permit requirements** for noon construction?\n\n## General Info about Midday Construction in Kolkata\n\n**Typical restrictions:**\n- Construction hours are usually **6 AM - 9 PM** in residential areas\n- Midday work (12 PM) is generally **allowed**\n- Noise levels are regulated by local authorities\n\n**Relevant authorities:**\n- Kolkata Municipal Corporation (KMC)\n- West Bengal Pollution Control Board\n- Local police stations\n\n## If you're planning construction work:\n- Obtain proper permits from KMC\n- Check noise pollution norms\n- Inform neighbors in advance\n- Follow environmental guidelines\n\nCould you provide more details about what you need? I can then give you more specific and useful information.",
+          "tokensIn": 136,
+          "tokensOut": 0,
+          "latencyMs": 4393,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "name": "site work in gurgaon today at 3pm",
+      "input": "site work in gurgaon today at 3pm",
+      "system": null,
+      "expected": {
+        "expected_contains": "Gurugram"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I'd be happy to help you with information about site work in Gurgaon at 3pm today. However, I need a bit more detail to assist you better:\n\n1. **What type of site work?** (e.g., construction, maintenance, inspection, site visit)\n2. **Which location in Gurgaon?** (specific address or area)\n3. **What do you need help with?** \n   - Directions/travel time?\n   - Things to bring or prepare?\n   - Weather check?\n   - Schedule/timeline?\n   - Safety requirements?\n\nCould you provide more context so I can give you relevant information?",
+          "tokensIn": 139,
+          "tokensOut": 0,
+          "latencyMs": 2670,
+          "pass": false,
+          "scoreReason": "missing \"Gurugram\""
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Is Bangalore safe for welding at 4pm tomorrow?",
+      "input": "Is Bangalore safe for welding at 4pm tomorrow?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Bengaluru"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have access to real-time data, weather forecasts, or current conditions in Bangalore, so I can't tell you whether it will be safe to weld there at 4pm tomorrow.\n\nHowever, here are factors that typically affect welding safety:\n\n**Weather conditions to check:**\n- **Humidity** - High moisture can cause porosity and weak welds\n- **Wind** - Can disperse shielding gas and cool the weld pool unevenly\n- **Rain** - Dangerous for electrical safety; can contaminate welds\n- **Temperature** - Affects metal properties and material brittleness\n\n**To plan your welding tomorrow:**\n1. **Check the weather forecast** for Bangalore (use weather.com, India Met Department, or local apps)\n2. **Look for** wind speed, humidity levels, and precipitation probability\n3. **Consider** your specific welding type (MIG, TIG, stick, etc.) — each has different environmental tolerances\n4. **Plan indoor/sheltered work** if conditions look unfavorable\n\n**General guidance:**\n- Avoid welding in rain or heavy moisture\n- Wind speeds above 15-20 km/h may be problematic\n- Extreme heat can also be challenging\n\nWould you like specific advice on what weather conditions to avoid, or do you need help finding Bangalore's forecast?",
+          "tokensIn": 140,
+          "tokensOut": 0,
+          "latencyMs": 4207,
+          "pass": false,
+          "scoreReason": "missing \"Bengaluru\""
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "name": "Bengaluru tomorrow morning 8am light work",
+      "input": "Bengaluru tomorrow morning 8am light work",
+      "system": null,
+      "expected": {
+        "expected_contains": "Bengaluru"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Bengaluru Tomorrow Morning 8am - Light Work\n\nI'd be happy to help you plan! Here's what I'd suggest for light work in the morning:\n\n## Options for 8am Light Work in Bengaluru:\n\n### **Outdoor/Activity-Based**\n- **Walk or jog** at nearby parks (Cubbon Park, Lumbini Gardens, Ulsoor Lake)\n- **Yoga/stretching session** at home or a local studio\n- **Photography walk** around your neighborhood\n\n### **Work-Related (Light Tasks)**\n- **Email & communication** - catch up on messages\n- **Planning/organization** - organize your day/week\n- **Creative work** - brainstorming, writing, design (low-pressure)\n- **Learning** - online course, reading, skill development\n\n### **Practical Chores**\n- Grocery shopping (markets are active by 8am)\n- Light household tidying\n- Admin tasks (bills, appointments)\n\n---\n\n**To give better suggestions, could you clarify:**\n- Are you looking for physical activity or work tasks?\n- Will you be indoors or outdoors?\n- Do you need a venue/location recommendation?\n- What's your energy level typically like at 8am?\n\nLet me know and I can provide more specific suggestions! 😊",
+          "tokensIn": 138,
+          "tokensOut": 0,
+          "latencyMs": 11384,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "name": "What about at 4 in Bhiwandi tomorrow?",
+      "input": "What about at 4 in Bhiwandi tomorrow?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Bhiwandi"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have access to current date information or any context about what \"at 4 in Bhiwandi tomorrow\" refers to. To help you, I'd need more details:\n\n- **What event or activity** are you asking about? (a meeting, appointment, class, event, etc.)\n- **What time zone** are you in?\n- **What date is \"tomorrow\"** for you?\n- **Is there previous context** I should know about?\n\nCould you provide more information so I can assist you better?",
+          "tokensIn": 140,
+          "tokensOut": 0,
+          "latencyMs": 2418,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "name": "now in Mumbai — sitting at a stall",
+      "input": "now in Mumbai — sitting at a stall",
+      "system": null,
+      "expected": {
+        "expected_contains": "Mumbai"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Hey, nice! You're in Mumbai 🇮🇳\n\nWhat kind of stall are you at? There are so many great ones:\n\n- **Food stall?** (vada pav, pani puri, bhel puri, chai?)\n- **Street market stall?** (clothes, accessories, electronics?)\n- **Tea/coffee corner?**\n- Something else?\n\nWhat's the vibe like right now? Crowded? Chill? What are you thinking of grabbing or doing?",
+          "tokensIn": 136,
+          "tokensOut": 0,
+          "latencyMs": 2310,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "name": "midnight in Delhi tomorrow",
+      "input": "midnight in Delhi tomorrow",
+      "system": null,
+      "expected": {
+        "expected_contains": "Delhi"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I can help you figure out midnight in Delhi tomorrow, but I need to know your current time zone or location.\n\nHere's what I can tell you:\n\n**Delhi uses Indian Standard Time (IST), which is UTC+5:30**\n\nIf you tell me your time zone, I can tell you exactly when midnight in Delhi tomorrow occurs for you locally.\n\nFor example:\n- If you're in **US Eastern Time (EST/EDT)**: midnight in Delhi is approximately **10:30 AM or 11:30 AM** the same day (depending on daylight saving)\n- If you're in **UTC**: it's **6:30 PM** the same day\n- If you're in **UK (GMT/BST)**: it's around **5:30 PM or 6:30 PM** the same day\n\n**What's your time zone?** Then I can give you the exact local time for midnight in Delhi tomorrow.",
+          "tokensIn": 131,
+          "tokensOut": 0,
+          "latencyMs": 3240,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "name": "Pune at 12 pm",
+      "input": "Pune at 12 pm",
+      "system": null,
+      "expected": {
+        "expected_contains": "Pune"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Pune at 12 PM\n\nHere's what you might expect in Pune at noon:\n\n## Weather & Climate\n- **Typically hot and bright** - intense midday sun\n- Temperature varies by season:\n  - **Summer (Mar-May)**: 35-40°C (95-104°F)\n  - **Monsoon (Jun-Sep)**: 25-28°C (77-82°F), often cloudy\n  - **Winter (Dec-Feb)**: 20-25°C (68-77°F), pleasant\n\n## Activity Levels\n- **Peak lunch hour** - restaurants and cafes bustling\n- Streets moderately busy with midday traffic\n- People seeking shade or indoor spaces during hot months\n- Office workers on lunch breaks\n\n## Things to Do at Noon\n- Visit air-conditioned malls or museums\n- Enjoy lunch at local restaurants\n- Explore indoor attractions (Aga Khan Palace, Shaniwarwada Fort interior)\n- Café culture is vibrant\n- Shopping areas are active\n\n## Practical Tips\n- Stay hydrated\n- Use sunscreen if going outdoors\n- Peak traffic hours - allow extra travel time\n- Many shops remain open; some may close briefly during peak heat\n\nWould you like specific information about attractions, restaurants, or weather for a particular date or season?",
+          "tokensIn": 134,
+          "tokensOut": 0,
+          "latencyMs": 4283,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "name": "Pune at 12 am",
+      "input": "Pune at 12 am",
+      "system": null,
+      "expected": {
+        "expected_contains": "Pune"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Pune at 12 AM (Midnight)\n\nHere's what Pune is typically like at midnight:\n\n## Time & Atmosphere\n- **12:00 AM** - Midnight on the 24-hour clock\n- Most of the city is asleep or winding down\n- A quiet, peaceful time compared to daytime\n\n## What's Open\n- **Hotels & late-night eateries** - Some restaurants, especially in tech parks and major areas\n- **24-hour establishments** - Selected pharmacies, petrol pumps, hospitals\n- **Some nightlife areas** - Limited activity in Koregaon Park, Viman Nagar\n\n## What's Closed\n- Most shops and offices\n- Government offices\n- Shopping malls\n- Schools and colleges\n\n## Transportation\n- Public buses reduced frequency\n- Auto-rickshaws and taxis available (negotiate rates)\n- Limited metro service\n- Personal vehicles the main option\n\n## Weather (Seasonal)\n- **Summer**: Still warm, around 25-30°C\n- **Winter**: Cool, around 15-20°C\n- **Monsoon**: Humid, 20-25°C\n\n---\n\n**Were you looking for:**\n- Current time in Pune?\n- Things to do/visit?\n- Accommodation options?\n- Travel information?\n\nLet me know how I can help! 🌙",
+          "tokensIn": 134,
+          "tokensOut": 0,
+          "latencyMs": 4427,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "name": "Is it safe in Mumbai 🔥 at 2pm tomorrow???",
+      "input": "Is it safe in Mumbai 🔥 at 2pm tomorrow???",
+      "system": null,
+      "expected": {
+        "expected_contains": "Mumbai"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Safety in Mumbai at 2pm Tomorrow\n\n**General answer: Yes, Mumbai is generally safe during daytime hours like 2pm.**\n\nHere's what typically applies:\n\n## Daytime Safety (2pm)\n✅ **Safer times** - Afternoon is usually one of the safer periods\n✅ **Busy areas** - More people and activity = better visibility\n✅ **Public transport** - Functional and busy during this time\n\n## Tips for staying safe:\n- **Stick to main areas** - South Mumbai, Bandra, Worli, Fort, etc.\n- **Avoid isolated spots** - Deserted side streets or construction areas\n- **Keep valuables secure** - Pickpocketing occurs in crowded areas\n- **Use registered taxis/Uber** - Not random cabs\n- **Tell someone where you're going**\n- **Stay aware of surroundings** - Common sense applies\n\n## Variables that matter:\n- **Which area?** (some neighborhoods are safer than others)\n- **Your situation?** (alone, with others, on foot, transport)\n- **Specific plans?** (different activities have different risk levels)\n\n## Current conditions:\nI can't see real-time weather or current events for tomorrow specifically, but 2pm in Mumbai is typically:\n- Hot/humid (bring water)\n- Crowded in commercial areas\n- Generally functional\n\n**Could you share what area you're planning to visit?** That would help me give more specific advice.",
+          "tokensIn": 143,
+          "tokensOut": 0,
+          "latencyMs": 4873,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "name": "case 14",
+      "error": "Prompt is required",
+      "models": []
+    },
+    {
+      "index": 14,
+      "name": "??? !!! 🔥🔥🔥",
+      "input": "??? !!! 🔥🔥🔥",
+      "system": null,
+      "expected": {
+        "expected_contains": "null"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "Hey! 👋 I see some punctuation and fire emojis! \n\nI'm not entirely sure what you're asking or expressing, but I'm here to help. Could you tell me more about what you'd like to know or discuss? For example, are you:\n\n- Excited about something? 🎉\n- Looking for help with a specific question?\n- Just testing things out?\n- Something else?\n\nFeel free to give me more context and I'll do my best to assist! 🙂",
+          "tokensIn": 141,
+          "tokensOut": 0,
+          "latencyMs": 2599,
+          "pass": false,
+          "scoreReason": "missing \"null\""
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "name": "Is it safe to work now?",
+      "input": "Is it safe to work now?",
+      "system": null,
+      "expected": {
+        "expected_contains": "true"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have enough context to answer your question safely. \"Is it safe to work now?\" could mean several things:\n\n1. **Safety conditions at your workplace** — I'd need to know about specific hazards, weather, equipment status, or incidents\n2. **Health/medical** — Whether you're well enough to work given an illness or injury\n3. **Timing/schedule** — Whether now is a good time in your day to work\n4. **External conditions** — Travel safety, air quality, pandemic levels, etc.\n5. **Work environment concerns** — Security, ergonomics, or other workplace issues\n\n**To help you better, could you clarify:**\n- What type of safety concern are you asking about?\n- What's prompting the question right now?\n- Is there a specific hazard or situation you're worried about?\n\nIf there's an immediate safety emergency, please contact local authorities or your workplace safety officer directly rather than waiting for advice online.",
+          "tokensIn": 134,
+          "tokensOut": 0,
+          "latencyMs": 3725,
+          "pass": false,
+          "scoreReason": "missing \"true\""
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "name": "कल दोपहर जयपुर में काम करना सुरक्षित है?",
+      "input": "कल दोपहर जयपुर में काम करना सुरक्षित है?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Jaipur"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# जयपुर की सुरक्षा के बारे में\n\nमैं आपको कुछ सामान्य बातें बता सकता हूं:\n\n## आमतौर पर सुरक्षित माने जाने वाले इलाके:\n- **C-Scheme, Bani Park** - व्यावसायिक और आवासीय क्षेत्र\n- **Vaishali Nagar** - विकसित इलाका\n- **Agarwal Market, M.I. Road** - व्यस्त व्यावसायिक क्षेत्र\n- **हवा महल के पास** - पर्यटन केंद्र\n\n## सुरक्षा सुझाव:\n✓ दिन के समय ज्यादातर जगहें सुरक्षित हैं  \n✓ मुख्य सड़कों पर रहें  \n✓ अपना सामान सुरक्षित रखें  \n✓ स्थानीय लोगों और गाइड पर भरोसा करें  \n✓ मोबाइल चार्ज रखें\n\n## वर्तमान जानकारी के लिए:\n- स्थानीय समाचार देखें\n- होटल या आवास स्टाफ से पूछें\n- आधिकारिक पर्यटन वेबसाइट चेक करें\n\n**कौन से क्षेत्र में काम करना है?** यदि आप विशिष्ट जानकारी दें, तो मैं बेहतर सुझाव दे सकता हूं।",
+          "tokensIn": 153,
+          "tokensOut": 0,
+          "latencyMs": 6332,
+          "pass": false,
+          "scoreReason": "missing \"Jaipur\""
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "name": "परसों सुबह 7 बजे लखनऊ में खेत में काम?",
+      "input": "परसों सुबह 7 बजे लखनऊ में खेत में काम?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Lucknow"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# मुझे कुछ स्पष्टता चाहिए\n\nआपका सवाल थोड़ा अस्पष्ट है। क्या आप पूछ रहे हैं:\n\n1. **परसों सुबह 7 बजे लखनऊ में खेत में काम करना है?**\n   - क्या आप पूछना चाहते हैं कि यह करना चाहिए या नहीं?\n   - क्या यह नियोजित काम है?\n\n2. **खेत का काम किस बारे में है?**\n   - फसल की बुवाई/कटाई?\n   - खेत की तैयारी?\n   - कोई अन्य कृषि कार्य?\n\n3. **क्या आपको मदद चाहिए?**\n   - दिनचर्या बनाने में?\n   - सही समय की जानकारी में?\n   - खेत के काम की जानकारी में?\n\nकृपया थोड़ा विस्तार से बताएं ताकि मैं आपको सही सलाह दे सकूं।",
+          "tokensIn": 154,
+          "tokensOut": 0,
+          "latencyMs": 4693,
+          "pass": false,
+          "scoreReason": "missing \"Lucknow\""
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "name": "शाम ५ बजे गोंडा में मज़दूरी ठीक है?",
+      "input": "शाम ५ बजे गोंडा में मज़दूरी ठीक है?",
+      "system": null,
+      "expected": {
+        "expected_contains": "गोंडा"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "शाम 5 बजे गोंडा में मज़दूरी के बारे में मैं आपको सटीक जानकारी नहीं दे सकता क्योंकि:\n\n1. **रोज़गार दर बदलती है** - मज़दूरी दरें समय, मौसम और काम के प्रकार के अनुसार बदलती हैं\n\n2. **काम का प्रकार महत्वपूर्ण है** - निर्माण, खेती, या अन्य कार्य में दरें अलग होती हैं\n\n3. **स्थानीय बाज़ार दर** - गोंडा (उत्तर प्रदेश) में वर्तमान दरें जानने के लिए आपको:\n   - **स्थानीय ठेकेदारों से पूछें**\n   - **मज़दूर संघों से संपर्क करें**\n   - **NREGA या रोज़गार कार्यालय से जांचें**\n   - **स्थानीय समाचार पत्रों को देखें**\n\n**आमतौर पर** उत्तर प्रदेश में सामान्य मज़दूरी ₹200-400 प्रति दिन के आसपास हो सकती है, लेकिन यह बदलती रहती है।\n\nक्या आप किसी विशेष प्रकार की मज़दूरी के बारे में पूछ रहे हैं?",
+          "tokensIn": 155,
+          "tokensOut": 0,
+          "latencyMs": 5654,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "name": "अभी दिल्ली में बाहर काम?",
+      "input": "अभी दिल्ली में बाहर काम?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Delhi"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "मैं एक AI असिस्टेंट हूं, मेरे पास वर्तमान समय या लाइव जानकारी नहीं है। मुझे नहीं पता कि अभी दिल्ली में मौसम या बाहर काम करने की परिस्थितियां कैसी हैं।\n\n**दिल्ली के मौसम के लिए आप यह कर सकते हैं:**\n\n1. **Google Weather** या **weather.com** पर चेक करें\n2. **IMD (Indian Meteorological Department)** की वेबसाइट देखें\n3. **Weather apps** जैसे - AccuWeather, Weather Channel\n4. **मोबाइल फोन** का default weather app खोलें\n\n**आम सुझाव:**\n- सर्दियों में (अक्टूबर-मार्च): आमतौर पर बाहर काम के लिए ठीक है, लेकिन प्रदूषण हो सकता है\n- गर्मियों में (अप्रैल-जून): बहुत गर्म, दोपहर में बाहर काम मुश्किल\n- बारिश के दिनों में: बाहर काम के लिए सावधान रहें\n\nक्या आप किसी विशेष काम या परियोजना के बारे में पूछना चाहते हैं?",
+          "tokensIn": 144,
+          "tokensOut": 0,
+          "latencyMs": 5499,
+          "pass": false,
+          "scoreReason": "missing \"Delhi\""
+        }
+      ]
+    },
+    {
+      "index": 20,
+      "name": "आज दोपहर 2 बजे कोलकाता में छत पर काम?",
+      "input": "आज दोपहर 2 बजे कोलकाता में छत पर काम?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Kolkata"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "मुझे आपके सवाल का सटीक मतलब समझ नहीं आया। आप जानना चाहते हैं:\n\n1. **क्या आज दोपहर 2 बजे कोलकाता में छत पर काम करना सुरक्षित है?**\n   - गर्मी और धूप की वजह से दोपहर का समय कठिन हो सकता है\n   - पानी और सुरक्षा सावधानियां जरूरी हैं\n\n2. **क्या कोलकाता में दोपहर 2 बजे कोई काम/ईवेंट है?**\n\n3. **कोई और सवाल?**\n\nअगर आप कोई **विशिष्ट जानकारी** चाहते हैं, तो कृपया थोड़ा विस्तार से बताएं, जैसे:\n- आप क्या काम करना चाहते हैं?\n- यह किस तरह की चिंता है?\n- और कोई विशिष्ट आवश्यकता है?\n\nमैं आपको बेहतर तरीके से मदद कर सकूंगा।",
+          "tokensIn": 154,
+          "tokensOut": 0,
+          "latencyMs": 4852,
+          "pass": false,
+          "scoreReason": "missing \"Kolkata\""
+        }
+      ]
+    },
+    {
+      "index": 21,
+      "name": "कल Bombay में roof work at 2pm",
+      "input": "कल Bombay में roof work at 2pm",
+      "system": null,
+      "expected": {
+        "expected_contains": "Mumbai"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I'll help you organize this information. Here's what you've mentioned:\n\n**Event Details:**\n- **Location:** Bombay (Mumbai)\n- **Activity:** Roof work\n- **Time:** 2:00 PM\n- **Date:** कल (Tomorrow)\n\n**To help you better, I can suggest:**\n\n1. **Confirmation** - Do you need to confirm this appointment or send a reminder?\n\n2. **Preparation checklist:**\n   - Safety equipment needed?\n   - Materials/tools to arrange?\n   - Weather check for tomorrow?\n   - Team members to notify?\n\n3. **Logistics:**\n   - Travel time to the location?\n   - Parking arrangements?\n   - Any permits needed?\n\n4. **Safety considerations:**\n   - Fall protection equipment\n   - Weather conditions\n   - Site access details\n\n**क्या आप चाहते हैं कि मैं:**\n- एक reminder set करूं?\n- एक checklist बनाऊं?\n- किसी और को notify करूं?\n\nPlease let me know what specific help you need with this roof work!",
+          "tokensIn": 139,
+          "tokensOut": 0,
+          "latencyMs": 3537,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "name": "परसों दिल्ली",
+      "input": "परसों दिल्ली",
+      "system": null,
+      "expected": {
+        "expected_contains": "Delhi"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# परसों दिल्ली\n\nयह एक हिंदी फिल्म का शीर्षक है। क्या आप इसके बारे में जानना चाहते हैं?\n\n**\"परसों दिल्ली\"** के बारे में कुछ बातें:\n\n- यह एक **भारतीय फिल्म** है\n- इसका शीर्षक \"परसों दिल्ली\" (Parson Delhi / The Day After Tomorrow - Delhi) है\n- यह **दिल्ली** शहर से संबंधित है\n\nअगर आप विस्तार से जानना चाहते हैं तो कृपया बताएं:\n- क्या आप इस फिल्म की समीक्षा चाहते हैं?\n- क्या आप कास्ट और क्रू के बारे में जानना चाहते हैं?\n- क्या आप प्लॉट/कहानी के बारे में जानकारी चाहते हैं?\n- या कोई अन्य जानकारी?\n\nमैं आपकी मदद करने के लिए तैयार हूँ। 🎬",
+          "tokensIn": 136,
+          "tokensOut": 0,
+          "latencyMs": 4326,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "name": "kal dopahar 3 baje Patna mein kaam safe hai?",
+      "input": "kal dopahar 3 baje Patna mein kaam safe hai?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Patna"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Patna mein 3 PM ke baare mein safety ke liye:\n\n**Haan, **zyada se zyada areas mein 3 PM daytime hai, toh generally safe hai:**\n\n✅ **Safe consider kiye ja sakte hain:**\n- Business districts (boring Road, Exhibition Road)\n- Main markets (Rajendra Nagar, Ashok Rajpath)\n- Shopping areas\n- Government offices\n- Educational institutions ke paas\n\n⚠️ **Savadhani rakhi jaaye:**\n- Harmesha apne surroundings ke baare mein aware rahiye\n- Akelapan mein late wale areas avoid kariye\n- Phone/wallet properly secure rakhe\n- Local areas ka pata hona zaroori hai\n\n**Practical tips:**\n- Shared cab/uber use kariye\n- Kisi ko inform rakiye aap kahan jaa rahe ho\n- Well-lit, crowded areas mein rehiye\n- Padhai/work ke liye institutional areas better hain\n\n**Kaunsa specific area mein kaam hai?** Agar aap zyada details diye, toh better suggestion de sakta hoon - jaise Patna City, Kankarbagh, Boring Road, etc.\n\nPatna mein 3 PM generally daylight aur busy time hota hai, toh kaafi safe rehna chahiye.",
+          "tokensIn": 147,
+          "tokensOut": 0,
+          "latencyMs": 5896,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "name": "aaj shaam 5 baje mumbai mein roof work?",
+      "input": "aaj shaam 5 baje mumbai mein roof work?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Mumbai"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Roof Work in Mumbai Today at 5 PM?\n\nI'd be happy to help, but I need a bit more clarity! Here are some questions:\n\n## What do you need to know?\n\n1. **Are you asking IF there's roof work scheduled?**\n   - At a specific building/location?\n   - For a construction project?\n\n2. **Are you planning to do roof work?**\n   - Need to check weather conditions?\n   - Looking for contractors/workers?\n   - Need safety precautions?\n\n3. **Something else?**\n   - Traffic updates for reaching a location?\n   - Equipment recommendations?\n\n## Quick Info for Mumbai Roof Work at 5 PM:\n\n- **Weather**: Check current forecast (monsoon season = risky)\n- **Safety**: Sunset around 6:45 PM (so only ~1.5 hours of daylight)\n- **Best time**: Usually 8 AM - 4 PM for roof work\n- **Permits**: May need BMC approval depending on work type\n\n**कृपया विस्तार से बताएं** (Please provide more details) - क्या आप:\n- किसी building में काम करना चाहते हैं?\n- कोई contractor ढूंढ रहे हैं?\n- Safety tips चाहिए?\n\nHow can I help you better? 🏗️",
+          "tokensIn": 143,
+          "tokensOut": 0,
+          "latencyMs": 4825,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "name": "parso subah 8 baje nagpur mein dig?",
+      "input": "parso subah 8 baje nagpur mein dig?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Nagpur"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Nagpur में सुबह 8 बजे खोदना (Digging)\n\nआप अगर **Nagpur में सुबह 8 बजे खोदना** चाहते हैं, तो कुछ बातें ध्यान दें:\n\n## महत्वपूर्ण बातें:\n\n1. **नियम & अनुमति**\n   - नगर निगम (NMC) या स्थानीय प्राधिकरण से अनुमति लें\n   - सार्वजनिक जमीन पर खुदाई के लिए परमिट जरूरी है\n\n2. **सार्वजनिक सुविधाएं**\n   - जांचें कि जमीन के नीचे पानी/बिजली की लाइनें तो नहीं हैं\n   - आस-पास के लोगों को सूचित करें\n\n3. **आवश्यक उपकरण**\n   - खुदाई के औजार (कुदाल, फावड़ा)\n   - सुरक्षा गियर (हेलमेट, हैंडग्लूव्स)\n\n4. **समय का फायदा**\n   - सुबह 8 बजे खुदाई शुरू करना अच्छा है (गर्मी से बचाव)\n\n---\n\n**क्या आप किसी विशेष कारण से खोदना चाहते हैं?** (जैसे - निर्माण, सड़क मरम्मत, बागवानी)\n\nअधिक विशिष्ट मदद के लिए विवरण साझा करें।",
+          "tokensIn": 142,
+          "tokensOut": 0,
+          "latencyMs": 6255,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "name": "abhi delhi mein kaam?",
+      "input": "abhi delhi mein kaam?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Delhi"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# हाँ, दिल्ली में काम हो रहा है! 👋\n\nमैं आपकी मदद के लिए यहाँ हूँ। कृपया बताइए कि आप क्या जानना चाहते हैं? मैं निम्नलिखित विषयों में सहायता कर सकता हूँ:\n\n**दिल्ली से संबंधित:**\n- नौकरी के अवसर\n- आवास/रेंट की जानकारी\n- परिवहन और आवाजाही\n- स्थानीय जानकारी\n- सरकारी योजनाएँ\n\n**अन्य विषय:**\n- शिक्षा\n- स्वास्थ्य सेवाएँ\n- कानूनी सलाह\n- तकनीकी मदद\n\n**कृपया विस्तार से बताइए:**\n- आप दिल्ली में क्या काम करना चाहते हैं?\n- किस प्रकार की जानकारी चाहिए?\n\nमैं आपकी सटीक मदद करने के लिए तैयार हूँ! 😊",
+          "tokensIn": 135,
+          "tokensOut": 0,
+          "latencyMs": 4339,
+          "pass": false,
+          "scoreReason": "missing \"Delhi\""
+        }
+      ]
+    },
+    {
+      "index": 27,
+      "name": "gurgaon kal 2pm bricks",
+      "input": "gurgaon kal 2pm bricks",
+      "system": null,
+      "expected": {
+        "expected_contains": "Gurugram"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Gurgaon - 2pm Tomorrow - Bricks\n\nI'd like to help, but your message is quite brief. Could you clarify what you're looking for?\n\nAre you asking about:\n\n1. **Brick suppliers/dealers in Gurgaon** - looking for where to buy bricks?\n2. **Construction material prices** - checking brick costs?\n3. **Delivery service** - arranging brick delivery for 2pm tomorrow?\n4. **A specific location** - \"Bricks\" as a place name or establishment?\n5. **Something else** - an event, restaurant, or service?\n\n**Some helpful info for Gurgaon brick shopping:**\n- Major suppliers are in sectors like 37, 38, and industrial areas\n- Popular areas: Udyog Vihar, IMT Manesar, Kharaudi\n- You might also check OLX, Indiamart, or local construction suppliers\n\nPlease provide more details so I can give you accurate information! 🧱",
+          "tokensIn": 138,
+          "tokensOut": 0,
+          "latencyMs": 4009,
+          "pass": false,
+          "scoreReason": "missing \"Gurugram\""
+        }
+      ]
+    },
+    {
+      "index": 28,
+      "name": "parson in Delhi",
+      "input": "parson in Delhi",
+      "system": null,
+      "expected": {
+        "expected_contains": "Delhi"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# Parson in Delhi\n\nI'd be happy to help! Could you clarify what you're looking for? \"Parson\" could refer to several things:\n\n## Possible interpretations:\n\n1. **Person/Contact** - Are you looking for someone specific in Delhi?\n\n2. **Parsons School of Design** - If there's an office or affiliation in Delhi, I can help you find contact information\n\n3. **Parson (name)** - A specific individual or family name\n\n4. **Business/Organization** - A company or establishment named Parson in Delhi\n\n5. **Restaurant/Venue** - \"Parson\" as a business name\n\n6. **Religious figure** - A parson (clergy member) or church in Delhi\n\n## Delhi Information:\nDelhi is India's capital with several neighborhoods and districts (New Delhi, South Delhi, North Delhi, East Delhi, etc.). If you're searching for a specific location or service, providing more details would help me give you:\n- Address information\n- Contact numbers\n- Business hours\n- Services offered\n\n**Please provide more context**, and I'll do my best to assist you!",
+          "tokensIn": 131,
+          "tokensOut": 0,
+          "latencyMs": 3677,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 29,
+      "name": "उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकतो का?",
+      "input": "उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकतो का?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Pune"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "मला असे सांगायचे आहे की **मी हवामान अंदाज किंवा भविष्यातील परिस्थितीचे भविष्यवाणी करू शकत नाही**.\n\nतरीही, उद्या दुपारी 3 वाजता पुण्यात छतावर काम करू शकता की नाही हे ठरवण्यासाठी तुम्ही हे तपासू शकता:\n\n**महत्वाचे गोष्टी:**\n1. **हवामानाचा अंदाज** - IMD (भारतीय हवामान विभाग) किंवा मोबाइल अ्‍ॅपद्वारे उद्याचे तपमान, पर्जन्य, आणि वारा तपासा\n2. **तुमची शारीरिक तयारी** - उन्हाची तीव्रता, थकवा, सुरक्षा उपाय\n3. **कामाचा प्रकार** - हल्का किंवा कठीण काम?\n\n**सुरक्षा सूचना:**\n- पुण्यात उन्हाचा कोप असतो - पाणी, सनस्क्रीन, टोपी घ्या\n- छतावरचे कामात सुरक्षा दोरी वापरा\n- आवश्यक असल्यास कोणाला सोबत ठेवा\n\nउद्याचे हवामान काय असेल हे जाणून घेऊन निर्णय घ्या। 😊",
+          "tokensIn": 163,
+          "tokensOut": 0,
+          "latencyMs": 7182,
+          "pass": false,
+          "scoreReason": "missing \"Pune\""
+        }
+      ]
+    },
+    {
+      "index": 30,
+      "name": "आज मुंबईमध्ये जड काम सुरक्षित आहे का?",
+      "input": "आज मुंबईमध्ये जड काम सुरक्षित आहे का?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Mumbai"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# मुंबई - निर्माण कार्य सुरक्षा\n\nमुंबईमध्ये जड काम (construction work) करणे हे विविध घटकांवर अवलंबून असते:\n\n## सामान्य परिस्थिती:\n- **मानसून काल** (जून-सप्टेंबर): पावसामुळे अधिक जोखीम\n- **उष्ण काळ** (मे-जून): उष्णतेच्या कारणे अतिरिक्त सावधानी आवश्यक\n- **हिवाळ** (नोव्हेंबर-जानेवारी): सर्वात सुरक्षित मौसम\n\n## सुरक्षा उपाय:\n✓ OSHA/ILO मानकांचे पालन करणे आवश्यक  \n✓ व्यक्तिगत सुरक्षा उपकरण (PPE)  \n✓ साइट इन्सपेक्शन नियमित करणे  \n✓ कामगारांना प्रशिक्षण देणे\n\n## सर्वोत्तम सुझाव:\n- स्थानिक मौसम अंदाज तपासा\n- प्रकल्पाचे जोखीम मूल्यांकन करा\n- कायदेशीर अनुमती व परवाने तपासा\n\n**आजच्या विशिष्ट परिस्थितीसाठी:** मुंबई मौसम विभाग किंवा स्थानिक प्राधिकारांशी संपर्क साधा.\n\nकाय माहिती हवी आहे?",
+          "tokensIn": 155,
+          "tokensOut": 0,
+          "latencyMs": 7466,
+          "pass": false,
+          "scoreReason": "missing \"Mumbai\""
+        }
+      ]
+    },
+    {
+      "index": 31,
+      "name": "नागपूर मध्ये उद्या सकाळी 10 वाजता हलके काम",
+      "input": "नागपूर मध्ये उद्या सकाळी 10 वाजता हलके काम",
+      "system": null,
+      "expected": {
+        "expected_contains": "Nagpur"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# नागपूर - उद्याचा हवामान अंदाज\n\nमला खेद आहे, पण मी **वास्तविक, रीअल-टाइम हवामान डेटा** देऊ शकत नाही.\n\nहवामान माहिती मिळवण्यासाठी हे स्रोत वापरा:\n\n## भारतीय स्रोत:\n- 🌐 **IMD (India Meteorological Department)** - www.imd.gov.in\n- 📱 **मौसम.gov.in** - भारतीय राष्ट्रीय संस्था\n- 📲 **Sky Exchange, Weather.com, AccuWeather** ऍप्स\n\n## आपल्या सुविधेसाठी:\n1. **नागपूर** टाइप करा + **10 AM सकाळचा वेळ** निवडा\n2. तापमान, वारा, पाऊस यांची माहिती मिळेल\n3. **अलर्ट सेट** करू शकता\n\n---\n\n**सूचना:** उद्या सकाळी हलके काम करणार असल्यास:\n- ☀️ धूप काढा\n- 🧢 टोपी/छत्री घ्या\n- 💧 पाणी भरून ठेवा\n\nनागपूरचे हवामान उपलब्ध असेल तर अधिक विशिष्ट सल्ला देऊ शकेन! 😊",
+          "tokensIn": 158,
+          "tokensOut": 0,
+          "latencyMs": 6902,
+          "pass": false,
+          "scoreReason": "missing \"Nagpur\""
+        }
+      ]
+    },
+    {
+      "index": 32,
+      "name": "परवा दुपारी पुणे मध्ये काम",
+      "input": "परवा दुपारी पुणे मध्ये काम",
+      "system": null,
+      "expected": {
+        "expected_contains": "Pune"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# परवा दुपारी पुणे मध्ये काम\n\nमला असे वाटते की तुमचा प्रश्न अपूर्ण आहे. आपण काय जाणू इच्छिता याबद्दल कृपया अधिक माहिती द्या:\n\n## संभाव्य विषय:\n\n1. **अर्धदिवसीय नोकरी (Part-time jobs)** - पुणे मध्ये दुपारी काम?\n2. **अफिस टाइमिंग** - काही कंपन्या दुपारी शिफ्ट करतात का?\n3. **फ्रीलान्सिंग/होम वर्क** - पुणे मधून दूरस्थ काम?\n4. **विशिष्ट व्यवसाय** - रेस्तोरां, दुकान, किंवा इतर?\n\n## पुणे मध्ये दुपारी काम शोधण्याचे मार्ग:\n\n- **LinkedI/नोकरी साइट्स**: Indeed, NobrokerHood, Shine.com\n- **स्थानिक वर्गीकृत**: OLX, Facebook Groups\n- **कंपन्या थेट संपर्क**: कॉल सेंटर, होटल, रिटेल स्टोर्स\n- **व्यवसायिक केंद्र**: हिंजेवाडी, काळे, मरोळ\n\nकृपया अधिक तपशील साझा करा, मी तुम्हाला चांगले मदत करू शकेन! 😊",
+          "tokensIn": 146,
+          "tokensOut": 0,
+          "latencyMs": 7218,
+          "pass": false,
+          "scoreReason": "missing \"Pune\""
+        }
+      ]
+    },
+    {
+      "index": 33,
+      "name": "आता पुण्यात काम?",
+      "input": "आता पुण्यात काम?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Pune"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "मला खेद आहे, पण मी एक AI असून मी पुण्यात काम करत नाही. मी एक डिजिटल सहायक आहे जो ऑनलाइन माध्यमातून मदत करतो.\n\nतुमच्या प्रश्नाचा अर्थ असू शकतो:\n\n1. **पुण्यात नोकरीची माहिती** - तुम्हाला पुण्यात काम शोधायचे असेल तर, मी तुम्हाला नोकरी पोर्टल्स (जसे LinkedIn, Indeed, Naukri.com) किंवा स्थानिक नोकरी वेबसाईट्स सुचवू शकतो.\n\n2. **पुण्याबद्दल माहिती** - पुण्यातील व्यवसाय, कंपन्या किंवा क्षेत्रांबद्दल माहिती.\n\n3. **अन्य मदत** - तुमचे CV तयार करणे, साक्षात्कारची तयारी आदी.\n\nकृपया तुमचा प्रश्न अधिक तपशीलवार सांगा, जेणे मी तुम्हाला योग्य सहाय्य देऊ शकतो. 🙏",
+          "tokensIn": 138,
+          "tokensOut": 0,
+          "latencyMs": 5621,
+          "pass": false,
+          "scoreReason": "missing \"Pune\""
+        }
+      ]
+    },
+    {
+      "index": 34,
+      "name": "आता मुंबईमध्ये आहे का?",
+      "input": "आता मुंबईमध्ये आहे का?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Mumbai"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "मला खेद आहे, पण मी आपल्या स्थानाविषयी माहिती नाही. मी एक AI असिस्टंट आहे आणि मेरे कोणतीही भौतिक स्थिती किंवा स्थान नाही.\n\nआपण हे प्रश्न विचारत आहात का:\n- **आप** मुंबईमध्ये आहात का?\n- **कोणीतरी विशिष्ट व्यक्ती** मुंबईमध्ये आहे का?\n- **मुंबई** विषयी माहिती हवी आहे?\n\nकृपया आपले प्रश्न स्पष्ट करा, मी मदत करू शकेन.",
+          "tokensIn": 144,
+          "tokensOut": 0,
+          "latencyMs": 3728,
+          "pass": false,
+          "scoreReason": "missing \"Mumbai\""
+        }
+      ]
+    },
+    {
+      "index": 35,
+      "name": "पुणे मध्ये उद्या दुपारी काम आहे का?",
+      "input": "पुणे मध्ये उद्या दुपारी काम आहे का?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Pune"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "मला खेद आहे, पण मी आपल्या व्यक्तिगत कॅलेंडर किंवा शेड्यूल अ्याक्सेस करू शकत नाही. मी हे जाणू शकत नाही की उद्या (आपल्या लोकेल मध्ये) आपल्याला पुणे मध्ये काम आहे का.\n\n**मी आपला सुचवू शकतो:**\n\n1. **आपल्या कॅलेंडर तपासा** - आपल्या फोन किंवा कंप्यूटरमध्ये\n2. **आपल्या कामाच्या शेड्यूल तपासा** - ईमेल किंवा कामाच्या ॲप मध्ये\n3. **आपल्या बॉस/सहकर्मी यांना विचारा** - जर आपल्याला खरोखर शक असेल\n\nकाय मदत करू शकतो हे सांगा - उदाहरणार्थ, आपण पुणे जाण्याच्या तयारीबद्दल काही सुचना हवेत का?",
+          "tokensIn": 152,
+          "tokensOut": 0,
+          "latencyMs": 5370,
+          "pass": false,
+          "scoreReason": "missing \"Pune\""
+        }
+      ]
+    },
+    {
+      "index": 36,
+      "name": "पुणे at 2pm tomorrow roof",
+      "input": "पुणे at 2pm tomorrow roof",
+      "system": null,
+      "expected": {
+        "expected_contains": "Pune"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I'd be happy to help, but I need a bit more clarity about what you're looking for regarding Pune at 2pm tomorrow on a roof.\n\nAre you asking about:\n\n1. **Weather forecast** - What the weather will be like in Pune tomorrow at 2pm on a roof (temperature, rain, wind, etc.)?\n\n2. **Activities/Events** - Something to do on a roof in Pune at that time?\n\n3. **Rooftop venues** - Recommendations for rooftop restaurants, cafes, or bars in Pune?\n\n4. **Photography/Viewing** - Best rooftop locations in Pune for photos or views at 2pm?\n\n5. **Something else** - Please specify!\n\nCould you provide a bit more context so I can give you the most helpful information?",
+          "tokensIn": 137,
+          "tokensOut": 0,
+          "latencyMs": 3182,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 37,
+      "name": "Is it safe to carry bricks in Banda on Wednesday at 13:30",
+      "input": "Is it safe to carry bricks in Banda on Wednesday at 13:30",
+      "system": null,
+      "expected": {
+        "expected_contains": "Banda"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have enough context to answer this question safely. To give you accurate advice, I'd need to know:\n\n1. **Which Banda?** There are several places with this name (e.g., Banda in Uganda, Banda Aceh in Indonesia, or other locations)\n\n2. **What \"safe\" means in this context:**\n   - Physical safety (traffic, terrain, weather)?\n   - Legal/regulatory concerns (permits, restrictions)?\n   - Security situation?\n   - Practical feasibility (road conditions, infrastructure)?\n\n3. **Why Wednesday at 13:30 specifically?** Is there something particular about that time/day in that location?\n\n**General considerations** for carrying bricks anywhere:\n- Check local weather and road conditions\n- Ensure your vehicle/transportation can handle the weight\n- Verify you have proper permits if required\n- Consider traffic patterns at that time\n- Use secure loading methods to prevent accidents\n\nCould you provide more details about your location and what concerns you most (safety concerns, logistics, local regulations, etc.)?",
+          "tokensIn": 144,
+          "tokensOut": 0,
+          "latencyMs": 3919,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 38,
+      "name": "Is it noon in Jaipur?",
+      "input": "Is it noon in Jaipur?",
+      "system": null,
+      "expected": {
+        "expected_contains": "Jaipur"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "I don't have access to the current time, so I can't tell you whether it's noon in Jaipur right now.\n\nHowever, I can help you figure this out:\n\n**Jaipur's timezone:** Jaipur, India is in **Indian Standard Time (IST)**, which is UTC+5:30.\n\nTo check if it's noon there now:\n1. Determine your current time zone\n2. Calculate the time difference between your location and IST\n3. Add that to your current time\n\nFor example:\n- If you're in UTC/GMT, add 5.5 hours\n- If you're in EST (UTC-5), add 10.5 hours\n- If you're in PST (UTC-8), add 13.5 hours\n\nYou can also simply search \"current time in Jaipur\" online to get an instant answer.",
+          "tokensIn": 136,
+          "tokensOut": 0,
+          "latencyMs": 2990,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    },
+    {
+      "index": 39,
+      "name": "at midnight in Pune",
+      "input": "at midnight in Pune",
+      "system": null,
+      "expected": {
+        "expected_contains": "Pune"
+      },
+      "models": [
+        {
+          "modelId": "smart-code",
+          "modelName": "SMART-Code (served · no key)",
+          "provider": "codenow",
+          "ok": true,
+          "text": "# At Midnight in Pune\n\nHere's what's happening in Pune at midnight:\n\n## Time & Location\n- **Local Time**: 00:00 (12:00 AM)\n- **Timezone**: IST (Indian Standard Time, UTC+5:30)\n- **City**: Pune, Maharashtra, India\n\n## What's Typically Happening\n\n**Nightlife & Activity:**\n- Most restaurants and bars in areas like **FC Road, Koregaon Park, Hinjewadi** close by midnight\n- Late-night eateries and food stalls remain open in certain areas\n- Public transport (buses, auto-rickshaws) operate on reduced frequency\n- Taxis and ride-sharing services (Uber, Ola) remain available\n\n**Weather Consideration:**\n- Temperature varies by season (cool in winter ~10-15°C, warm in summer ~25-30°C)\n- Humidity typically moderate to high\n\n**What to Do:**\n- Visit 24-hour cafes or restaurants\n- Night walks in safe, populated areas\n- Star-gazing (moderate light pollution in city)\n- Late-night shopping at select malls\n\n## Safety Notes\n- Stick to well-lit, populated areas\n- Use reliable transport options\n- Inform someone of your whereabouts\n\nIs there something specific you'd like to know about midnight in Pune? (Events, weather, travel, activities, etc.)",
+          "tokensIn": 132,
+          "tokensOut": 0,
+          "latencyMs": 4785,
+          "pass": true,
+          "scoreReason": "contains match"
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "modelId": "smart-code",
+      "modelName": "SMART-Code (served · no key)",
+      "total": 39,
+      "passed": 22,
+      "failed": 17,
+      "errors": 0,
+      "totalMs": 185743,
+      "totalCost": 0
+    }
+  ]
+}
